@@ -1,0 +1,24 @@
+/* Admin-Front Css */
+
+
+
+.hideblock
+{
+    display: none;
+}
+.btn.btn-default.btntoggle {
+    margin-top: 15px;
+}
+.greencolor
+{
+    color: greenyellow;
+}
+.redcolor{
+    color: red;
+}
+.blackcolor{
+    color: black;
+}
+.yellowcolor{
+    color: yellow;
+}
