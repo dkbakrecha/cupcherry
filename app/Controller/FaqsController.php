@@ -30,11 +30,9 @@ class FaqsController extends AppController {
         if (isset($this->data['Faq']) && !empty($this->data['Faq'])) {
             if (!empty($this->data)) {
                 $this->Faq->save($this->data);
-                // echo $this->General->flash_msg(1, 'Saved');
                 $this->Session->setFlash('Data Saved');
                 $this->redirect(array('controller' => 'faqs', 'action' => 'admin_index'));
             }
-            //  echo $this->General->flash_msg(2, ' Not Saved');
             $this->Session->setFlash('Data Not Saved');
         }
 
@@ -44,39 +42,37 @@ class FaqsController extends AppController {
         $this->set('cateAll', $cateAll);
     }
 
-    public function index() {
-//                $CMS_Text = $this->SiteText(6);	
-//		$this->set('title_for_layout', $CMS_Text['Cmspage']['title']);	
-//		$FAQ_Text = $CMS_Text['Cmspage']['content'];	
-//		$this->set('FAQ_Text',$FAQ_Text);
-
+    public function index($cate = 'general') {
         $this->loadModel('FaqCategory');
         $this->loadModel('Faq');
 
         $categories = $this->FaqCategory->find('all', array(
-            'recursive' => -1,
             'conditions' => array('FaqCategory.status' => '1'),
             'fields' => array('FaqCategory.*'),
             'order' => array('order')
         ));
 
-        //pr($categories); 
-        $i = 0;
-        foreach ($categories as $c) {
-            $faqs = $this->Faq->find('all', array(
-                'recursive' => -1,
-                'conditions' => array('Faq.status' => '1', 'Faq.faq_category_id' => $c['FaqCategory']['id']),
-                'fields' => array('Faq.id', 'Faq.title', 'Faq.content', 'Faq.order', ''),
-                'order' => array('order')
-            ));
-            $j = 0;
-            foreach ($faqs as $rec) {
-                $categories[$i]['Faq'][$j]['title'] = $rec['Faq']['title'];
-                $categories[$i]['Faq'][$j++]['content'] = $rec['Faq']['content'];
-            }
-            $i++;
-        }
+        $faqList = $this->Faq->find('all', array(
+            'conditions' => array(
+                'Faq.status' => '1',
+                'FaqCate.faq_category_title' => $cate
+                ),
+            'fields' => array('Faq.*', 'FaqCate.*'),
+            'joins' => array(
+                array('table' => 'faq_categories',
+                    'alias' => 'FaqCate',
+                    'type' => 'INNER',
+                    'conditions' => array(
+                        'Faq.faq_category_id = FaqCate.id',
+                    )
+                )
+            ),
+            'order' => array('Faq.order')
+        ));
+        
         $this->set('categories', $categories);
+        $this->set('faqList', $faqList);
+        $this->set('cate',$cate);
     }
 
     public function admin_list() {
@@ -112,23 +108,22 @@ class FaqsController extends AppController {
         if (empty($data)) {
             $this->data = $this->Faq->read(null, $id);
         } elseif ($this->Faq->save($this->data)) {
-            $this->flash_msg(1,'Data Saveds');
+            $this->flash_msg(1, 'Data Saveds');
             //$this->Session->setFlash('Data Saved');
             $this->redirect(array('controller' => 'faqs', 'action' => 'edit', $id));
         } else {
 
-           $this->flash_msg(2,'Data not Saved');
+            $this->flash_msg(2, 'Data not Saved');
             //$this->Session->setFlash('Data not saved');
         }
     }
-    
-    public function admin_delete($id){
-        
+
+    public function admin_delete($id) {
+
         $this->Faq->delete($id);
-        $this->flash_msg(1,'Data Saved');
-       // $this->Session->setFlash('Data Deleted. ');
-        $this->redirect(array('controller'=>'faqs','action'=>'admin_list'));
-        
+        $this->flash_msg(1, 'Data Saved');
+        // $this->Session->setFlash('Data Deleted. ');
+        $this->redirect(array('controller' => 'faqs', 'action' => 'admin_list'));
     }
 
 }
