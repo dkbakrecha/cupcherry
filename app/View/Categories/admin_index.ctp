@@ -4,9 +4,9 @@
             <div class="portlet-header">
                 <h3>
                     <i class="fa fa-users"></i>
-                    Type (Primary Content Type)
+                    Categories
                 </h3>
-                <a class="btn btn-primary pull-right" href="<?php echo $this->Html->url(array('admin' => true, 'controller' => 'types', 'action' => 'add')); ?>">Add New Types</a>
+                <a class="btn btn-primary pull-right" href="<?php echo $this->Html->url(array('admin' => true, 'controller' => 'categories', 'action' => 'add')); ?>">Add New Category</a>
             </div> 
 
             <div class="portlet-content">           
@@ -25,16 +25,16 @@
 
                             <tbody aria-relevant="all" aria-live="polite" role="alert"> 
                                 <?php
-                                foreach ($typeList as $typeRow) {
+                                foreach ($cateList as $cateRow) {
                                     ?>
                                     <tr class="odd">
                                         <td class="sorting_1">   
-                                            <?php echo $typeRow['Type']['id']; ?>
+                                            <?php echo $cateRow['Category']['id']; ?>
                                         </td>
-                                        <td class="  sorting_2"><?php echo $typeRow['Type']['title'] ?></td>
-                                        <td class=" "><?php echo $typeRow['Type']['updated'] ?></td>
+                                        <td class="  sorting_2"><?php echo $cateRow['Category']['title'] ?></td>
+                                        <td class=" "><?php echo $cateRow['Category']['updated'] ?></td>
                                         <td class="hidden-xs hidden-sm ">
-                                            &nbsp; <a href="<?php echo $this->Html->url(array('controller' => 'types', 'action' => 'admin_edit', $typeRow['Type']['id'])); ?>"><i class="fa fa-edit fa-2x "></i></a> 
+                                            &nbsp; <a href="<?php echo $this->Html->url(array('controller' => 'categories', 'action' => 'admin_edit', $cateRow['Category']['id'])); ?>"><i class="fa fa-edit fa-2x "></i></a> 
                                         </td>
 
                                     </tr>
