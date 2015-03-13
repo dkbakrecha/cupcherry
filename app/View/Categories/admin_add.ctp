@@ -3,7 +3,7 @@
         <div class="portlet">
             <div class="portlet-header">
                 <h3>
-                    <i class="fa fa-file"></i> Types Edit
+                    <i class="fa fa-file"></i> Category add
                 </h3>
             </div>
 
@@ -11,8 +11,7 @@
                 <div class="row">
                     <div class="col-md-6 col-md-offset-1">
                         <?php
-                        echo $this->Form->create('Type', array('role' => 'form'));
-                        echo $this->Form->hidden('id');
+                        echo $this->Form->create('Category', array('role' => 'form'));
                         ?>
                         <div class="form-group">
                             <div class="row">

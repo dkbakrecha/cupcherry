@@ -12,7 +12,7 @@
             <ul class="nav navbar-nav mainbar-nav">
 
                 <li class="active">
-                    <a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'admin_index','admin' => true)) ?>">
+                    <a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'admin_index', 'admin' => true)) ?>">
                         <i class="fa fa-dashboard"></i>
                         Dashboard
                     </a>
@@ -20,63 +20,33 @@
 
                 <li class="dropdown">
                     <a href="#about" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
-                        <i class="fa fa-desktop"></i>
-                        Meta Info
+                        <i class="fa fa-bars"></i>
+                        Meta Content
                         <span class="caret"></span>
                     </a>
 
                     <ul class="dropdown-menu">   
-                        <li><a href="<?php echo $this->Html->url(array('controller' => 'types', 'action' => 'admin_index','admin' => true)) ?>"><i class="fa fa-user nav-icon"></i> Types (Standard)</a></li>
-                        <li><a href="http://preview.jumpstartthemes.com/target-admin/ui-tabs.html"><i class="fa fa-bars nav-icon"></i> Tabs &amp; Accordions</a></li>
-                        <li><a href="http://preview.jumpstartthemes.com/target-admin/ui-notifications.html"><i class="fa fa-asterisk nav-icon"></i> Popups / Notifications</a></li>
-                        <li><a href="http://preview.jumpstartthemes.com/target-admin/ui-sliders.html"><i class="fa fa-tasks nav-icon"></i> Sliders</a></li>
-                        <li><a href="http://preview.jumpstartthemes.com/target-admin/ui-typography.html"><i class="fa fa-font nav-icon"></i> Typography</a></li>
-                        <li><a href="http://preview.jumpstartthemes.com/target-admin/ui-portlets.html"><i class="fa fa-list-alt nav-icon"></i> Portlets</a></li>
-
-
-                        <li class="dropdown-submenu">
-                            <a tabindex="-1" href="#">
-                                <i class="fa fa-asterisk nav-icon"></i> 
-                                &nbsp;&nbsp;Charts &amp; Graphs
-                            </a>
-
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="http://preview.jumpstartthemes.com/target-admin/ui-chart-flot.html">
-                                        <i class="fa fa-bar-chart-o"></i> 
-                                        &nbsp;&nbsp;jQuery Flot
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="http://preview.jumpstartthemes.com/target-admin/ui-chart-morris.html">
-                                        <i class="fa fa-bar-chart-o"></i> 
-                                        &nbsp;&nbsp;Morris.js
-                                    </a>
-                                </li> 
-                            </ul>
-                        </li>
-
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'types', 'action' => 'admin_index', 'admin' => true)) ?>"><i class="fa fa-bars nav-icon"></i> Types (Standard)</a></li>
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'categories', 'action' => 'admin_index', 'admin' => true)) ?>"><i class="fa fa-bars nav-icon"></i> Categories</a></li>
                     </ul>
                 </li>
 
                 <li class="dropdown">
                     <a href="#about" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
                         <i class="fa fa-desktop"></i>
-                        Services
+                        CupCherry Services
                         <span class="caret"></span>
                     </a>
 
                     <ul class="dropdown-menu">   
-                        <li><a href=""><i class="fa fa-user nav-icon"></i> KeyNotes</a></li>
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'keynotes', 'action' => 'admin_index', 'admin' => true)) ?>"><i class="fa fa-user nav-icon"></i> KeyNotes</a></li>
                         <li><a href=""><i class="fa fa-bars nav-icon"></i> Resources</a></li>
                         <li><a href=""><i class="fa fa-asterisk nav-icon"></i> Events Calendar</a></li>
                         <li><a href=""><i class="fa fa-tasks nav-icon"></i> Groups</a></li>
                         <li><a href=""><i class="fa fa-font nav-icon"></i> Private Courses</a></li>
                         <li><a href=""><i class="fa fa-list-alt nav-icon"></i> Advertisment</a></li>
 
-
-                        <li class="dropdown-submenu">
+                        <!--                        <li class="dropdown-submenu">
                             <a tabindex="-1" href="#">
                                 <i class="fa fa-asterisk nav-icon"></i> 
                                 &nbsp;&nbsp;Charts &amp; Graphs
@@ -97,14 +67,14 @@
                                     </a>
                                 </li> 
                             </ul>
-                        </li>
+                        </li>-->
 
                     </ul>
                 </li>
 
-                
 
-                
+
+                <!--                
                 <li class="dropdown ">
                     <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
                         <i class="fa fa-align-left"></i> 
@@ -161,32 +131,32 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li>-->
 
                 <li class="dropdown ">
                     <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
                         <i class="fa fa-files-o"></i>
-                        Manage Content
+                        Site Content
                         <span class="caret"></span>
                     </a>
 
                     <ul class="dropdown-menu">
-                        <li class="dropdown-header">Site Content</li>
-                        <li><a href="<?php echo $this->Html->url(array('controller' => 'cms_pages', 'action' => 'admin_index','admin' => true)) ?>"><i class="fa fa-files-o nav-icon"></i> CMS Pages</a></li>
+                        <!--<li class="dropdown-header">Site Content</li>-->
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'cms_pages', 'action' => 'admin_index', 'admin' => true)) ?>"><i class="fa fa-files-o nav-icon"></i> CMS Pages</a></li>
                         <li><a href=""><i class="fa fa-file-text nav-icon"></i> Email Content</a></li>
-                        <li><a href=""><i class="fa fa-file-powerpoint-o nav-icon"></i> FAQ'S Section</a></li>
-                        <li class="divider"></li>
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'faqs', 'action' => 'admin_list', 'admin' => true)) ?>"><i class="fa fa-file-powerpoint-o nav-icon"></i> FAQ'S Section</a></li>
+                        <!--                        <li class="divider"></li>
                         <li class="dropdown-header">Client Content</li>
                         <li><a href=""><i class="fa fa-money nav-icon"></i> Invoice</a></li>
                         <li><a href=""><i class="fa fa-dollar nav-icon"></i> Pricing Plans</a></li>
                         <li><a href=""><i class="fa fa-question nav-icon"></i> Support Page</a></li>
                         <li><a href=""><i class="fa fa-picture-o nav-icon"></i> Gallery</a></li>
-                        <li><a href=""><i class="fa fa-cogs nav-icon"></i> Settings</a></li>
-                        
+                        <li><a href=""><i class="fa fa-cogs nav-icon"></i> Settings</a></li>-->
+
                     </ul>
                 </li>  
 
-                                <li class="dropdown">
+                <li class="dropdown">
                     <a href="#about" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
                         <i class="fa fa-users"></i>
                         User Management
@@ -196,7 +166,7 @@
                     <ul class="dropdown-menu">   
                         <li><a href="<?php echo $this->Html->url(array('controller' => 'Users', 'action' => 'list')); ?>"><i class="fa fa-user nav-icon"></i>Users</a></li>
                         <li><a href="#"><i class="fa fa-bars nav-icon"></i>  CMS Pages</a></li>
-                        <!--<li><a href="<?php // echo $this->Html->url(array('controller' => 'faqs', 'action' => 'admin_index'))      ?>"><i class="fa fa-asterisk nav-icon"></i> FAQ Options</a></li>-->
+                        <!--<li><a href="<?php // echo $this->Html->url(array('controller' => 'faqs', 'action' => 'admin_index'))       ?>"><i class="fa fa-asterisk nav-icon"></i> FAQ Options</a></li>-->
                         <li>
                             <a href="#"><i class="fa fa-tasks nav-icon">
 
@@ -295,7 +265,7 @@
                     </ul>
                 </li>
 
-                
+                <!--
                 <li class="dropdown ">
                     <a href="#contact" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
                         <i class="fa fa-external-link"></i>
@@ -389,7 +359,7 @@
                         </li> 
 
                     </ul>
-                </li>
+                </li>-->
 
             </ul>
 

@@ -16,10 +16,9 @@
                         ?>
                         <div class="form-group">
                             <div class="row">
-                                <div class='col-md-12'>
+                                <dvi class='col-md-12'>
                                     <label for="exampleInputEmail1">Enter new class</label>
                                     <?php echo $this->Form->input('title', array('div' => false, 'label' => false, 'class' => 'form-control ', 'placeholder' => 'First Name')); ?>
-                                </div>
                             </div>
                         </div>
                         <?php
