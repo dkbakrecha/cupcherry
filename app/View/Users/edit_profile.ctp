@@ -5,7 +5,7 @@
     </div>
     <div class="col-md-12">
         <?php
-        echo $this->Form->create('UserProfile', array('url' => array(
+        echo $this->Form->create('UserProfile', array('clasee' =>'form-horizontal','url' => array(
                 'controller' => 'users', 'action' => 'edit_profile'
         )));
         ?>
@@ -48,7 +48,7 @@
                         'div' => false,
                         'label' => false,
                         'separator' => '',
-                        // pending year picker
+                            // pending year picker
 //                       'dateFormat' => 'DMY',
 //                    'minYear' => date('Y') - 70,
 //                    'maxYear' => date('Y') - 18

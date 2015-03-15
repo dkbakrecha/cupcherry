@@ -228,7 +228,8 @@
     background: none repeat scroll 0 0 #428bca;
     color: white;
     font-variant: small-caps;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+   
 }
 .btn{
     border-radius: 0px;
@@ -274,17 +275,32 @@
     font-variant: small-caps;
 }
 .btn-invite {
-    position: relative;
-    top: -34px;
-    outline: none;
+    left: 186px;
+    outline: medium none;
+    position: absolute;
+    top: 0;
 }
 .invite-group-div {
-    position: relative;
-    top: 26px;
+  //  position: relative;
+   // top: 26px;
+  // margin-bottom: 15px;
 }
 #grp-drop-list{
     display: none;
 }
 .gifProcess {
     display: none;
+}
+.form-bottom-margin{
+    margin-bottom: 0px;
+}
+.table.grp_mem_table a {
+    outline: medium none;
+    text-decoration: none;
+}
+.error-message{
+    color: red;
+}
+.required-sign{
+    color: red;
 }

@@ -63,10 +63,11 @@ class AppController extends Controller {
             $this->Auth->loginAction = array('admin' => true, 'controller' => 'users', 'action' => 'admin_login');
             $this->Auth->loginRedirect = array('admin' => true, 'controller' => 'users', 'action' => 'admin_dashboard');
             $this->Auth->logoutRedirect = array('admin' => true, 'controller' => 'users', 'action' => 'admin_login');
+             $this->Auth->authorize = 'controller';
         } else {
 
             $this->Auth->authenticate = array(
-                'Form' => array(
+                'form' => array(
                     'fields' => array(
                         'username' => 'email',
                         'password' => 'password',
@@ -74,7 +75,7 @@ class AppController extends Controller {
                     'scope' => array('User.type' => array(1, 2))
                 ),
             );
-
+            
             // to check session key if we not define this here then is will check with 'Auth.User' so dont remove it
             AuthComponent::$sessionKey = 'Auth.User';
             $this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
@@ -91,9 +92,22 @@ class AppController extends Controller {
         //$this->Auth->allow('index');
         $this->SiteSettings();
         $this->commonData();
+      
+    }
+    
+    public function isAuthorized(){
+       // prd($currentUserInfo);
+        if($currentUserInfo['profile_status'] == 0){
+            $this->Auth->authorize = array(
+                'Actions' => array('step1' => 'users/'),
+                'Controller'
+            );
+           // return false;
+        }
     }
 
-    public function flash_msg($flag = NULL, $msg) {
+
+        public function flash_msg($flag = NULL, $msg) {
         if ($flag == 1) {
             $this->Session->setFlash($msg, 'default', array('class' => 'alert alert-success'));
         } elseif ($flag == 2) {

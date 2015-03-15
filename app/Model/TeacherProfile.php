@@ -1,82 +1,23 @@
 <?php
 
-App::uses('AppModel', 'Model');
-App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
+class TeacherProfile extends AppModel {
 
-class User extends AppModel {
-
-    var $name = 'User';
+    var $name = 'TeacherProfile';
     public $validate = array(
-        'username' => array(
+        'phone_number' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
-                'message' => 'A username is required'
+                'message' => 'Please provide you number.'
             ),
-            'unique name' => array(
-                'rule' => 'isUnique',
-                'message' => 'this username already taken'
-            )
-        ),
-        'email' => array(
-            'valid email' => array(
-                'rule' => array('email', false), // second parameter verify that the host for the address is valid / I set this false right now
-                'message' => 'Please enter a valid email address'
+            'phone_number' => array(
+                'rule' => 'numeric',
+                'message' => 'Please provide valid number'
             ),
-            'unique email' => array(
-                'rule' => 'isUnique',
-                'message' => 'This email address already registered.'
-            )
+//            'phone_number' => array(
+//                'rule' => array('phone'),
+//                'message' => 'Please provide valid number'
+//            )
         ),
-        'password' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'A password is required'
-            ),
-            'password match' => array(
-                'rule' => 'passwordMatch',
-                'message' => ''
-            )
-        ),
-        'confirm_password' => array(
-            'required' => array(
-                'rule' => array('notEmpty'),
-                'message' => 'A confirm password is required'
-            )
-            
-        ),
-        'role' => array(
-            'valid' => array(
-                'rule' => array('inList', array('admin', 'member')),
-                'message' => 'Please enter a valid role',
-                'allowEmpty' => false
-            )
-        )
     );
-
-    public function passwordMatch() {
-        if ($this->data[$this->alias]['password'] == $this->data['User']['confirm_password']) {
-            return true;
-        }
-        $this->invalidate('confirm_password', 'Passwords do not match.');
-        return false;
-    }
-
-//    public function validate_passwords() {
-//        return $this->data[$this->alias]['password'] === $this->data[$this->alias]['cpassword'];
-//    }
-
-    public function beforeSave($options = array()) {
-        if (isset($this->data[$this->alias]['password'])) {
-            $passwordHasher = new SimplePasswordHasher();
-            $this->data[$this->alias]['password'] = $passwordHasher->hash(
-                    $this->data[$this->alias]['password']
-            );
-
-            if (!empty($this->data)) {
-                $this->data['User']['dob'] = date('Y-m-d', strtotime($this->data['User']['dob']));
-            }
-        }
-        return true;
-    }
 
 }

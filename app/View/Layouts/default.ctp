@@ -19,6 +19,7 @@ $cakeDescription = __d('cake_dev', 'Cup Cherry : ');
 <!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=9">
         <?php echo $this->Html->charset(); ?>
         <title>
             <?php echo $cakeDescription ?>
@@ -52,6 +53,7 @@ $cakeDescription = __d('cake_dev', 'Cup Cherry : ');
             <?php echo 'Current User Id : ' . Configure::read('currentUserInfo.id');?>
             <?php echo $this->element('header2'); ?>
             <?php echo $this->element('menu'); ?>
+             <?php // echo $this->Session->flash(); ?>
             <?php
             if (!isset($currentUserInfo) && empty($currentUserInfo)) {
                 // prd($this->request);
