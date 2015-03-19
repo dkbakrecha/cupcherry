@@ -63,10 +63,11 @@ class AppController extends Controller {
             $this->Auth->loginAction = array('admin' => true, 'controller' => 'users', 'action' => 'admin_login');
             $this->Auth->loginRedirect = array('admin' => true, 'controller' => 'users', 'action' => 'admin_dashboard');
             $this->Auth->logoutRedirect = array('admin' => true, 'controller' => 'users', 'action' => 'admin_login');
+            //  $this->Auth->authorize = 'controller';
         } else {
 
             $this->Auth->authenticate = array(
-                'Form' => array(
+                'form' => array(
                     'fields' => array(
                         'username' => 'email',
                         'password' => 'password',
@@ -85,15 +86,36 @@ class AppController extends Controller {
         if (isset($currentUserInfo) && !empty($currentUserInfo)) {
             $this->set('currentUserInfo', $currentUserInfo);
         }
-        //  prd($currentUserInfo);
+        // prd($currentUserInfo);
 
         Configure::write('currentUserInfo', $currentUserInfo);
+        $cont = $this->request->params['controller'];
+        $act = $this->request->params['action'];
+
+        $currentAction = $cont . "_" . $act;
+
+        $allowAction = array();
+        $allowAction[] = 'users_step1';
+        $allowAction[] = 'users_uprofile';
+        $allowAction[] = 'users_tprofile';
+        $allowAction[] = 'users_profile';
+
+//        if($currentUserInfo['profile_status'] == 0){
+//            if(in_array($currentAction, $allowAction)){
+//                // User profile not complate and try to access valid controller
+//            }else{
+//                $this->flash_msg(1,"Hello Plesae conform your profile");
+//                $this->redirect(array('controller' => 'users', 'action' => 'step1'));
+//            }
+//        }
+        //pr($this->request);
+        //prd($currentUserInfo);
         //$this->Auth->allow('index');
         $this->SiteSettings();
         $this->commonData();
     }
-    
-    public function __getUser(){
+
+    public function __getUser() {
         $currentUserInfo = $this->Session->read('Auth.User');
         return $currentUserInfo;
     }
@@ -114,17 +136,16 @@ class AppController extends Controller {
 
         $groupList = $this->Group->find('all', array(
             'conditions' => array('Group.created_by' => $userId, 'Group.status' => 1),
-            'fields'=> array('id','title','status'),
+            'fields' => array('id', 'title', 'status'),
         ));
         $this->set('groupList', $groupList);
         //  prd($groupList);
-        
+
         $joinedGropus = $this->GroupMember->find('all', array(
             'conditions' => array('GroupMember.user_id' => $userId, 'GroupMember.status' => 1),
-           
         ));
         $this->set('joinedGropus', $joinedGropus);
-       //  prd($joinedGropus);
+        //  prd($joinedGropus);
     }
 
     protected function SiteSettings() {

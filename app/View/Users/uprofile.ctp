@@ -1,12 +1,15 @@
+<?php
+//prd($types);
+?>
 <?php ?>
 <div class="row">
     <div class="col-md-12 for_heading">
-        <span><h3>Profile</h3></span>
+        <span><h3>Complete your profile</h3></span>
     </div>
     <div class="col-md-12">
         <?php
-        echo $this->Form->create('UserProfile', array('clasee' =>'form-horizontal','url' => array(
-                'controller' => 'users', 'action' => 'edit_profile'
+        echo $this->Form->create('UserProfile', array('url' => array(
+                'controller' => 'users', 'action' => 'uprofile'
         )));
         ?>
         <div class="form-group">
@@ -48,7 +51,7 @@
                         'div' => false,
                         'label' => false,
                         'separator' => '',
-                            // pending year picker
+                        // pending year picker
 //                       'dateFormat' => 'DMY',
 //                    'minYear' => date('Y') - 70,
 //                    'maxYear' => date('Y') - 18
@@ -87,11 +90,11 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-md-3">
-
+                     
                 </div>
                 <div class="col-md-6">
-                    <?php
-                    echo $this->Form->submit('Update', array('class' => ' pull-right btn btn-primary'));
+                   <?php
+                    echo $this->Form->submit('Save', array('class' => 'pull-right btn btn-primary'));
                     ?>
                 </div>
             </div>

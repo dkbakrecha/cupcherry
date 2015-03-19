@@ -42,7 +42,18 @@ class User extends AppModel {
                 'rule' => array('notEmpty'),
                 'message' => 'A confirm password is required'
             )
-            
+        ),
+        'change_password' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'old password is required'
+            )
+        ),
+        'change_password' => array(
+            'required' => array(
+                'rule' => 'checkCurrentPassword',
+               // 'message' => 'old password incorrect.'
+            )
         ),
         'role' => array(
             'valid' => array(
@@ -58,6 +69,22 @@ class User extends AppModel {
             return true;
         }
         $this->invalidate('confirm_password', 'Passwords do not match.');
+        return false;
+    }
+
+    public function checkCurrentPassword() {
+        $passwordHasher = new SimplePasswordHasher();
+        $this->data[$this->alias]['change_password'] = $passwordHasher->hash(
+                $this->data[$this->alias]['change_password']
+        );
+        
+        //$currentId = Configure::read('currentUserInfo.id');
+        $oldpassword = $this->data[$this->alias]['old_password'];
+      
+        if ($this->data[$this->alias]['change_password'] == $oldpassword) {
+            return true;
+        }
+        $this->invalidate('change_password','old password incorrect.');
         return false;
     }
 

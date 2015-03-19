@@ -233,7 +233,8 @@ header{
     background: none repeat scroll 0 0 #428bca;
     color: white;
     font-variant: small-caps;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+
 }
 .btn{
     border-radius: 0px;
@@ -279,13 +280,15 @@ header{
     font-variant: small-caps;
 }
 .btn-invite {
-    position: relative;
-    top: -34px;
-    outline: none;
+    left: 186px;
+    outline: medium none;
+    position: absolute;
+    top: 0;
 }
 .invite-group-div {
-    position: relative;
-    top: 26px;
+    //  position: relative;
+    // top: 26px;
+    // margin-bottom: 15px;
 }
 #grp-drop-list{
     display: none;
@@ -294,6 +297,37 @@ header{
     display: none;
 }
 
+
 .searchform{
     padding: 20px;
+}
+.form-bottom-margin{
+    margin-bottom: 0px;
+}
+.table.grp_mem_table a {
+    outline: medium none;
+    text-decoration: none;
+}
+.error-message{
+    color: red;
+}
+.required-sign{
+    color: red;
+}
+.error{
+    color:red;
+}
+
+
+.loginPage {
+    background-color: #fbfbfb;
+    border: 1px solid #D3D3D3;
+    margin-bottom: 70px;
+    margin-top: 50px;
+    padding-bottom: 25px;
+    padding-top: 25px;
+}
+.login-page-heading{
+    font-size: 16px;
+
 }

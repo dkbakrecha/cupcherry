@@ -19,6 +19,7 @@ $cakeDescription = __d('cake_dev', '| Education Solution | CupCherry');
 <!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=9">
         <?php echo $this->Html->charset(); ?>
         <title>
             <?php echo $this->fetch('title'); ?>
@@ -35,6 +36,7 @@ $cakeDescription = __d('cake_dev', '| Education Solution | CupCherry');
             'style',
             'front',
             'mediafile',
+            'bootstrap-social'
         ));
 
         echo $this->Html->script(array(
@@ -44,20 +46,18 @@ $cakeDescription = __d('cake_dev', '| Education Solution | CupCherry');
             'bootstrap/bootstrap.min',
             'custom_jquery',
         ));
-       
         ?>
     </head>
     <body>
         <div class="page">
-            <?php echo 'Current User Id : ' . Configure::read('currentUserInfo.id');?>
+            <?php echo 'Current User Id : ' . Configure::read('currentUserInfo.id'); ?>
             <?php echo $this->element('header2'); ?>
             <?php echo $this->element('menu'); ?>
+            <?php // echo $this->Session->flash(); ?>
             <?php
             if (!isset($currentUserInfo) && empty($currentUserInfo)) {
                 // prd($this->request);
-                if ($this->request->params['controller'] == 'users' && $this->request->params['action'] == 'login') {
-                    echo $this->element('slider');
-                } elseif ($this->request->params['controller'] == 'pages' && $this->request->params['action'] == 'index') {
+                if ($this->request->params['controller'] == 'pages' && $this->request->params['action'] == 'index') {
                     echo $this->element('slider');
                 }
             }
@@ -105,10 +105,10 @@ $cakeDescription = __d('cake_dev', '| Education Solution | CupCherry');
                 <?php echo $this->element('footer'); ?>
             </div>
 
-            <?php //echo $this->element('sql_dump');     ?>
+            <?php //echo $this->element('sql_dump');      ?>
         </div>
         <?php
-         echo $this->Js->writeBuffer(array('cache' => false));
+        echo $this->Js->writeBuffer(array('cache' => false));
         ?>
     </body>
 </html>
