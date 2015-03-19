@@ -13,7 +13,7 @@
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-$cakeDescription = __d('cake_dev', 'Cup Cherry : ');
+$cakeDescription = __d('cake_dev', '| Education Solution | CupCherry');
 //$cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 ?>
 <!DOCTYPE html>
@@ -21,8 +21,8 @@ $cakeDescription = __d('cake_dev', 'Cup Cherry : ');
     <head>
         <?php echo $this->Html->charset(); ?>
         <title>
-            <?php echo $cakeDescription ?>
             <?php echo $this->fetch('title'); ?>
+            <?php echo $cakeDescription ?>
         </title>
         <?php
         echo $this->Html->meta('icon');

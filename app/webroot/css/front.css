@@ -78,8 +78,13 @@
     margin-top: 0px;
     text-align: justify;
 }
+
+header{
+    border-bottom: 2px solid #277396;
+}
+
 .logo{
-    margin-top: 20px;
+    margin: 10px auto;
 }
 .logo a {
     font-size: 36px;
@@ -287,4 +292,8 @@
 }
 .gifProcess {
     display: none;
+}
+
+.searchform{
+    padding: 20px;
 }

@@ -92,6 +92,11 @@ class AppController extends Controller {
         $this->SiteSettings();
         $this->commonData();
     }
+    
+    public function __getUser(){
+        $currentUserInfo = $this->Session->read('Auth.User');
+        return $currentUserInfo;
+    }
 
     public function flash_msg($flag = NULL, $msg) {
         if ($flag == 1) {

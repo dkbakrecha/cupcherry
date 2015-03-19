@@ -45,60 +45,174 @@
     .form__body {
         padding: 6.23701% 9.35551%;
     }
+    
+    
+    .thumb-pad1 {
+    background: none repeat scroll 0 0 #ffffff;
+    border: 1px solid #dadada;
+    margin: 0 0 63px;
+    overflow: visible !important;
+    padding: 86px 35px 49px;
+    text-align: center;
+}
+
+.thumb-pad1 .badge {
+    background: none repeat scroll 0 0 #b93a41;
+    border-radius: 100%;
+    float: left;
+    height: 94px;
+    left: 50%;
+    line-height: 94px;
+    margin: 0 34px 0 -47px;
+    padding: 0;
+    position: absolute;
+    text-align: center;
+    top: -44px;
+    width: 94px;
+}
+
+img {
+    vertical-align: middle;
+}
+
+.thumb-pad1 .badge .fa{
+    vertical-align: middle;
+}
+.thumb-pad1 .thumbnail {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: medium none;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+}
+
+.thumb-pad1 .thumbnail .caption {
+    overflow: hidden;
+    padding: 0;
+}
+
+.thumb-pad1 .thumbnail .caption .title {
+    color: #555a78;
+    font: bold 22px "Passion One";
+    margin-bottom: 13px;
+    text-transform: uppercase;
+}
+
+.thumb-pad1 .thumbnail .caption p {
+    margin-bottom: 20px;
+    line-height: 24px;
+}
+
+.btn-default.btn1 {
+    background: none repeat scroll 0 0 #555a78;
+    border: 1px solid #555a78;
+    border-radius: 0;
+    box-shadow: none;
+    color: #ffffff;
+    display: inline-block;
+    font: bold 13px/34px "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    margin: 0;
+    padding: 0 20px;
+    text-decoration: none !important;
+    text-shadow: none;
+    text-transform: uppercase;
+    transition: all 0.25s ease 0s;
+}
+
+.LRpadding{
+    padding: 120px 0 0;
+}
+
+.home-about{
+    background: #555A78;
+    color : #fff;
+}
 </style>
 
-
-
-<div class="row">
-    <div class="wrapper1 row">
-        <div class="heading wow fadeInUp" data-wow-delay="0.2s">
-            <h6>Providing Education systems & solutions</h6>
-
-            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit</p>
-        </div>
-        <div class="row off1">
-            <div class="col-lg-3 grid_3 wow fadeInLeft" data-wow-delay="0.2s">
-                <div class="icon-box">
-                    <div class="icon i1"></div>
-                    <p class="lg">Web Design</p>
-
-                    <p>Fusce euismod consequat ante</p>
-                    <a class="btn" href="index.html#">learn more</a>
-                </div>
+<div class="LRpadding center-background">
+<div class="container"> 
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4">
+                <div class="thumb-pad1 maxheight wow fadeIn animated" style="visibility: visible; animation-name: fadeIn; height: 327px;"><div class="box_inner">
+                        <div class="badge"><i class="fa fa-anchor fa-3x"></i></div>
+                    <div class="thumbnail">
+                        <div class="caption">
+                            <p class="title">online education</p>
+                            <p>Lorem ipsum dolor sit amet, consectscing elit. Maecenas moleset alldbus id ictum. Ut neque purus, sollic alitudin non ante ac, malesuada. condimentum libero. </p>
+                            <a class="btn-default btn1" href="#">Read More</a>
+                        </div>
+                    </div>
+                </div></div>
             </div>
-            <div class="col-lg-3 grid_3 wow fadeInLeft" data-wow-delay="0.3s">
-                <div class="icon-box">
-                    <div class="icon i2"></div>
-                    <p class="lg">Facilities Management</p>
-
-                    <p>Mauris accumsan nulla</p>
-                    <a class="btn" href="index.html#">learn more</a>
-                </div>
+            <div data-wow-delay="0.1s" class="col-lg-4 col-md-4 col-sm-4 wow fadeIn animated" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeIn;">
+                <div class="thumb-pad1 maxheight" style="height: 327px;"><div class="box_inner">
+                    <div class="badge"><i class="fa fa-clipboard fa-3x"></i></div>
+                    <div class="thumbnail">
+                        <div class="caption">
+                            <p class="title">education notes</p>
+                            <p>Lorem ipsum dolor sit amet, consectscing elit. Maecenas moleset alldbus id ictum. Ut neque purus, sollic alitudin non ante ac, malesuada. condimentum libero. </p>
+                            <a class="btn-default btn1" href="#">Read More</a>
+                        </div>
+                    </div>
+                </div></div>
             </div>
-            <div class="col-lg-3 grid_3 wow fadeInLeft" data-wow-delay="0.4s">
-                <div class="icon-box">
-                    <div class="icon i3"></div>
-                    <p class="lg">Computer Support</p>
-
-                    <p>In pede mi, aliquet </p>
-                    <a class="btn" href="index.html#">learn more</a>
-                </div>
+            <div data-wow-delay="0.2s" class="col-lg-4 col-md-4 col-sm-4 wow fadeIn animated" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeIn;">
+                <div class="thumb-pad1 maxheight" style="height: 327px;"><div class="box_inner">
+                    <div class="badge"><i class="fa fa-group fa-3x"></i></div>
+                    <div class="thumbnail">
+                        <div class="caption">
+                            <p class="title">Effective Groups</p>
+                            <p>Lorem ipsum dolor sit amet, consectscing elit. Maecenas moleset alldbus id ictum. Ut neque purus, sollic alitudin non ante ac, malesuada. condimentum libero. </p>
+                            <a class="btn-default btn1" href="#">Read More</a>
+                        </div>
+                    </div>
+                </div></div>
             </div>
-            <div class="col-lg-3 grid_3 wow fadeInLeft" data-wow-delay="0.5s">
-                <div class="icon-box">
-                    <div class="icon i4"></div>
-                    <p class="lg">24/7 Suppport</p>
-
-                    <p>Aliquam congue fermentu</p>
-                    <a class="btn" href="index.html#">learn more</a>
-                </div>
+            <div data-wow-delay="0.2s" class="col-lg-4 col-md-4 col-sm-4 wow fadeIn animated" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeIn;">
+                <div class="thumb-pad1 maxheight" style="height: 327px;"><div class="box_inner">
+                    <div class="badge"><i class="fa fa-files-o fa-3x"></i></div>
+                    <div class="thumbnail">
+                        <div class="caption">
+                            <p class="title">Manage Resources</p>
+                            <p>Lorem ipsum dolor sit amet, consectscing elit. Maecenas moleset alldbus id ictum. Ut neque purus, sollic alitudin non ante ac, malesuada. condimentum libero. </p>
+                            <a class="btn-default btn1" href="#">Read More</a>
+                        </div>
+                    </div>
+                </div></div>
+            </div>
+            <div data-wow-delay="0.2s" class="col-lg-4 col-md-4 col-sm-4 wow fadeIn animated" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeIn;">
+                <div class="thumb-pad1 maxheight" style="height: 327px;"><div class="box_inner">
+                    <div class="badge"><i class="fa fa-graduation-cap fa-3x"></i></div>
+                    <div class="thumbnail">
+                        <div class="caption">
+                            <p class="title">Online Courses</p>
+                            <p>Lorem ipsum dolor sit amet, consectscing elit. Maecenas moleset alldbus id ictum. Ut neque purus, sollic alitudin non ante ac, malesuada. condimentum libero. </p>
+                            <a class="btn-default btn1" href="#">Read More</a>
+                        </div>
+                    </div>
+                </div></div>
+            </div>
+            <div data-wow-delay="0.2s" class="col-lg-4 col-md-4 col-sm-4 wow fadeIn animated" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeIn;">
+                <div class="thumb-pad1 maxheight" style="height: 327px;"><div class="box_inner">
+                    <div class="badge"><i class="fa fa-bank fa-3x"></i></div>
+                    <div class="thumbnail">
+                        <div class="caption">
+                            <p class="title">Manage PTA</p>
+                            <p>Lorem ipsum dolor sit amet, consectscing elit. Maecenas moleset alldbus id ictum. Ut neque purus, sollic alitudin non ante ac, malesuada. condimentum libero. </p>
+                            <a class="btn-default btn1" href="#">Read More</a>
+                        </div>
+                    </div>
+                </div></div>
             </div>
         </div>
     </div>
 </div>
 
-
-
+<div class="home-about">
+<div class="container"> 
 <div class="row">
     <div class="homeabout">
         <div class="container">
@@ -131,5 +245,5 @@
         
         
     </div>
-
- 
+</div>
+</div>
