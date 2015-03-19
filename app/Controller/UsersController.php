@@ -30,11 +30,46 @@ class UsersController extends AppController {
 
     public function profile($username = null) {
         $this->set('title_for_layout', 'Public Profile');
-        prd($this->request);
+
+
+        $userData = $this->User->find('first', array('conditions' => array(
+                'username' => $username
+        )));
+
+        $this->set('userData', $userData);
     }
 
     public function changepassword() {
         $this->set('title_for_layout', 'Change Password');
+        // pr($this->request->data);
+        $currentId = Configure::read('currentUserInfo.id');
+        $data = $this->request->data;
+
+
+        //  prd($data);
+       
+        if(isset($data) && !empty($data)) {
+            $oldpass = $this->User->find('first', array(
+                'conditions' => array('User.id' => $currentId),
+                'fields' => array('password', 'id'),
+            ));
+
+            $data['User']['id'] = $oldpass['User']['id'];
+            $data['User']['old_password'] = $oldpass['User']['password'];
+             $this->User->set($data);
+            if ($this->User->validates()) {
+                if ($this->User->save($data)) {
+
+                    $this->flash_msg(1, 'Password changed.');
+                      $this->redirect(array('controller'=>'users','action'=>'changepassword'));
+                } else {
+                    $this->flash_msg(2, 'Password not changed.');
+                    //  $this->redirect(array('controller'=>'users','action'=>'changepassword'));
+                }
+            } else {
+                $errors = $this->User->validationErrors;
+            }
+        }
     }
 
     public function edit_profile() {
@@ -297,7 +332,7 @@ class UsersController extends AppController {
 
             if ($this->request->is('post')) {
                 $data['UserProfile']['user_id'] = $userId;
-                 $data['UserProfile']['status'] = 1;
+                $data['UserProfile']['status'] = 1;
                 if ($this->UserProfile->save($data)) {
                     $this->flash_msg(1, 'Profile Saved.');
                     $this->redirect(array('controller' => 'users', 'action' => 'dasboard'));
@@ -387,6 +422,7 @@ class UsersController extends AppController {
         }
 
 
+
         if ($this->request->is('post')) {
             if ($user['type'] == 0) {
                 if ($this->Auth->login()) {
@@ -399,6 +435,11 @@ class UsersController extends AppController {
 
             $this->Session->setFlash(__('Incorrect Username or Password'));
         }
+    }
+
+    public function plus_login() {
+        $this->layout = 'plus_login';
+        $this->set('title_for_layout', 'Plus Login');
     }
 
     function admin_logout() {

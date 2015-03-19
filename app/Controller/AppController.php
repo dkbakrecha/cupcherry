@@ -63,7 +63,7 @@ class AppController extends Controller {
             $this->Auth->loginAction = array('admin' => true, 'controller' => 'users', 'action' => 'admin_login');
             $this->Auth->loginRedirect = array('admin' => true, 'controller' => 'users', 'action' => 'admin_dashboard');
             $this->Auth->logoutRedirect = array('admin' => true, 'controller' => 'users', 'action' => 'admin_login');
-             $this->Auth->authorize = 'controller';
+           //  $this->Auth->authorize = 'controller';
         } else {
 
             $this->Auth->authenticate = array(
@@ -86,25 +86,40 @@ class AppController extends Controller {
         if (isset($currentUserInfo) && !empty($currentUserInfo)) {
             $this->set('currentUserInfo', $currentUserInfo);
         }
-        //  prd($currentUserInfo);
+         // prd($currentUserInfo);
 
         Configure::write('currentUserInfo', $currentUserInfo);
+        $cont = $this->request->params['controller'];
+        $act = $this->request->params['action'];
+        
+        $currentAction = $cont . "_" . $act;
+        
+        $allowAction = array();
+        $allowAction[] = 'users_step1';
+        $allowAction[] = 'users_uprofile';
+        $allowAction[] = 'users_tprofile';
+        $allowAction[] = 'users_profile';
+        
+//        if($currentUserInfo['profile_status'] == 0){
+//            if(in_array($currentAction, $allowAction)){
+//                // User profile not complate and try to access valid controller
+//            }else{
+//                $this->flash_msg(1,"Hello Plesae conform your profile");
+//                $this->redirect(array('controller' => 'users', 'action' => 'step1'));
+//            }
+//        }
+        
+        
+        //pr($this->request);
+        //prd($currentUserInfo);
+        
+        
         //$this->Auth->allow('index');
         $this->SiteSettings();
         $this->commonData();
-      
     }
     
-    public function isAuthorized(){
-       // prd($currentUserInfo);
-        if($currentUserInfo['profile_status'] == 0){
-            $this->Auth->authorize = array(
-                'Actions' => array('step1' => 'users/'),
-                'Controller'
-            );
-           // return false;
-        }
-    }
+  
 
 
         public function flash_msg($flag = NULL, $msg) {

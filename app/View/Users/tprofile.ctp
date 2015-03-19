@@ -11,7 +11,8 @@
 
         <?php
         echo $this->Form->create('TeacherProfile', array(
-            'class' => 'form-horizontal'
+            'class' => 'form-horizontal',
+           
         ));
         ?>
         <div class="form-group">
@@ -74,7 +75,7 @@
                     <?php
                     $location_options = array('1' => 'sardarpura', '2' => 'Jalori Gate', '3' => 'CHB');
 
-                    echo $this->Form->input('tc_country', array(
+                    echo $this->Form->input('tc_location', array(
                         'class' => 'form-control',
                         'empty' => 'Select',
                         'options' => $location_options,
@@ -152,13 +153,13 @@
                 </div>
                 <div class="col-md-7">
                     <?php
-                    $type_options[0] = 'Select';
+                   
                     foreach ($types as $type) {
                         $type_options[$type['Type']['id']] = $type['Type']['title'];
                     };
                     echo $this->Form->input('teaching_standards', array(
                         'class' => 'form-control',
-                        'default' => $type_options[0],
+                         'empty' =>'Select',
                         'options' => $type_options,
                         'label' => false,
                         'div' => false,
@@ -177,12 +178,13 @@
                 </div>
                 <div class="col-md-7">
                     <?php
-                    $categorie_options[0] = 'Select';
+                  
                     foreach ($categories as $cate) {
                         $categorie_options[$cate['Category']['id']] = $cate['Category']['title'];
                     }
                     echo $this->Form->input('teaching_subjects', array(
                         'class' => 'form-control',
+                         'empty' =>'Select',
                         'options' => $categorie_options,
                         'label' => false,
                         'div' => false,
@@ -201,12 +203,13 @@
                 </div>
                 <div class="col-md-7">
                     <?php
-                    $facility_option[0] = 'Select';
+                   // $facility_option[0] = 'Select';
                     foreach ($facility as $fac) {
                         $facility_option[$fac['TeacherFacility']['id']] = $fac['TeacherFacility']['title'];
                     }
                     echo $this->Form->input('teaching_facilities', array(
                         'class' => 'form-control',
+                        'empty' =>'Select',
                         'options' => $facility_option,
                         'label' => false,
                         'div' => false,
@@ -214,9 +217,9 @@
                     ));
                     ?>
                 </div>
-                
+
                 <span class="required-sign">*</span>
-               
+
             </div>
 
         </div>
@@ -225,11 +228,13 @@
         <div class="form-group">
             <div class="col-md-12">
                 <div class="col-md-4">
-                   
+
                 </div>
                 <div class="col-md-7">
-<?php
-                    echo $this->Form->submit('Save', array('class' => ' pull-right btn btn-primary'));
+                    <?php
+                    echo $this->Form->submit('Save', array(
+                        'class' => ' pull-right btn btn-primary', 
+                        ));
                     ?>
                 </div>
             </div>
@@ -241,48 +246,36 @@
         ?>   
     </div>
 </div>
+<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
 <script>
     $(document).ready(function() {
         // When the browser is ready...
-  $(function() {
-  
-    // Setup form validation on the #register-form element
-    $("#TeacherProfileTprofileForm").validate({
-    
-        // Specify the validation rules
-        rules: {
-            TeacherProfileTeacherType: "required",
-            lastname: "required",
-            email: {
-                required: true,
-                email: true
-            },
-            password: {
-                required: true,
-                minlength: 5
-            },
-            agree: "required"
-        },
-        
-        // Specify the validation error messages
-        messages: {
-            firstname: "Please enter your first name",
-            lastname: "Please enter your last name",
-            password: {
-                required: "Please provide a password",
-                minlength: "Your password must be at least 5 characters long"
-            },
-            email: "Please enter a valid email address",
-            agree: "Please accept our policy"
-        },
-        
-        submitHandler: function(form) {
-            form.submit();
-        }
-    });
+        $(function() {
+            // alert('Hello');
+            // Setup form validation on the #register-form element
+            $("#TeacherProfileTprofileForm").validate({
+                // Specify the validation rules
+                rules: {
+                    TeacherProfileTeacherType: "required",
+                    TeacherProfileTeachingStandards: "required",
+                    TeacherProfileTeachingSubjects: "requiredv",
+                    TeacherProfileTcLocation: "required",
+                    TeacherProfileTeachingFacilities: "required",
+                    TeacherProfilePhonePrivacy: "required",
+                },
+                // Specify the validation error messages
+                messages: {
+                    TeacherProfileTeacherType: "Please enter your first name",
+                    TeacherProfilePhoneNumber: "Please fill this..",
+                },
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            });
 
-  });
-  
+        }
+        );
+
 
 
     });

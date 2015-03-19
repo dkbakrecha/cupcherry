@@ -14,7 +14,11 @@
                 </div>
                 <div class="col-md-6">
                     <?php
-                    echo $this->Form->input('old_password', array('class' => 'form-control', 'div' => false, 'label' => false,));
+                    echo $this->Form->input('change_password', 
+                            array('class' => 'form-control', 
+                                'div' => false, 'label' => false,
+                                 'type'=>'password'
+                                ));
                     ?>
                 </div>
             </div>
@@ -45,6 +49,7 @@
                         'class' => 'form-control ',
                         'div' => false,
                         'label' => false,
+                        'type'=>'password'
                       
                     ));
                     ?>
