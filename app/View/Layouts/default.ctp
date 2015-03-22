@@ -66,7 +66,7 @@ $cakeDescription = __d('cake_dev', 'Cup Cherry : ');
 
             <div class="container-fluid LRpadding center-background">
                 <?php
-                $userId = Configure::read('currentUserInfo.id');
+                $userId = Configure::read('currentUserInfo.User.id');
                 if (isset($userId) && !empty($userId)) {
                     ?>
                     <div class="container min-height ">

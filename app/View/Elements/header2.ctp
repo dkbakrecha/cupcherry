@@ -23,7 +23,7 @@
                 } else {
                     ?>
                     <div class="top-info">
-                        <span>Hello </span><?php echo $currentUserInfo['fname']; ?>
+                        <span>Hello </span><?php echo $currentUserInfo['User']['fname']; ?>
                     </div>
 
                     <?php
