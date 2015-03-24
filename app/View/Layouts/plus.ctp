@@ -13,7 +13,7 @@
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-$cakeDescription = __d('cake_dev', 'Cup Cherry : ');
+$cakeDescription = __d('cake_dev', 'Cup Cherry - ');
 //$cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 ?>
 <!DOCTYPE html>
@@ -38,7 +38,8 @@ $cakeDescription = __d('cake_dev', 'Cup Cherry : ');
             'plus/bootstrap-responsive.min',
             'plus/style',
             'plus/pages/dashboard',
-            'plus/font-awesome'
+            'plus/font-awesome',
+            'plus/customcss'
         ));
         echo $this->Html->script(array(
             'jQueryv1.11.1',

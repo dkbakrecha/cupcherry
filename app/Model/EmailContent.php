@@ -204,6 +204,114 @@ class EmailContent extends AppModel {
             return true;
         }
     }
+    
+    public function add_member_request($organ_name, $name, $email, $temPassword, $key) {
+        //prd($this->request);
+        $mail_content = $this->getMailContent('ADD_MEMBER_REQUEST');
+
+        $link = Router::url(array('plus'=>false,'controller' => 'users', 'action' => 'verification', $key), true);
+       
+       // prd($mail_content);
+        if (is_array($mail_content) && !empty($mail_content)) {
+
+            $UserName = ucwords($name);
+            $UserEmail = strtolower($email);
+
+            $mail_refined_content = $mail_content['content'];
+            $mail_refined_content = str_replace('{{name}}', $UserName, $mail_refined_content);
+            $mail_refined_content = str_replace('{{email}}', $UserEmail, $mail_refined_content);
+            $mail_refined_content = str_replace('{{link}}', $link, $mail_refined_content);
+            $mail_refined_content = str_replace('{{organ_name}}',$organ_name,$mail_refined_content);
+             $mail_refined_content = str_replace('{{password}}',$temPassword,$mail_refined_content);
+            // prd($mail_refined_content);
+
+            $admin_email = strtolower(Configure::read('ADMIN_MAIL'));
+
+            App::uses('CakeEmail', 'Network/Email');
+
+            $cake_email = new CakeEmail();
+            $cake_email->config('gmail');
+            $cake_email->to($UserEmail);
+            $cake_email->from(array('cupcherry2@gmail.com' => 'cupcherry'));
+            $cake_email->replyTo("no-replay@cupcherry.com", "cupcherry");
+            $cake_email->subject("Add as member request");
+            $cake_email->template('default', 'default');
+            $cake_email->emailFormat('html');
+            $cake_email->viewVars(array(
+                'content' => $mail_refined_content,
+            ));
+            //pr($this->request);
+            //prd($mail_refined_content);
+            //prd($cake_email->send());
+            //print_r ($cake_email);exit;
+
+            try {
+                //if(CakeRequest::host()=='192.168.1.2'){
+                //print_r ($cake_email);exit;
+                //	return true;
+                //}
+
+                $cake_email->send();
+            } catch (Exception $e) {
+                return false;
+            }
+            return true;
+        }
+    }
+    
+    public function add_request($organ_name, $name, $email, $temPassword, $key) {
+        //prd($this->request);
+        $mail_content = $this->getMailContent('ADD_MEMBER_REQUEST1');
+
+        $link = Router::url(array('plus'=>false,'controller' => 'users', 'action' => 'verification', $key), true);
+       
+       // prd($mail_content);
+        if (is_array($mail_content) && !empty($mail_content)) {
+
+            $UserName = ucwords($name);
+            $UserEmail = strtolower($email);
+
+            $mail_refined_content = $mail_content['content'];
+            $mail_refined_content = str_replace('{{name}}', $UserName, $mail_refined_content);
+            $mail_refined_content = str_replace('{{email}}', $UserEmail, $mail_refined_content);
+            $mail_refined_content = str_replace('{{link}}', $link, $mail_refined_content);
+            $mail_refined_content = str_replace('{{organ_name}}',$organ_name,$mail_refined_content);
+             $mail_refined_content = str_replace('{{password}}',$temPassword,$mail_refined_content);
+            // prd($mail_refined_content);
+
+            $admin_email = strtolower(Configure::read('ADMIN_MAIL'));
+
+            App::uses('CakeEmail', 'Network/Email');
+
+            $cake_email = new CakeEmail();
+            $cake_email->config('gmail');
+            $cake_email->to($UserEmail);
+            $cake_email->from(array('cupcherry2@gmail.com' => 'cupcherry'));
+            $cake_email->replyTo("no-replay@cupcherry.com", "cupcherry");
+            $cake_email->subject("Add as member request");
+            $cake_email->template('default', 'default');
+            $cake_email->emailFormat('html');
+            $cake_email->viewVars(array(
+                'content' => $mail_refined_content,
+            ));
+            //pr($this->request);
+            //prd($mail_refined_content);
+            //prd($cake_email->send());
+            //print_r ($cake_email);exit;
+
+            try {
+                //if(CakeRequest::host()=='192.168.1.2'){
+                //print_r ($cake_email);exit;
+                //	return true;
+                //}
+
+                $cake_email->send();
+            } catch (Exception $e) {
+                return false;
+            }
+            return true;
+        }
+    }
 
     public function registration_mail($status, $userName, $userEmail, $key) {
         //prd($this->request);

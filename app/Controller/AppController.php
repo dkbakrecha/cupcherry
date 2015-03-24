@@ -73,7 +73,7 @@ class AppController extends Controller {
                         'username' => 'email',
                         'password' => 'password',
                     ),
-                    'scope' => array('User.type' => 1)
+                    'scope' => array('User.type' => 4)
                 ),
             );
 
@@ -105,7 +105,7 @@ class AppController extends Controller {
         if (isset($currentUserInfo) && !empty($currentUserInfo)) {
             $this->set('currentUserInfo', $currentUserInfo);
         }
-        
+
 
         //  prd($currentUserInfo);
 
@@ -141,6 +141,10 @@ class AppController extends Controller {
             $this->Session->setFlash($msg, 'default', array('class' => 'alert alert-success'));
         } elseif ($flag == 2) {
             $this->Session->setFlash($msg, 'default', array('class' => 'alert alert-danger'));
+        } elseif ($flag == 3) {
+            $this->Session->setFlash($msg, 'default', array('class' => 'alert alert-info'));
+        } elseif ($flag == 4) {
+            $this->Session->setFlash($msg, 'default', array('class' => 'alert alert-warning'));
         }
     }
 

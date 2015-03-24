@@ -1,6 +1,4 @@
-<?php
-//echo 'hleo';
-?>
+<?php ?>
 
 <div class="row">
     <div class="col-md-12">
@@ -11,73 +9,80 @@
         <div class="widget-content">
             <div class="tabbable">
                 <ul class="nav nav-tabs">
-                    <li>
+                    <li  class="active">
                         <a href="#formcontrols" data-toggle="tab">Form Controls</a>
                     </li>
-                    <li  class="active"><a href="#jscontrols" data-toggle="tab">JS Controls</a></li>
+                    <li >
+                        <a href="#jscontrols" data-toggle="tab">JS Controls</a></li>
                 </ul>
 
                 <br>
 
                 <div class="tab-content">
                     <div class="tab-pane" id="formcontrols">
-                        <form id="edit-profile" class="form-horizontal">
-                            <fieldset>
+                        <?php
+                        echo $this->Form->create('User', array(
+                            'class' => 'form-horizontal'
+                        ));
+                        ?>
 
-                                <div class="form-group">											
-                                    <label class="control-label" for="username">Username</label>
+                        <fieldset>
+
+                            <div class="form-group">			
+                                <div class="col-md-6">
+                                    <label class="control-label" for="username">Email</label>
                                     <div class="controls">
-                                        <input type="text" class=" form-control span6  disabled" id="username" value="Example" disabled>
-                                        <p class="help-block">Your username is for logging in and cannot be changed.</p>
-                                    </div> <!-- /controls -->				
-                                </div> <!-- /control-group -->
+                                        <?php
+                                        echo $this->Form->input('email', array(
+                                            'class' => 'form-control',
+                                            'placeholder' => 'Provide valid email id',
+                                            'label' => false,
+                                            'div' => false));
+                                        if (isset($errors['email'])) {
+                                           echo 'error found.';
+                                        }
+                                        ?>
+
+                                        <p class="help-block">This is going to be the login id.</p>
+                                    </div>
+                                </div>
+
+                            </div> 
 
 
-                                <div class="form-group">											
+                            <div class="form-group">
+                                <div class="col-md-6">
+
                                     <label class="control-label" for="firstname">First Name</label>
                                     <div class="controls">
-                                        <input type="text" class="form-control span6" id="firstname" value="John">
-                                    </div> <!-- /controls -->				
-                                </div> <!-- /control-group -->
+                                        <?php
+                                        echo $this->Form->input('fname', array(
+                                            'class' => 'form-control',
+                                            'div' => false, 'label' => false));
+                                        ?>
 
+                                    </div>
+                                </div>
 
-                                <div class="control-group">											
-                                    <label class="control-label" for="lastname">Last Name</label>
+                            </div>
+                            <div class="form-group">			
+                                <div class="col-md-6">
+                                    <label class="control-label" for="firstname">Last Name</label>
                                     <div class="controls">
-                                        <input type="text" class="span6" id="lastname" value="Donga">
-                                    </div> <!-- /controls -->				
-                                </div> <!-- /control-group -->
-
-
-                                <div class="control-group">											
-                                    <label class="control-label" for="email">Email Address</label>
-                                    <div class="controls">
-                                        <input type="text" class="span4" id="email" value="john.donga@egrappler.com">
-                                    </div> <!-- /controls -->				
-                                </div> <!-- /control-group -->
-
-
-                                <br /><br />
-
-                                <div class="control-group">											
-                                    <label class="control-label" for="password1">Password</label>
-                                    <div class="controls">
-                                        <input type="password" class="span4" id="password1" value="thisispassword">
-                                    </div> <!-- /controls -->				
-                                </div> <!-- /control-group -->
-
-
-                                <div class="control-group">											
-                                    <label class="control-label" for="password2">Confirm</label>
-                                    <div class="controls">
-                                        <input type="password" class="span4" id="password2" value="thisispassword">
-                                    </div> <!-- /controls -->				
-                                </div> <!-- /control-group -->
+                                        <?php
+                                        echo $this->Form->input('lname', array(
+                                            'class' => 'form-control',
+                                            'div' => false, 'label' => false));
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
 
 
 
-                                <div class="control-group">											
-                                    <label class="control-label">Checkboxes</label>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <label class="control-label">Rights</label>
 
 
                                     <div class="controls">
@@ -88,103 +93,24 @@
                                         <label class="checkbox inline">
                                             <input type="checkbox"> Option 02
                                         </label>
-                                    </div>		<!-- /controls -->		
-                                </div> <!-- /control-group -->
+                                    </div> 
+                                </div>
+
+                            </div> 
 
 
-
-                                <div class="control-group">											
-                                    <label class="control-label">Radio Buttons</label>
+                            <br />
 
 
-                                    <div class="controls">
-                                        <label class="radio inline">
-                                            <input type="radio"  name="radiobtns"> Option 01
-                                        </label>
+                            <div class="form-actions">
+                                <?php echo $this->Form->submit('Save', array('class' => 'btn btn-primary', 'div' => false)); ?>
 
-                                        <label class="radio inline">
-                                            <input type="radio" name="radiobtns"> Option 02
-                                        </label>
-                                    </div>	<!-- /controls -->			
-                                </div> <!-- /control-group -->
-
-
-
-
-                                <div class="control-group">											
-                                    <label class="control-label" for="radiobtns">Combined Textbox</label>
-
-                                    <div class="controls">
-                                        <div class="input-prepend input-append">
-                                            <span class="add-on">$</span>
-                                            <input class="span2" id="appendedPrependedInput" type="text">
-                                            <span class="add-on">.00</span>
-                                        </div>
-                                    </div>	<!-- /controls -->			
-                                </div> <!-- /control-group -->
-
-
-
-
-
-                                <div class="control-group">											
-                                    <label class="control-label" for="radiobtns">Textbox with Buttons </label>
-
-                                    <div class="controls">
-                                        <div class="input-append">
-                                            <input class="span2 m-wrap" id="appendedInputButton" type="text">
-                                            <button class="btn" type="button">Go!</button>
-                                        </div>
-                                    </div>	<!-- /controls -->			
-                                </div> <!-- /control-group -->
-
-
-
-
-
-                                <div class="control-group">											
-                                    <label class="control-label" for="radiobtns">Dropdown in a button group</label>
-
-                                    <div class="controls">
-                                        <div class="btn-group">
-                                            <a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> User</a>
-                                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
-                                                <li><a href="#"><i class="icon-trash"></i> Delete</a></li>
-                                                <li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
-                                                <li class="divider"></li>
-                                                <li><a href="#"><i class="i"></i> Make admin</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>	<!-- /controls -->			
-                                </div> <!-- /control-group -->
-
-
-
-
-
-                                <div class="control-group">											
-                                    <label class="control-label" for="radiobtns">Button sizes</label>
-
-                                    <div class="controls">
-                                        <a class="btn btn-large" href="#"><i class="icon-star"></i> Star</a>
-                                        <a class="btn btn-small" href="#"><i class="icon-star"></i> Star</a>
-                                        <a class="btn btn-mini" href="#"><i class="icon-star"></i> Star</a>
-                                    </div>	<!-- /controls -->			
-                                </div> <!-- /control-group -->
-
-
-
-                                <br />
-
-
-                                <div class="form-actions">
-                                    <button type="submit" class="btn btn-primary">Save</button> 
-                                    <button class="btn">Cancel</button>
-                                </div> <!-- /form-actions -->
-                            </fieldset>
-                        </form>
+                                <button class="btn">Cancel</button>
+                            </div> <!-- /form-actions -->
+                        </fieldset>
+                        <?php
+                        $this->Form->end();
+                        ?>
                     </div>
 
                     <div class="tab-pane active" id="jscontrols">

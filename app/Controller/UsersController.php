@@ -734,11 +734,11 @@ class UsersController extends AppController {
         $this->layout = 'plus_login';
         $this->set('title_for_layout', 'Plus Registration');
         $this->loadModel('PlusRequest');
-       // $this->loadModel('User');
+        // $this->loadModel('User');
         $this->loadModel('EmailContent');
         // prd($this->request->data);
         $data = $this->request->data;
-               if (!empty($data) && isset($data)) {
+        if (!empty($data) && isset($data)) {
             $data['PlusRequest']['status'] = 0;
             if ($this->PlusRequest->save($data)) {
 
@@ -764,8 +764,54 @@ class UsersController extends AppController {
         $this->set('title_for_layout', 'Welcome to Cup Cherry Plus');
     }
 
-    public function plus_addmember(){
-        
+    public function plus_addmember() {
+        $this->set('title_for_layout', 'Add New Member');
+        $this->loadModel('User');
+        $this->loadModel('EmailContent');
+        $user = Configure::read('currentUserInfo.Plus');
+        //  prd($user);
+        $data = $this->request->data;
+        if (isset($data) && !empty($data)) {
+            $verifyCode = uniqid();
+            $passkey = $data['User']['fname'] . '@123';
+            $data['User']['password'] = $passkey;
+            $data['User']['confirm_password'] = $passkey;
+            $data['User']['type'] = 2;
+            $data['User']['created_under'] = $user['id'];
+            $data['User']['accesskey'] = $verifyCode;
+            $data['User']['status'] = 3;
+            $data['User']['profile_status'] = 0;
+
+
+            $this->User->set($data);
+            if ($this->User->validates()) {
+                $organ_name = 'XYZ';
+                $name = $data['User']['fname'];
+                $email = $data['User']['email'];
+                $temPassword = $passkey;
+                $key = $verifyCode;
+
+                // Initializing Email Model.
+                $emailObj = new EmailContent;
+                $emailObj->add_member_request($organ_name, $name, $email, $temPassword, $key);
+                if ($this->User->save($data)) {
+                    $this->flash_msg(3, 'An Email has been send to you member ,Please  verify the email address.');
+                    $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'addmember'));
+                } else {
+                    $this->flash_msg(2, 'Some error occured, Please try again.');
+                    $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'addmember'));
+                }
+            } else {
+                $errors = $this->User->validationErrors;
+                $this->set('errors', $errors);
+//                if (isset($errors['email'])) {
+//                    $this->User->validationErrors['email'][0] = "asds";
+//                }
+                //prd($errors);
+            }
+        } else {
+            
+        }
     }
-    
+
 }
