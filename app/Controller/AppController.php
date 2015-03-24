@@ -31,6 +31,8 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
+    
+    public $user_id;
 
     public $components = array(
         'Session',
@@ -85,6 +87,7 @@ class AppController extends Controller {
         $currentUserInfo = $this->Session->read('Auth.User');
         if (isset($currentUserInfo) && !empty($currentUserInfo)) {
             $this->set('currentUserInfo', $currentUserInfo);
+            $this->user_id = $this->Session->read('Auth.User.id');
         }
         // prd($currentUserInfo);
 

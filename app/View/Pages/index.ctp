@@ -126,10 +126,6 @@ img {
     padding: 120px 0 0;
 }
 
-.home-about{
-    background: #555A78;
-    color : #fff;
-}
 </style>
 
 <div class="LRpadding center-background">

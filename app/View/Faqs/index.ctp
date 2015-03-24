@@ -1,3 +1,9 @@
+<header class="page-header primary">
+    <div class="container">
+        <h1>FAQs</h1>
+    </div>
+</header>
+
 <style>
     .faq_text {
         color: #000000;
@@ -51,22 +57,14 @@
     }
     
 </style>
-
-<div class="main">
-    <!-- START : PAGE CONTENT -->
-
-
-    <div class="section" style="min-height: 500px">
+<section class="container">
+    <div class="section">
         <div class="row">
-            <div class="col-lg-12"><h1 class="amber">FAQs</h1></div>
             <div class="col-lg-9">
 
                 <div class="signup">
                     <div class="signup_container">
                         
-                        <div class="signup_text"><?php //echo $FAQ_Text; ?></div>
-
-
                         <div class="contact_form">  	
 
                             <div class="faq_contenter">
@@ -125,8 +123,7 @@
             
         </div>
     </div>
-</div>
-
+</section>
 <script >
     $(document).ready(function() {
         setTimeout(function() {

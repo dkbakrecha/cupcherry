@@ -38,7 +38,7 @@ class PagesController extends AppController {
     }
 
     public function howitworks() {
-        $this->set('title_for_layout', 'About us');
+        $this->set('title_for_layout', 'How It Works | CupCherry');
         $this->loadModel('CmsPage');
         $cmsData = $this->CmsPage->find('all', array(
             'conditions' => array('unique_name' => 'HOW_IT_WORKS')

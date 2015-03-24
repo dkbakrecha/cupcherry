@@ -98,15 +98,15 @@ li {
 
 
 .top-links ul li {
-   // color: #c0c0c0;
+    // color: #c0c0c0;
     float: left;
-  
-   
+
+
     list-style-type: none;
     margin: 0 0 0 25px;
     position: relative;
     font-size: 17px ;
-   
+
 }
 
 .top-links ul li:before {
@@ -169,7 +169,7 @@ li {
 }
 
 .footer {
-   
+
     background: #23262C;
     border: medium none;
     color: #fff;
@@ -227,7 +227,7 @@ nav.footer-nav ul li.current-menu-item a:after {
     width: 100%;
 }
 .copyright {
-    border-top: 1px solid #757575;
+    /* border-top: 1px solid #757575; */
     padding: 28px 0 0;
 }
 .footer-text {
@@ -252,7 +252,7 @@ nav.footer-nav ul li.current-menu-item a:after {
     width: 100%;
 }
 .footer-text a.site-name {
-   // text-transform: uppercase;
+    // text-transform: uppercase;
 }
 
 .contacts {
@@ -365,10 +365,6 @@ nav.footer-nav ul li.current-menu-item a:after {
     color: #3db4ff;
 }
 
-.content{
-    background: #eeeeee;
-}
-
 .homeabout {
     display: block;
     margin: 50px;
@@ -437,4 +433,73 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
     padding: 0 25px;
     text-transform: uppercase;
     transition: all 0.4s ease 0s;
+}
+
+
+
+/* HOMEPAGE MAIN STYLE LAYOUT 22 MARCH 2015 : Dharmendra Bagrecha */
+.center-background {
+    background-color: #FFFFFF;
+}
+
+.header-menu{
+    background: #1D3F6B;
+    color: #ffffff;
+}
+
+.header-menu .navbar-default .navbar-nav > li > a{
+    color: #ffffff;
+}
+
+.header-menu .navbar-default .navbar-nav > li > a:hover{
+    color: #dddddd;
+}
+
+.page-header{
+    margin-bottom: 0px;
+}
+
+.page-header h1, .page-header .h1 {
+    color: #50718e;
+    font-size: 22px;
+    line-height: 1em;
+    margin: 0;
+}
+
+.page-header.primary {
+    margin-top: 0;
+    padding: 18px 0;
+}
+
+.section {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+h2, .h2 {
+    font-size: 19.5px;
+}
+
+
+/* HOMEPAGE STYLE */
+.carousel-inner .item {
+    color: #daedf0;
+    text-align: center;
+    padding: 40px 15px 0px;
+}
+
+.home-about{
+    background: #1D3F6B;
+    color : #fff;
+}
+
+
+/* CONTACT US */
+.contact-info{
+    background: #f7f7f7;
+    padding: 20px 0;
+}
+
+.muted {
+    color: #999;
 }

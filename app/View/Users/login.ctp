@@ -1,12 +1,10 @@
-
 <?php
 if (!isset($currentUserInfo) && empty($currentUserInfo)) {
     ?>
 <style>
     .center-background{
         background-color: white;
-    }    
-    
+    }        
 </style>
     <div class="section">
         <div class="container">
@@ -120,5 +118,3 @@ if (!isset($currentUserInfo) && empty($currentUserInfo)) {
     <?php
 }
 ?>
-
-
