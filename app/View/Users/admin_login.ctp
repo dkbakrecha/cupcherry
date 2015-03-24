@@ -31,20 +31,20 @@
             </div>
 
             <div class="control-group">
-<?php
-echo $this->Form->input('password', array(
-    'label' => false,
-    'class' => 'login-field',
-    'placeholder' => 'password',
-    'div' => false,
-    'id' => 'login-pass'));
-?>
+                <?php
+                echo $this->Form->input('password', array(
+                    'label' => false,
+                    'class' => 'login-field',
+                    'placeholder' => 'password',
+                    'div' => false,
+                    'id' => 'login-pass'));
+                ?>
 <!--                <input type = "password" class = "login-field" value = "" placeholder = "password" id = "login-pass">-->
                 <label class = "login-field-icon fui-lock" for = "login-pass"></label>
             </div>
 
-<?php echo $this->Form->submit("Login", array('class' => 'btn btn-success btn-large ')); ?>
-<?php //echo $this->Form->end();   ?>
+            <?php echo $this->Form->submit("Login", array('class' => 'btn btn-success btn-large ')); ?>
+            <?php //echo $this->Form->end();   ?>
             <!--            <a class = "btn btn-primary btn-large btn-block" href = "#">login</a>-->
             <a class = "login-link" href = "#">Lost your password?</a>
         </div>

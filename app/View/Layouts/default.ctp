@@ -49,6 +49,7 @@ $cakeDescription = __d('cake_dev', '| Education Solution | CupCherry');
         ?>
     </head>
     <body>
+        <<<<<<< HEAD
         <?php //echo 'Current User Id : ' . Configure::read('currentUserInfo.id'); ?>
         <?php echo $this->element('header2'); ?>
         <?php echo $this->element('menu'); ?>
@@ -56,12 +57,14 @@ $cakeDescription = __d('cake_dev', '| Education Solution | CupCherry');
         <?php
         $userId = Configure::read('currentUserInfo.id');
         if (isset($userId) && !empty($userId)) {
-        ?>
+            ?>
             <div class="container min-height ">
                 <?php echo $this->Session->flash(); ?>
                 <div class="row marginTB20px">
                     <div class="col-md-3  left_member LRpadding">
                         <?php echo $this->element('left_panel'); ?>
+
+
                     </div>
                     <div class="col-md-9 ">
                         <div class="col-md-12 right_member">

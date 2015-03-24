@@ -45,7 +45,7 @@ class AppController extends Controller {
 
     public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->allow('account_recovery', 'recovery_token', 'index');
+        $this->Auth->allow('account_recovery', 'recovery_token', 'index', 'plus_login', 'plus_registration');
 
         if (isset($this->request->params['admin'])) {
             $this->layout = 'admin';
@@ -66,6 +66,26 @@ class AppController extends Controller {
             $this->Auth->loginRedirect = array('admin' => true, 'controller' => 'users', 'action' => 'admin_dashboard');
             $this->Auth->logoutRedirect = array('admin' => true, 'controller' => 'users', 'action' => 'admin_login');
             //  $this->Auth->authorize = 'controller';
+        } elseif (isset($this->request->params['plus'])) {
+            $this->layout = 'plus';
+
+            $this->Auth->authenticate = array(
+                'Form' => array(
+                    'fields' => array(
+                        'username' => 'email',
+                        'password' => 'password',
+                    ),
+                    'scope' => array('User.type' => 4)
+                ),
+            );
+
+            // to check session key if we not define this here then is will check with 'Auth.Plus' so dont remove it
+            AuthComponent::$sessionKey = 'Auth.Plus';
+            $this->Auth->loginAction = array('plus' => true, 'controller' => 'users', 'action' => 'plus_login');
+            $this->Auth->loginRedirect = array('plus' => true, 'controller' => 'users', 'action' => 'plus_dashboard');
+            $this->Auth->logoutRedirect = array('plus' => true, 'controller' => 'users', 'action' => 'plus_login');
+            //  $this->Auth->authorize = 'controller';
+
         } else {
 
             $this->Auth->authenticate = array(
@@ -84,13 +104,12 @@ class AppController extends Controller {
             $this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'dashboard');
             $this->Auth->logoutRedirect = array('controller' => 'users', 'action' => 'login');
         }
-        $currentUserInfo = $this->Session->read('Auth.User');
+        $currentUserInfo = $this->Session->read('Auth');
         if (isset($currentUserInfo) && !empty($currentUserInfo)) {
             $this->set('currentUserInfo', $currentUserInfo);
             $this->user_id = $this->Session->read('Auth.User.id');
         }
-        // prd($currentUserInfo);
-
+        
         Configure::write('currentUserInfo', $currentUserInfo);
         $cont = $this->request->params['controller'];
         $act = $this->request->params['action'];
@@ -103,20 +122,11 @@ class AppController extends Controller {
         $allowAction[] = 'users_tprofile';
         $allowAction[] = 'users_profile';
 
-//        if($currentUserInfo['profile_status'] == 0){
-//            if(in_array($currentAction, $allowAction)){
-//                // User profile not complate and try to access valid controller
-//            }else{
-//                $this->flash_msg(1,"Hello Plesae conform your profile");
-//                $this->redirect(array('controller' => 'users', 'action' => 'step1'));
-//            }
-//        }
-        //pr($this->request);
-        //prd($currentUserInfo);
         //$this->Auth->allow('index');
         $this->SiteSettings();
         $this->commonData();
     }
+
 
     public function __getUser() {
         $currentUserInfo = $this->Session->read('Auth.User');
@@ -128,6 +138,10 @@ class AppController extends Controller {
             $this->Session->setFlash($msg, 'default', array('class' => 'alert alert-success'));
         } elseif ($flag == 2) {
             $this->Session->setFlash($msg, 'default', array('class' => 'alert alert-danger'));
+        } elseif ($flag == 3) {
+            $this->Session->setFlash($msg, 'default', array('class' => 'alert alert-info'));
+        } elseif ($flag == 4) {
+            $this->Session->setFlash($msg, 'default', array('class' => 'alert alert-warning'));
         }
     }
 
@@ -135,7 +149,7 @@ class AppController extends Controller {
         $this->loadModel('Group');
         $this->loadModel('GroupMember');
         // Query to fetch all joined groups by current User
-        $userId = Configure::read('currentUserInfo.id');
+        $userId = Configure::read('currentUserInfo.User.id');
 
         $groupList = $this->Group->find('all', array(
             'conditions' => array('Group.created_by' => $userId, 'Group.status' => 1),

@@ -9,7 +9,9 @@ class UsersController extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
         // Allow users to register and logout.
-        $this->Auth->allow('admin_login', 'register', 'add', 'signup', 'registration', 'verification');
+        $this->Auth->allow(
+                'admin_login', 'register', 'add', 'signup', 'registration', 'verification'
+        );
     }
 
     public function register() {
@@ -47,8 +49,8 @@ class UsersController extends AppController {
 
 
         //  prd($data);
-       
-        if(isset($data) && !empty($data)) {
+
+        if (isset($data) && !empty($data)) {
             $oldpass = $this->User->find('first', array(
                 'conditions' => array('User.id' => $currentId),
                 'fields' => array('password', 'id'),
@@ -56,12 +58,12 @@ class UsersController extends AppController {
 
             $data['User']['id'] = $oldpass['User']['id'];
             $data['User']['old_password'] = $oldpass['User']['password'];
-             $this->User->set($data);
+            $this->User->set($data);
             if ($this->User->validates()) {
                 if ($this->User->save($data)) {
 
                     $this->flash_msg(1, 'Password changed.');
-                      $this->redirect(array('controller'=>'users','action'=>'changepassword'));
+                    $this->redirect(array('controller' => 'users', 'action' => 'changepassword'));
                 } else {
                     $this->flash_msg(2, 'Password not changed.');
                     //  $this->redirect(array('controller'=>'users','action'=>'changepassword'));
@@ -412,11 +414,12 @@ class UsersController extends AppController {
     }
 
     public function admin_login() {
+        // prd($this->request->data);
         $this->layout = 'login';
-        $this->set('title_for_layout', 'Education - Admin Panel');
+        $this->set('title_for_layout', 'Cup Cherry - Admin Panel');
 
         $user = $this->Session->read('Auth.Admin');
-        // prd($user);
+        //  prd($user);
         if (isset($user['id']) && !empty($user['id'])) {
             $this->redirect($this->Auth->loginRedirect);
         }
@@ -424,6 +427,9 @@ class UsersController extends AppController {
 
 
         if ($this->request->is('post')) {
+            //   prd($user);
+
+
             if ($user['type'] == 0) {
                 if ($this->Auth->login()) {
 
@@ -435,11 +441,6 @@ class UsersController extends AppController {
 
             $this->Session->setFlash(__('Incorrect Username or Password'));
         }
-    }
-
-    public function plus_login() {
-        $this->layout = 'plus_login';
-        $this->set('title_for_layout', 'Plus Login');
     }
 
     function admin_logout() {
@@ -696,6 +697,121 @@ class UsersController extends AppController {
 
         // prd($this->request);
         // prd($checkedId);
+    }
+
+    public function plus_login() {
+        // prd($this->request);
+        $this->layout = 'plus_login';
+        $this->set('title_for_layout', 'Plus Login');
+
+        $user = Configure::read('currentUserInfo.Plus');
+        // echo $userId;
+
+        if (isset($user['id']) && !empty($user['id'])) {
+            $this->redirect($this->Auth->loginRedirect);
+        }
+
+
+
+        if ($this->request->is('post')) {
+
+            if ($this->Auth->login()) {
+
+                $this->redirect($this->Auth->loginRedirect);
+            } else {
+                $this->flash_msg(2, 'Username & password incorrect.');
+            }
+        }
+    }
+
+    public function plus_logout() {
+        $this->Session->delete('Auth.Plus');
+        $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'login'));
+    }
+
+    public function plus_registration() {
+
+        $this->layout = 'plus_login';
+        $this->set('title_for_layout', 'Plus Registration');
+        $this->loadModel('PlusRequest');
+        // $this->loadModel('User');
+        $this->loadModel('EmailContent');
+        // prd($this->request->data);
+        $data = $this->request->data;
+        if (!empty($data) && isset($data)) {
+            $data['PlusRequest']['status'] = 0;
+            if ($this->PlusRequest->save($data)) {
+
+                $organizationName = $data['PlusRequest']['organization_name'];
+                $contactPerson = $data['PlusRequest']['contact_person'];
+                $contactEmail = $data['PlusRequest']['contact_email'];
+                $contactNumber = $data['PlusRequest']['contact_number'];
+                // Initializing Email Model.
+                $emailObj = new EmailContent;
+                $emailObj->plus_request($organizationName, $contactPerson, $contactEmail, $contactNumber);
+
+                $this->flash_msg(1, 'Thanks for showing interest in CupCherry, We will contact you soon.');
+                $this->redirect(array('controller' => 'users', 'action' => 'login'));
+            } else {
+                $this->flash_msg(2, 'Some error, Please try again.');
+                $this->redirect(array('controller' => 'users', 'action' => 'registration'));
+            }
+        }
+    }
+
+    public function plus_dashboard() {
+        // $this->layout = 'plus';
+        $this->set('title_for_layout', 'Welcome to Cup Cherry Plus');
+    }
+
+    public function plus_addmember() {
+        $this->set('title_for_layout', 'Add New Member');
+        $this->loadModel('User');
+        $this->loadModel('EmailContent');
+        $user = Configure::read('currentUserInfo.Plus');
+        //  prd($user);
+        $data = $this->request->data;
+        if (isset($data) && !empty($data)) {
+            $verifyCode = uniqid();
+            $passkey = $data['User']['fname'] . '@123';
+            $data['User']['password'] = $passkey;
+            $data['User']['confirm_password'] = $passkey;
+            $data['User']['type'] = 2;
+            $data['User']['created_under'] = $user['id'];
+            $data['User']['accesskey'] = $verifyCode;
+            $data['User']['status'] = 3;
+            $data['User']['profile_status'] = 0;
+
+
+            $this->User->set($data);
+            if ($this->User->validates()) {
+                $organ_name = 'XYZ';
+                $name = $data['User']['fname'];
+                $email = $data['User']['email'];
+                $temPassword = $passkey;
+                $key = $verifyCode;
+
+                // Initializing Email Model.
+                $emailObj = new EmailContent;
+                $emailObj->add_member_request($organ_name, $name, $email, $temPassword, $key);
+                if ($this->User->save($data)) {
+                    $this->flash_msg(3, 'An Email has been send to you member ,Please  verify the email address.');
+                    $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'addmember'));
+                } else {
+                    $this->flash_msg(2, 'Some error occured, Please try again.');
+                    $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'addmember'));
+                }
+            } else {
+                $errors = $this->User->validationErrors;
+                $this->set('errors', $errors);
+//                if (isset($errors['email'])) {
+//                    $this->User->validationErrors['email'][0] = "asds";
+//                }
+                //prd($errors);
+            }
+        } else {
+            
+        }
     }
 
 }

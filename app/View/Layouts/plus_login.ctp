@@ -30,24 +30,33 @@ $cakeDescription = __d('cake_dev', 'Cup Cherry - ');
 
         echo $this->fetch('meta');
         echo $this->Html->css(array(
-            'bootstrap/bootstrap.min',
-            'fa/font-awesome.min',
-            'plus_login',
+            // 'fa/font-awesome.min',
+            'plus/bootstrap.min',
+            'plus/font-awesome',
+            'plus/style',
+            'plus/pages/signin',
+            'plus/bootstrap-responsive.min',
+                //   'bootstrap/bootstrap.min',
         ));
         echo $this->Html->script(array(
-            'jQueryv1.11.1',
-            'bootstrap/bootstrap.min',
-           // 'plus_login'
+            //  'jQueryv1.11.1',
+            //s  'bootstrap/bootstrap.min',
+            'plus/jquery-1.7.2.min',
+            'plus/bootstrap',
+            'plus/signin',
         ));
         ?>
     </head>
     <body>
+
+        <?php echo $this->Element('pluslogin/header'); ?>
         <div class="container">
-            
-            <?php  //echo $this->Session->flash(); ?>
+            <?php echo $this->Session->flash(); ?>
             <?php echo $this->fetch('content'); ?>
-           
         </div>
+
+        <?php echo $this->Element('pluslogin/footer'); ?>
+
 
     </body>
 </html>
