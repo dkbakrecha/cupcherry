@@ -21,20 +21,8 @@
                         </ul>
                     </div>
                     <?php
-                } else {
-                    ?>
-                    <div class="top-info">
-                        <span>Hello </span><?php echo $currentUserInfo['User']['fname']; ?>
-                    </div>
-
-                    <?php
-                }
-                ?>
-
-
-
-
-
+                } 
+            ?>
             </div>
         </div>
 </header>

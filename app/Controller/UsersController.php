@@ -292,23 +292,45 @@ class UsersController extends AppController {
     }
 
     public function login() {
-        $this->set('title_for_layout', 'Login');
+        $this->set('title_for_layout', 'Member login');
 
         $user = $this->Session->read('Auth.User');
-        //  prd($user);
         if (isset($user['id']) && !empty($user['id'])) {
             $this->redirect($this->Auth->loginRedirect);
         }
 
-
-
         if ($this->request->is('post')) {
-            //prd($this->Auth);
             if ($this->Auth->login()) {
-                $this->redirect($this->Auth->loginRedirect);
-            }
+                $status = $this->Auth->User('status');
+                $userData = $this->Auth->User();
+                $msg = '';
+                switch ($status) {
+                    case '3':
+                        $link = Router::url(array('controller' => 'users', 'action' => 'resend_activation', $userData['email']), true);
 
-            $this->flash_msg(2, 'Incorrect Username or Password');
+                        $msg = __('Your account is not activated. Resend activation code?');
+                        $click = __('click here');
+                        $msg .= ('<a href="' . $link . '" target="_BLANK">' . $click . '</a>.');
+
+
+                        //$msg = _('Your account is not activated');
+                        break;
+                    case '0':
+                        $msg = _('Your account is disabled by Administrator');
+                        break;
+                }
+
+
+                if (empty($msg)) {
+                    $this->flash_msg('Logged in successful');
+                    $this->redirect($this->Auth->loginRedirect);
+                } else {
+                    $this->Auth->logout();
+                    $this->flash_msg($msg,2);
+                }
+            } else {
+                $this->flash_msg('Incorrect Username or Password',2);
+            }
         }
     }
 
@@ -336,10 +358,10 @@ class UsersController extends AppController {
                 $data['UserProfile']['user_id'] = $userId;
                 $data['UserProfile']['status'] = 1;
                 if ($this->UserProfile->save($data)) {
-                    $this->flash_msg(1, 'Profile Saved.');
+                    $this->flash_msg('Profile Saved.');
                     $this->redirect(array('controller' => 'users', 'action' => 'dasboard'));
                 } else {
-                    $this->flash_msg(2, 'Unable to save profile. Please try again.');
+                    $this->flash_msg('Unable to save profile. Please try again.',2);
                     $this->redirect(array('controller' => 'users', 'action' => 'uprofile'));
                 }
             }

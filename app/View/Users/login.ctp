@@ -1,6 +1,3 @@
-<?php
-if (!isset($currentUserInfo) && empty($currentUserInfo)) {
-    ?>
 <style>
     .center-background{
         background-color: white;
@@ -115,6 +112,3 @@ if (!isset($currentUserInfo) && empty($currentUserInfo)) {
 
         </div>
     </div>
-    <?php
-}
-?>

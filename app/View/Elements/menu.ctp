@@ -24,11 +24,11 @@
                     </ul>
                     
                     <?php
-                    if (isset($currentUserInfo) && !empty($currentUserInfo)) {
+                    if (isset($currentUserInfo) && !empty($currentUserInfo['User'])) {
                         ?>
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo $currentUserInfo['fname'] . " " .$currentUserInfo['lname']; ?>  <span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo $currentUserInfo['User']['fname'] . " " .$currentUserInfo['User']['lname']; ?>  <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
                                         <a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'edit_profile')); ?>">

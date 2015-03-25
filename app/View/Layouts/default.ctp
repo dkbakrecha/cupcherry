@@ -13,7 +13,7 @@
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-$cakeDescription = __d('cake_dev', '| Education Solution | CupCherry');
+$cakeDescription = __d('cake_dev', '| Education Solution | CupCherry.com');
 //$cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 ?>
 <!DOCTYPE html>
@@ -49,14 +49,16 @@ $cakeDescription = __d('cake_dev', '| Education Solution | CupCherry');
         ?>
     </head>
     <body>
-        <<<<<<< HEAD
         <?php //echo 'Current User Id : ' . Configure::read('currentUserInfo.id'); ?>
-        <?php echo $this->element('header2'); ?>
-        <?php echo $this->element('menu'); ?>
-        <?php // echo $this->Session->flash(); ?>
         <?php
-        $userId = Configure::read('currentUserInfo.id');
-        if (isset($userId) && !empty($userId)) {
+        echo $this->element('header2');
+        echo $this->element('menu');
+        echo $this->element('flash_msg');
+        ?>
+
+        <?php
+        $userInfo = Configure::read('currentUserInfo');
+        if (isset($userInfo['User']['id']) && !empty($userInfo['User']['id'])) {
             ?>
             <div class="container min-height ">
                 <?php echo $this->Session->flash(); ?>
