@@ -91,7 +91,7 @@ class AppController extends Controller {
                         'username' => 'email',
                         'password' => 'password',
                     ),
-                    'scope' => array('User.type' => array(1, 2))
+                    'scope' => array('User.type' => array(0,1,2,3,5))
                 ),
             );
 
@@ -102,9 +102,9 @@ class AppController extends Controller {
             $this->Auth->logoutRedirect = array('controller' => 'users', 'action' => 'login');
         }
         $currentUserInfo = $this->Session->read('Auth');
-        if (isset($currentUserInfo) && !empty($currentUserInfo)) {
-            $this->set('currentUserInfo', $currentUserInfo);
-        }
+//        if (isset($currentUserInfo) && !empty($currentUserInfo)) {
+//            $this->set('currentUserInfo', $currentUserInfo);
+//        }
 
 
         //  prd($currentUserInfo);

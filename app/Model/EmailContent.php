@@ -205,11 +205,11 @@ class EmailContent extends AppModel {
         }
     }
     
-    public function add_member_request($organ_name, $name, $email, $temPassword, $key) {
+    public function add_member_request($organ_name, $name, $email,$temPassword, $key) {
         //prd($this->request);
         $mail_content = $this->getMailContent('ADD_MEMBER_REQUEST');
 
-        $link = Router::url(array('plus'=>false,'controller' => 'users', 'action' => 'verification', $key), true);
+        $link = Router::url(array('plus'=>false,'controller' => 'users', 'action' => 'mem_verify', $key), true);
        
        // prd($mail_content);
         if (is_array($mail_content) && !empty($mail_content)) {
@@ -259,13 +259,13 @@ class EmailContent extends AppModel {
         }
     }
     
-    public function add_request($organ_name, $name, $email, $temPassword, $key) {
-        //prd($this->request);
-        $mail_content = $this->getMailContent('ADD_MEMBER_REQUEST1');
+    public function add_request($organ_name, $name, $email, $key) {
+     //   prd($this->request);
+        $mail_content = $this->getMailContent('ADD_REQUEST');
 
-        $link = Router::url(array('plus'=>false,'controller' => 'users', 'action' => 'verification', $key), true);
+        $link = Router::url(array('plus'=>false,'controller' => 'users', 'action' => 'mem_verify', $key), true);
        
-       // prd($mail_content);
+        //prd($mail_content);
         if (is_array($mail_content) && !empty($mail_content)) {
 
             $UserName = ucwords($name);
@@ -276,8 +276,7 @@ class EmailContent extends AppModel {
             $mail_refined_content = str_replace('{{email}}', $UserEmail, $mail_refined_content);
             $mail_refined_content = str_replace('{{link}}', $link, $mail_refined_content);
             $mail_refined_content = str_replace('{{organ_name}}',$organ_name,$mail_refined_content);
-             $mail_refined_content = str_replace('{{password}}',$temPassword,$mail_refined_content);
-            // prd($mail_refined_content);
+           //  prd($mail_refined_content);
 
             $admin_email = strtolower(Configure::read('ADMIN_MAIL'));
 

@@ -10,7 +10,7 @@ class UsersController extends AppController {
         parent::beforeFilter();
         // Allow users to register and logout.
         $this->Auth->allow(
-                'admin_login', 'register', 'add', 'signup', 'registration', 'verification'
+                'admin_login', 'register', 'add', 'signup', 'registration', 'verification', 'mem_verify'
         );
     }
 
@@ -122,7 +122,7 @@ class UsersController extends AppController {
         if (isset($data) && !empty($data)) {
             $verifyCode = uniqid();
             $data['User']['status'] = 3;
-            $data['User']['type'] = 1;
+            $data['User']['type'] = 3;
             $data['User']['accesskey'] = $verifyCode;
 
             $this->User->set($data);
@@ -179,6 +179,75 @@ class UsersController extends AppController {
         } else {
             $this->flash_msg(2, 'Invalid access.');
             $this->redirect(array('controller' => 'pages', 'action' => 'index'));
+        }
+    }
+
+    public function mem_verify($key) {
+        $this->loadModel('User');
+        $this->loadModel('OrganizationMember');
+        $flag = 0;
+        $save = array();
+        if (!$key) {
+            $this->flash_msg(2, 'Invalid access.');
+            $this->redirect(array('controller' => 'pages', 'action' => 'index'));
+        }
+
+        $data = array();
+        $data = $this->User->find('all', array(
+            'conditions' => array('User.member_verify_key' => $key, 'status' => array(1, 3)),
+            'fields' => array('id', 'fname', 'email', 'status', 'member_verify_key', 'created_under'),
+        ));
+        // prd($data);
+        $dot = explode('.', $data[0]['User']['member_verify_key']);
+        // prd($dot);
+        if (isset($dot[1]) && !empty($dot[1])) {
+
+            if (isset($data) && !empty($data)) {
+                $save['User']['id'] = $data[0]['User']['id'];
+                $save['User']['type'] = 2;
+                $save['User']['created_under'] = $dot[1];
+                $save['User']['member_verify_key'] = 0;
+                $save2['OrganizationMember']['organization_id'] = $dot[1];
+                $save2['OrganizationMember']['user_id'] = $data[0]['User']['id'];
+                $save2['OrganizationMember']['status'] = 1;
+//                 pr($save);
+//                prd($save2);
+
+                if ($this->User->save($save)) {
+                    $this->OrganizationMember->save($save2);
+                    $this->flash_msg(1, 'Verification successful.');
+                    $this->redirect(array('controller' => 'pages', 'action' => 'index'));
+                }
+                // $this->User->validationErrors;
+                $this->flash_msg(2, 'Verification unsuccessful.');
+                $this->redirect(array('controller' => 'pages', 'action' => 'index'));
+            } else {
+                $this->flash_msg(2, 'Invalid access2.');
+                $this->redirect(array('controller' => 'pages', 'action' => 'index'));
+            }
+        } else {
+
+            if (isset($data) && !empty($data)) {
+                $save['User']['id'] = $data[0]['User']['id'];
+                $save['User']['status'] = 1;
+                $save['User']['member_verify_key'] = 0;  // Verified by user
+                $save2['OrganizationMember']['organization_id'] = $data[0]['User']['created_under'];
+                $save2['OrganizationMember']['user_id'] = $data[0]['User']['id'];
+                $save2['OrganizationMember']['status'] = 1;
+                // pr($save);
+                //  prd($save2);
+                if ($this->User->save($save)) {
+                    $this->OrganizationMember->save($save2);
+                    $this->flash_msg(1, 'Verification successful.');
+                    $this->redirect(array('controller' => 'pages', 'action' => 'index'));
+                }
+                // $this->User->validationErrors;
+                $this->flash_msg(2, 'Verification unsuccessful.');
+                $this->redirect(array('controller' => 'pages', 'action' => 'index'));
+            } else {
+                $this->flash_msg(2, 'Invalid access1.');
+                $this->redirect(array('controller' => 'pages', 'action' => 'index'));
+            }
         }
     }
 
@@ -767,50 +836,116 @@ class UsersController extends AppController {
     public function plus_addmember() {
         $this->set('title_for_layout', 'Add New Member');
         $this->loadModel('User');
+        $this->loadModel('OrganizationMember');
         $this->loadModel('EmailContent');
         $user = Configure::read('currentUserInfo.Plus');
         //  prd($user);
+        $flag = 0;
+        $membersList = $this->OrganizationMember->find('all', array(
+            'conditions' => array('OrganizationMember.organization_id' => $user['id'], 'status' => 1),
+        ));
+        //prd($membersList);
+        $this->set('membersList', $membersList);
+
         $data = $this->request->data;
-        if (isset($data) && !empty($data)) {
-            $verifyCode = uniqid();
-            $passkey = $data['User']['fname'] . '@123';
-            $data['User']['password'] = $passkey;
-            $data['User']['confirm_password'] = $passkey;
-            $data['User']['type'] = 2;
-            $data['User']['created_under'] = $user['id'];
-            $data['User']['accesskey'] = $verifyCode;
-            $data['User']['status'] = 3;
-            $data['User']['profile_status'] = 0;
+       //  prd($data);
+        @$emailId = $data['User']['email'];
+        $userCheck = $this->User->find('first', array(
+            'conditions' => array('User.email' => $emailId, 'User.status' => 1),
+            'fields' => array('id', 'email', 'username', 'fname', 'status')
+        ));
+        // prd($userCheck);
+
+        if ($data['User']['email'] == $user['email']) {
+            $flag = 1;
+        } elseif (isset($userCheck) && !empty($userCheck)) {
+            // user exist.
+            $flag = 2;
+        } else {
+            // user not exist . 
+            $flag = 3;
+        }
+
+        if ($flag == 1) {
+            $this->flash_msg(4, 'You cannot add yourself as member.');
+        } elseif ($flag == 2) {
+            // member exist check.
+            $memExistCheck = $this->OrganizationMember->find('first', array(
+                'conditions' => array('OrganizationMember.organization_id' => $user['id'], 'OrganizationMember.user_id' => $userCheck['User']['id']),
+            ));
+            if (isset($memExistCheck) && !empty($memExistCheck)) {
+                // already a member
+                $this->flash_msg(2, 'This is already a member of your organization.');
+            } else {
+                // user exist but  not a member 
+                if (isset($data) && !empty($data)) {
+                    $uniqueCode = uniqid();
+                    $verifyCode = $uniqueCode . '.' . $user['id'];
+                    $save['User']['id'] = $userCheck['User']['id'];
+                    $save['User']['member_verify_key'] = $verifyCode;
+
+                    if ($this->User->save($save)) {
+                        $organ_name = 'XYZ';
+                        $name = $userCheck['User']['fname'];
+                        $email = $userCheck['User']['email'];
+                        $key = $verifyCode;
+
+                        // Initializing Email Model.
+                        $emailObj = new EmailContent;
+                        $emailObj->add_request($organ_name, $name, $email, $key);
+
+                        $this->flash_msg(3, 'An Email has been send to your member, please check.');
+                        $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'addmember'));
+                    } else {
+                        $this->flash_msg(2, 'Some error occured, Please try again.');
+                        $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'addmember'));
+                    }
+                }
+            }
+        } elseif ($flag == 3) {
+
+            if (isset($data) && !empty($data)) {
+                $verifyCode = uniqid();
+                $passkey = $data['User']['fname'] . '@123';
+                $data['User']['password'] = $passkey;
+                $data['User']['confirm_password'] = $passkey;
+                $data['User']['type'] = 2;
+                $data['User']['created_under'] = $user['id'];
+                $data['User']['member_verify_key'] = $verifyCode;
+                $data['User']['status'] = 3;
+                $data['User']['profile_status'] = 0;
 
 
-            $this->User->set($data);
-            if ($this->User->validates()) {
-                $organ_name = 'XYZ';
-                $name = $data['User']['fname'];
-                $email = $data['User']['email'];
-                $temPassword = $passkey;
-                $key = $verifyCode;
+                $this->User->set($data);
+                if ($this->User->validates()) {
+                    $organ_name = 'XYZ';
+                    $name = $data['User']['fname'];
+                    $email = $data['User']['email'];
+                    $temPassword = $passkey;
+                    $key = $verifyCode;
 
-                // Initializing Email Model.
-                $emailObj = new EmailContent;
-                $emailObj->add_member_request($organ_name, $name, $email, $temPassword, $key);
-                if ($this->User->save($data)) {
-                    $this->flash_msg(3, 'An Email has been send to you member ,Please  verify the email address.');
-                    $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'addmember'));
+                    // Initializing Email Model.
+                    $emailObj = new EmailContent;
+                    $emailObj->add_member_request($organ_name, $name, $email, $temPassword, $key);
+
+                    if ($this->User->save($data)) {
+                        $this->flash_msg(3, 'An Email has been send to you member ,Please  verify the email address.');
+                        $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'addmember'));
+                    } else {
+                        $this->flash_msg(2, 'Some error occured, Please try again.');
+                        $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'addmember'));
+                    }
                 } else {
-                    $this->flash_msg(2, 'Some error occured, Please try again.');
-                    $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'addmember'));
+                    $errors = $this->User->validationErrors;
+                    $this->set('errors', $errors);
+//                    if (isset($errors['email'])) {
+//                        $this->User->validationErrors['email'][0] = "";
+//                    }
+//                    //prd($errors);
                 }
             } else {
-                $errors = $this->User->validationErrors;
-                $this->set('errors', $errors);
-//                if (isset($errors['email'])) {
-//                    $this->User->validationErrors['email'][0] = "asds";
-//                }
-                //prd($errors);
+                
             }
-        } else {
-            
         }
     }
 
