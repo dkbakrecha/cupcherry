@@ -13,7 +13,7 @@
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-$cakeDescription = __d('cake_dev', 'Cup Cherry : ');
+$cakeDescription = __d('cake_dev', '| Education Solution | CupCherry.com');
 //$cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 ?>
 <!DOCTYPE html>
@@ -22,8 +22,8 @@ $cakeDescription = __d('cake_dev', 'Cup Cherry : ');
         <meta http-equiv="X-UA-Compatible" content="IE=9">
         <?php echo $this->Html->charset(); ?>
         <title>
-            <?php echo $cakeDescription ?>
             <?php echo $this->fetch('title'); ?>
+            <?php echo $cakeDescription ?>
         </title>
         <?php
         echo $this->Html->meta('icon');
@@ -49,66 +49,37 @@ $cakeDescription = __d('cake_dev', 'Cup Cherry : ');
         ?>
     </head>
     <body>
-        <div class="page">
-            <?php echo 'Current User Id : ' . Configure::read('currentUserInfo.id'); ?>
-            <?php echo $this->element('header2'); ?>
-            <?php echo $this->element('menu'); ?>
-            <?php // echo $this->Session->flash(); ?>
-            <?php
-            if (!isset($currentUserInfo) && empty($currentUserInfo)) {
-                // prd($this->request);
-                if ($this->request->params['controller'] == 'pages' && $this->request->params['action'] == 'index') {
-                    echo $this->element('slider');
-                }
-            }
-            ?>
-
-
-            <div class="container-fluid LRpadding center-background">
-                <?php
-                $userId = Configure::read('currentUserInfo.User.id');
-                if (isset($userId) && !empty($userId)) {
-                    ?>
-                    <div class="container min-height ">
-                        <?php echo $this->Session->flash(); ?>
-                        <div class="row marginTB20px">
-                            <div class="col-md-3  left_member LRpadding">
-                                <?php echo $this->element('left_panel'); ?>
-                            </div>
-                            <div class="col-md-9 ">
-                                <div class="col-md-12 right_member">
-                                    <?php echo $this->fetch('content'); ?>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <?php
-                } else {
-                    ?>
-                    <div class="container">
-                        <?php echo $this->Session->flash(); ?>
-                        <div class="row">
-
-                            <div class="col-md-12 ">
-
-                                <?php echo $this->fetch('content'); ?>
-
-                            </div>
-
-                        </div>
-                    </div>
-                    <?php
-                }
-                ?>
-
-                <?php echo $this->element('footer'); ?>
-            </div>
-
-            <?php //echo $this->element('sql_dump');      ?>
-        </div>
+        <?php //echo 'Current User Id : ' . Configure::read('currentUserInfo.id'); ?>
         <?php
-        echo $this->Js->writeBuffer(array('cache' => false));
+        echo $this->element('header2');
+        echo $this->element('menu');
+        echo $this->element('flash_msg');
         ?>
+
+        <?php
+        $userInfo = Configure::read('currentUserInfo');
+        if (isset($userInfo['User']['id']) && !empty($userInfo['User']['id'])) {
+            ?>
+            <div class="container min-height ">
+                <?php echo $this->Session->flash(); ?>
+                <div class="row marginTB20px">
+                    <div class="col-md-3  left_member LRpadding">
+                        <?php echo $this->element('left_panel'); ?>
+
+
+                    </div>
+                    <div class="col-md-9 ">
+                        <div class="col-md-12 right_member">
+                            <?php echo $this->fetch('content'); ?>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        <?php } else { ?>
+            <?php //echo $this->Session->flash(); ?>
+            <?php echo $this->fetch('content'); ?>
+        <?php } ?>
+        <?php echo $this->element('footer'); ?>
     </body>
 </html>

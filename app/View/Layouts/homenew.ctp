@@ -32,7 +32,7 @@ $cakeDescription = __d('cake_dev', '| Education Solution | CupCherry');
     </head>
     <body>
         <?php echo $this->element('header2'); ?>
-        <?php //echo $this->element('menu'); ?>
+        <?php echo $this->element('menu'); ?>
         <?php echo $this->element('slider'); ?>
         <?php echo $this->Session->flash(); ?>
         <?php echo $this->fetch('content'); ?>

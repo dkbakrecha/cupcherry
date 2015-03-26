@@ -1,8 +1,3 @@
-<?php
-//
-//  prd($joinedGropus);
-?>
-
 <div class="profile_pic_panel">
     <div class="thumbnail" id="image-thumb">
         <?php echo $this->Html->image('no_image.jpg'); ?>
@@ -15,20 +10,19 @@
             </a>
         </div>
     </div>
-
-
 </div>
+
 <div class="panel panel-primary panel-custome ">
     <a class="dash_panel_heading" href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'dashboard')); ?>">
         <div class="panel-heading">
-            <i class="fa fa-dashboard fa-2x" ></i>Dashboard
+            <i class="fa fa-dashboard" ></i>Dashboard
         </div>
     </a>
 
     <ul class="list-group">
 
         <a id="groupListToggle">
-            <li class="list-group-item"><i class="fa fa-group fa-2x" ></i><span>Groups</span>
+            <li class="list-group-item"><i class="fa fa-group" ></i><span>Groups</span>
                 <div class="dashboard-plusIcon pull-right">
                     <i class="fa fa-plus"></i>    
                 </div>
@@ -111,17 +105,8 @@
         </ul>
 
 
-        <a href="#">
-            <li class="list-group-item"><i class="fa fa-book fa-2x" ></i><span>KeyNotes</span></li>
-        </a>
-        <a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'edit_profile')); ?>">
-            <li class="list-group-item"><i class="fa fa-user fa-2x" ></i><span>Edit Profile</span></li>
-        </a>
-        <a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'changepassword')); ?>">
-            <li class="list-group-item"><i class="fa fa-key fa-2x" ></i><span>Change Password</span></li>
-        </a>
-        <a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'logout')); ?>">
-            <li class="list-group-item"><i class="fa fa-sign-out fa-2x" ></i><span>Logout</span></li>
+        <a href="<?php echo $this->Html->url(array('controller' => 'keynotes', 'action' => 'index')); ?>">
+            <li class="list-group-item"><i class="fa fa-book" ></i><span>KeyNotes</span></li>
         </a>
 
     </ul>

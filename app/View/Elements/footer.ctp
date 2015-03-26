@@ -13,13 +13,26 @@
                 <div class="copyright">
                     <div class="row">
                         <div data-motopress-static-file="static/static-footer-nav.php" data-motopress-type="static" class="col-lg-6">
+                            
+                            <?php if(!empty( $this->user_id )){ ?>
+                            
                             <nav class="nav footer-nav">
                                 <ul class="menu" id="menu-footer-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-1797 current_page_item menu-item-1821" id="menu-item-1821"><a href="http://livedemo00.template-help.com/wordpress_52970/">About us</a></li>
                                     <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1820" id="menu-item-1820"><a href="">In-home care</a></li>
                                     <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1819" id="menu-item-1819"><a href="">Gallery</a></li>
                                     <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1818" id="menu-item-1818"><a href="">Contacts</a></li>
                                     <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1817" id="menu-item-1817"><a href="">Blog</a></li>
-                                </ul> </nav>
+                                </ul> 
+                            </nav>
+                            
+                            <?php } else { ?>
+                            <nav class="nav footer-nav">
+                                <ul class="menu" id="menu-footer-menu">
+                                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1820" id="menu-item-1820"><a href=""> &lt; CODE &gt; WITH <i class="fa fa-heart-o"></i> BY CupCherry TEAM </a></li>
+                                </ul> 
+                            </nav>
+                            <?php } ?>
+                            
                         </div>
                         <div data-motopress-static-file="static/static-footer-text.php" data-motopress-type="static" class="col-lg-6">
                             <div class="footer-text" id="footer-text">
@@ -33,3 +46,7 @@
         </div>
     </div>
 </footer>
+
+<?php
+        echo $this->Js->writeBuffer(array('cache' => false));
+        ?>

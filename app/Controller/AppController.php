@@ -1,37 +1,10 @@
 <?php
 
-/**
- * Application level Controller
- *
- * This file is application-wide controller file. You can put all
- * application-wide controller-related methods here.
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.Controller
- * @since         CakePHP(tm) v 0.2.9
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
 App::uses('Controller', 'Controller');
 
-/**
- * Application Controller
- *
- * Add your application-wide methods in the class below, your controllers
- * will inherit them.
- *
- * @package		app.Controller
- * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
- */
 class AppController extends Controller {
 
+    public $user_id;
     public $components = array(
         'Session',
         'Auth',
@@ -54,7 +27,10 @@ class AppController extends Controller {
                         'username' => 'email',
                         'password' => 'password',
                     ),
-                    'scope' => array('User.type' => 0)
+                    'scope' => array(
+                        'User.type' => array('0','1'),
+                        'User.status !=' => '2'
+                        )
                 ),
             );
 
@@ -67,13 +43,20 @@ class AppController extends Controller {
         } elseif (isset($this->request->params['plus'])) {
             $this->layout = 'plus';
 
+            /*
+             *  Plus login -- Organization Account
+             *  Usertype => 4 
+             */
             $this->Auth->authenticate = array(
                 'Form' => array(
                     'fields' => array(
                         'username' => 'email',
                         'password' => 'password',
                     ),
-                    'scope' => array('User.type' => 4)
+                    'scope' => array(
+                        'User.type' => array('4'), 
+                        'User.status !=' => '2'
+                    )
                 ),
             );
 
@@ -82,32 +65,40 @@ class AppController extends Controller {
             $this->Auth->loginAction = array('plus' => true, 'controller' => 'users', 'action' => 'plus_login');
             $this->Auth->loginRedirect = array('plus' => true, 'controller' => 'users', 'action' => 'plus_dashboard');
             $this->Auth->logoutRedirect = array('plus' => true, 'controller' => 'users', 'action' => 'plus_login');
-            //  $this->Auth->authorize = 'controller';
         } else {
-
+            /*
+             *  Front login
+             *  Usertype 
+             *      2 => Student (learner)
+             *      3 => Teacher 
+             *      5 => Guardian
+             */
             $this->Auth->authenticate = array(
                 'form' => array(
                     'fields' => array(
                         'username' => 'email',
                         'password' => 'password',
                     ),
-                    'scope' => array('User.type' => array(0,1,2,3,5))
+
+                    'scope' => array(
+                        'User.type' => array('2', '3', '5'),
+                        'User.status !=' => '2'
+                        )
                 ),
             );
 
-            // to check session key if we not define this here then is will check with 'Auth.User' so dont remove it
             AuthComponent::$sessionKey = 'Auth.User';
             $this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
             $this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'dashboard');
             $this->Auth->logoutRedirect = array('controller' => 'users', 'action' => 'login');
         }
+
         $currentUserInfo = $this->Session->read('Auth');
-//        if (isset($currentUserInfo) && !empty($currentUserInfo)) {
-//            $this->set('currentUserInfo', $currentUserInfo);
-//        }
 
-
-        //  prd($currentUserInfo);
+        if (isset($currentUserInfo) && !empty($currentUserInfo)) {
+            $this->set('currentUserInfo', $currentUserInfo);
+            $this->user_id = $this->Session->read('Auth.User.id');
+        }
 
         Configure::write('currentUserInfo', $currentUserInfo);
         $cont = $this->request->params['controller'];
@@ -121,30 +112,25 @@ class AppController extends Controller {
         $allowAction[] = 'users_tprofile';
         $allowAction[] = 'users_profile';
 
-//        if($currentUserInfo['profile_status'] == 0){
-//            if(in_array($currentAction, $allowAction)){
-//                // User profile not complate and try to access valid controller
-//            }else{
-//                $this->flash_msg(1,"Hello Plesae conform your profile");
-//                $this->redirect(array('controller' => 'users', 'action' => 'step1'));
-//            }
-//        }
-        //pr($this->request);
-        //   prd($currentUserInfo);
-        //$this->Auth->allow('index');
+        
         $this->SiteSettings();
         $this->commonData();
     }
 
-    public function flash_msg($flag = NULL, $msg) {
+    public function __getUser() {
+        $currentUserInfo = $this->Session->read('Auth.User');
+        return $currentUserInfo;
+    }
+
+    public function flash_msg($msg, $flag = 1) {
         if ($flag == 1) {
-            $this->Session->setFlash($msg, 'default', array('class' => 'alert alert-success'));
+            $this->Session->setFlash($msg, 'default', array('id' => 'success'));
         } elseif ($flag == 2) {
-            $this->Session->setFlash($msg, 'default', array('class' => 'alert alert-danger'));
+            $this->Session->setFlash($msg, 'default', array('id' => 'danger'));
         } elseif ($flag == 3) {
-            $this->Session->setFlash($msg, 'default', array('class' => 'alert alert-info'));
+            $this->Session->setFlash($msg, 'default', array('id' => 'info'));
         } elseif ($flag == 4) {
-            $this->Session->setFlash($msg, 'default', array('class' => 'alert alert-warning'));
+            $this->Session->setFlash($msg, 'default', array('id' => 'warning'));
         }
     }
 

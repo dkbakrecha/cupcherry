@@ -44,4 +44,35 @@ class KeyNotesController extends AppController {
             
             $this->set('listData',$listData);
         }
+        
+        public function create() {
+            $this->set('title_for_layout', 'Education Notes');
+
+            $data = $this->request->data;
+            if (isset($data) && !empty($data)) {
+                $user = $this->__getUser();
+                $saveData = $data;
+                $saveData['KeyNote']['user_id'] = $user['id'];
+                
+                if ($this->KeyNote->save($saveData)) {
+                    $this->Session->setFlash("Keynote add successfully", 'default', array('class'=>'alert alert-success'));
+                    $this->redirect(array('action' => 'mynotes'));
+                } else {
+                    $this->Session->setFlash("Keynoye cannot add. Please Try again", 'default', array('class'=>'alert alert-danger'));
+                }
+            }
+            
+            $listData = array();
+            $this->loadModel('Type');
+            $this->loadModel('Category');
+            
+            $listData['types'] = $this->Type->find('list');
+            $listData['categories'] = $this->Category->find('list');
+            
+            $this->set('listData',$listData);
+	}
+        
+        public function mynotes() {
+
+	}
 }

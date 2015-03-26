@@ -13,12 +13,17 @@ class PagesController extends AppController {
     }
 
     public function index() {
-
+        $this->layout = 'homenew';
         $this->set('title_for_layout', 'Eduction');
         $user = $this->Session->read('Auth.User.id');
         if (isset($user['id']) && !empty($user['id'])) {
             $this->redirect(array('controller' => 'users', 'action' => 'dashboard'));
         }
+
+        $this->loadModel('CmsPage');
+        $cmsData = $this->CmsPage->find('all', array(
+            'conditions' => array('parent_key' => 'HOMEPAGE')
+        ));
     }
 
     public function about() {
@@ -33,7 +38,7 @@ class PagesController extends AppController {
     }
 
     public function howitworks() {
-        $this->set('title_for_layout', 'About us');
+        $this->set('title_for_layout', 'How It Works | CupCherry');
         $this->loadModel('CmsPage');
         $cmsData = $this->CmsPage->find('all', array(
             'conditions' => array('unique_name' => 'HOW_IT_WORKS')

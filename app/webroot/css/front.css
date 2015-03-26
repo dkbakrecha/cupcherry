@@ -78,8 +78,13 @@
     margin-top: 0px;
     text-align: justify;
 }
+
+header{
+    border-bottom: 2px solid #277396;
+}
+
 .logo{
-    margin-top: 20px;
+    margin: 10px auto;
 }
 .logo a {
     font-size: 36px;
@@ -200,9 +205,7 @@
     color: white;
     outline: none;
 }
-.center-background {
-    background-color: #f9f9f9;
-}
+
 .panel{
     background-color: #fff;
     border: 0px;
@@ -291,6 +294,11 @@
 .gifProcess {
     display: none;
 }
+
+
+.searchform{
+    padding: 20px;
+}
 .form-bottom-margin{
     margin-bottom: 0px;
 }
@@ -319,4 +327,5 @@
 }
 .login-page-heading{
     font-size: 16px;
+
 }
