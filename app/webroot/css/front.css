@@ -329,3 +329,6 @@ header{
     font-size: 16px;
 
 }
+#org-drop-list{
+    display: none;
+}

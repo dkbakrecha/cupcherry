@@ -19,6 +19,7 @@ class GroupsController extends AppController {
         $this->loadModel('GroupMember');
         $currentUserId = $this->Session->read('Auth.User.id');
         //  prd($currentUserId);
+
         $groupData = $this->Group->find('all', array(
             'conditions' => array('Group.created_by' => $currentUserId, 'Group.status' => 1),
         ));
@@ -280,13 +281,13 @@ class GroupsController extends AppController {
             $this->request->data['Invite'][$this->request->data['field']] = $this->request->data['value'];
             $data = array();
             $data = $this->request->data;
-           // pr($data);
+            // pr($data);
             $this->Invite->set($data);
             if ($this->Invite->validates()) {
                 $this->autoRender = FALSE;
             } else {
-              $error = $this->Invite->validationErrors;
-               // $error = $this->validationErrors($this->Message);
+                $error = $this->Invite->validationErrors;
+                // $error = $this->validationErrors($this->Message);
                 $this->set('error', $error[$this->request->data['field']][0]);
             }
         }
@@ -407,6 +408,93 @@ class GroupsController extends AppController {
             if ($this->Group->saveField('status', '2')) {
                 $this->flash_msg('1', 'Recorded deleted.');
                 $this->redirect(array('controller' => 'groups', 'action' => 'view'));
+            }
+        }
+    }
+
+    // Plus Functions
+
+    public function plus_index() {
+        $this->set('title_for_layout', 'Create Group');
+        $this->loadModel('User');
+        $this->loadModel('Type');
+        $user = Configure::read('currentUserInfo.Plus');
+        // prd($user);
+        //Model Bind with Group Resources
+        $this->Group->bindModel(
+                array('belongsTo' => array(
+                        'User' => array(
+                            'foreignKey' => 'managed_by',
+                            'conditions' => array(
+                                'User.status = 1',
+                            //'GroupMessage.group_resource_id != 0'
+                            ),
+                            'fields' => array('fname', 'lname', 'email', 'status')
+                        )
+                    )
+                )
+        );
+        
+        
+       
+       
+        
+        
+        
+
+
+        $memberList = $this->User->find('all', array(
+            'conditions' => array('User.created_under' => $user['id'], 'User.status' => 1),
+            'fields' => array('id', 'fname', 'lname', 'status', 'type', 'email'),
+        ));
+        $types = $this->Type->find('all', array(
+            'conditions' => array('Type.status' => 1),
+            'fields' => array('id', 'title', 'description', 'status'),
+        ));
+        $grpList = $this->Group->find('all', array(
+            'conditions' => array('Group.created_by' => $user['id'], 'Group.status' => 1),
+            'fields' => array(
+                'id', 
+                'group_unique_name',
+                'title', 
+                'created_by',
+                'managed_by', 
+                'type_id', 
+                'total_member', 
+                'status',
+                'User.fname',
+                'User.lname',
+                'User.email',
+                'User.status')
+        ));
+        $this->set(compact('types', 'memberList', 'grpList'));
+
+        // prd($types);
+        $data = array();
+        $data = $this->request->data;
+
+
+        //prd($data);
+        if (isset($data) && !empty($data)) {
+            $save = array();
+            $save['Group']['title'] = $data['Group']['title'];
+            $save['Group']['managed_by'] = $data['Group']['managed_by'];
+            $save['Group']['created_by'] = $user['id'];
+            $save['Group']['type'] = $data['Group']['type'];
+            $save['Group']['status'] = 1;
+            if ($this->Group->save($save)) {
+                $lastInsertMsgId = $this->Group->getLastInsertID();
+                $date1 = $dateFormated = date('Ym');
+                $grpUniqueName = $date1 . $user['id'] . '.' . $lastInsertMsgId;
+                $save1['Group']['id'] = $lastInsertMsgId;
+                $save1['Group']['group_unique_name'] = $grpUniqueName;
+                $this->Group->save($save1);
+
+                $this->flash_msg('Group created', 1);
+                $this->redirect(array('plus' => true, 'controller' => 'groups', 'action' => 'index'));
+            } else {
+                $this->flash_msg('Group cannot created, Please try agian', 2);
+                $this->redirect(array('plus' => true, 'controller' => 'groups', 'action' => 'index'));
             }
         }
     }

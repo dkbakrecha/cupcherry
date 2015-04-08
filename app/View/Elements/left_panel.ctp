@@ -1,3 +1,7 @@
+
+<?php
+//prd($groupList);
+?>
 <div class="profile_pic_panel">
     <div class="thumbnail" id="image-thumb">
         <?php echo $this->Html->image('no_image.jpg'); ?>
@@ -40,8 +44,8 @@
                     <?php
                     foreach ($groupList as $grps) {
                         ?>
-                        <li class="list-padding list-group-item">
-                            <span>
+                    <li class="list-padding list-group-item">
+                        <span>
                                 <?php
                                 echo $this->Html->link($grps['Group']['title'], array(
                                     'controller' => 'groups',
@@ -49,8 +53,8 @@
                                 ));
                                 ?>
 
-                            </span>
-                        </li>
+                        </span>
+                    </li>
                         <?php
                     }
                     ?>
@@ -59,7 +63,8 @@
                 </ul>
 
             </li>
-            <li id="joinedGrp" class="list-padding list-group-item"><span>
+            <li id="joinedGrp" class="list-padding list-group-item">
+                <span>
                     <a>
                         Joined Groups
                     </a>
@@ -69,8 +74,8 @@
                     <?php
                     foreach ($joinedGropus as $jGroups) {
                         ?>
-                        <li class="list-padding list-group-item">
-                            <span>
+                    <li class="list-padding list-group-item">
+                        <span>
                                 <?php
                                 echo $this->Html->link($jGroups['Group']['title'], array(
                                     'controller' => 'groups',
@@ -78,8 +83,8 @@
                                 ));
                                 ?>
 
-                            </span>
-                        </li>
+                        </span>
+                    </li>
                         <?php
                     }
                     ?>
@@ -108,6 +113,33 @@
         <a href="<?php echo $this->Html->url(array('controller' => 'keynotes', 'action' => 'index')); ?>">
             <li class="list-group-item"><i class="fa fa-book" ></i><span>KeyNotes</span></li>
         </a>
+           <?php
+         $userCreatedUnder = Configure::read('currentUserInfo.User.created_under');
+            
+           if($userCreatedUnder != 0 && 1 ){
+               ?>
+        <a id="orgToggle">
+            <li class="list-group-item"><i class="fa fa-hospital-o" ></i><span>Organizations</span>
+                <div class="dashboard-plusIcon pull-right">
+                    <i class="fa fa-plus"></i>    
+                </div>
+            </li>
+        </a>
+        <ul id="org-drop-list" class="list-group">
+            <li class="list-padding list-group-item">
+                <span>
+                    <a href="<?php // echo $this->Html->url(array('controller' => 'groups', 'action' => 'add')); ?>">
+                        <?php echo $org['Organization']['organization_name']?>
+                    </a>
+                </span>
+            </li>
+        </ul>
+        
+        <?php
+           }
+           
+           ?>
+
 
     </ul>
 </div>

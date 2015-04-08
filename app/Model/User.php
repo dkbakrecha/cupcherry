@@ -6,6 +6,25 @@ App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
 class User extends AppModel {
 
     var $name = 'User';
+//    public $hasOne = array(
+//        'Organization' => array(
+//            'className' => 'Organization',
+//            'foreignKey' => 'user_id',
+//            'conditions' => array('Organization.status' => '1'),
+//
+//        ),
+//        'UserProfile' => array(
+//            'className' => 'UserProfile',
+//            'foreignKey' => 'user_id',
+//            'conditions' => array('UserProfile.status' => '1'),
+//
+//        ),
+//        
+//        
+//    );
+  
+    
+    
     public $validate = array(
         'username' => array(
             'required' => array(
@@ -52,7 +71,7 @@ class User extends AppModel {
         'change_password' => array(
             'required' => array(
                 'rule' => 'checkCurrentPassword',
-               // 'message' => 'old password incorrect.'
+            // 'message' => 'old password incorrect.'
             )
         ),
         'role' => array(
@@ -77,14 +96,14 @@ class User extends AppModel {
         $this->data[$this->alias]['change_password'] = $passwordHasher->hash(
                 $this->data[$this->alias]['change_password']
         );
-        
+
         //$currentId = Configure::read('currentUserInfo.id');
         $oldpassword = $this->data[$this->alias]['old_password'];
-      
+
         if ($this->data[$this->alias]['change_password'] == $oldpassword) {
             return true;
         }
-        $this->invalidate('change_password','old password incorrect.');
+        $this->invalidate('change_password', 'old password incorrect.');
         return false;
     }
 
@@ -101,6 +120,7 @@ class User extends AppModel {
 
             if (!empty($this->data)) {
                 $this->data['User']['dob'] = date('Y-m-d', strtotime($this->data['User']['dob']));
+               
             }
         }
         return true;

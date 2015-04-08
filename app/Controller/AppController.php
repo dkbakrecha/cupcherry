@@ -35,9 +35,9 @@ class AppController extends Controller {
                         'password' => 'password',
                     ),
                     'scope' => array(
-                        'User.type' => array('0','1'),
+                        'User.type' => array('0', '1'),
                         'User.status !=' => '2'
-                        )
+                    )
                 ),
             );
 
@@ -61,7 +61,7 @@ class AppController extends Controller {
                         'password' => 'password',
                     ),
                     'scope' => array(
-                        'User.type' => array('4'), 
+                        'User.type' => array('4'),
                         'User.status !=' => '2'
                     )
                 ),
@@ -72,6 +72,8 @@ class AppController extends Controller {
             $this->Auth->loginAction = array('plus' => true, 'controller' => 'users', 'action' => 'plus_login');
             $this->Auth->loginRedirect = array('plus' => true, 'controller' => 'users', 'action' => 'plus_dashboard');
             $this->Auth->logoutRedirect = array('plus' => true, 'controller' => 'users', 'action' => 'plus_login');
+
+            $this->commonDataPlus();
         } else {
             /*
              *  Front login
@@ -90,7 +92,7 @@ class AppController extends Controller {
                     'scope' => array(
                         'User.type' => array('2', '3', '5', '6'),
                         'User.status !=' => '2'
-                        )
+                    )
                 ),
             );
 
@@ -99,10 +101,10 @@ class AppController extends Controller {
             $this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'dashboard');
             $this->Auth->logoutRedirect = array('controller' => 'users', 'action' => 'login');
         }
-        
-        //$this->Auth->authorize = array('Controller');
-        
-        
+
+        $currentUserInfo = $this->Session->read('Auth');
+       //prd($currentUserInfo);
+
         if (isset($currentUserInfo) && !empty($currentUserInfo)) {
             $this->set('currentUserInfo', $currentUserInfo);
             $this->user_id = $this->Session->read('Auth.User.id');
@@ -110,9 +112,8 @@ class AppController extends Controller {
 
         Configure::write('currentUserInfo', $currentUserInfo);
 
-        //$this->checkTerms($currentUserInfo['User']);
         $this->SiteSettings();
-        $this->commonData();
+        $this->commonDataFront();
     }
     
     public function checkTerms($user){
@@ -142,6 +143,8 @@ class AppController extends Controller {
         return true;
     }
 
+    
+
     public function __getUser() {
         $currentUserInfo = $this->Session->read('Auth.User');
         return $currentUserInfo;
@@ -159,24 +162,53 @@ class AppController extends Controller {
         }
     }
 
-    public function commonData() {
+    public function commonDataFront() {
         $this->loadModel('Group');
         $this->loadModel('GroupMember');
+        
         // Query to fetch all joined groups by current User
-        $userId = Configure::read('currentUserInfo.User.id');
+        $user = Configure::read('currentUserInfo.User');
 
         $groupList = $this->Group->find('all', array(
-            'conditions' => array('Group.created_by' => $userId, 'Group.status' => 1),
+            'conditions' => array('Group.created_by' => $user['id'], 'Group.status' => 1),
             'fields' => array('id', 'title', 'status'),
         ));
         $this->set('groupList', $groupList);
         //  prd($groupList);
 
         $joinedGropus = $this->GroupMember->find('all', array(
-            'conditions' => array('GroupMember.user_id' => $userId, 'GroupMember.status' => 1),
+            'conditions' => array('GroupMember.user_id' => $user['id'], 'GroupMember.status' => 1),
         ));
-        $this->set('joinedGropus', $joinedGropus);
+        $this->set('joinedGropus',$joinedGropus);
         //  prd($joinedGropus);
+        if($user['created_under'] != 0 && 1){
+            $this->loadModel('Organization');
+            $org = $this->Organization->find('first',array(
+                'conditions'=> array(
+                    'Organization.user_id' => $user['created_under'],
+                    'Organization.status' => 1)
+            ));
+            $this->set('org',$org);
+           // prd($org);
+        }
+        
+    }
+
+    public function commonDataPlus() {
+        $this->loadModel('Type');
+        $this->loadModel('Category');
+
+        $types = $this->Type->find('all', array(
+            'conditions' => array('Type.status' => 1),
+            'fields' => array('id', 'title', 'description', 'status')
+        ));
+        $this->set('types', $types);
+
+        $categories = $this->Category->find('all', array(
+            'conditions' => array('Category.status' => 1),
+            'fields' => array('id', 'title', 'description', 'status'),
+        ));
+        $this->set('categories', $categories);
     }
 
     protected function SiteSettings() {

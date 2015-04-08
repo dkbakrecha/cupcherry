@@ -31,7 +31,7 @@ $cakeDescription = __d('cake_dev', 'Cup Cherry - ');
         echo $this->fetch('meta');
         echo $this->Html->css(array(
             // 'fa/font-awesome.min',
-            'plus/bootstrap.min',
+            'plus/plus-bootstrap.min',
             'plus/font-awesome',
             'plus/style',
             'plus/pages/signin',
@@ -51,7 +51,7 @@ $cakeDescription = __d('cake_dev', 'Cup Cherry - ');
 
         <?php echo $this->Element('pluslogin/header'); ?>
         <div class="container">
-            <?php echo $this->Session->flash(); ?>
+            <?php echo $this->Element('flash_msg') ?>
             <?php echo $this->fetch('content'); ?>
         </div>
 
