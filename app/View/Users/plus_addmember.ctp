@@ -3,23 +3,25 @@
 <div class="row">
     <div class="col-md-12">
         <div class="widget-header">
-            <i class="icon-user"></i>
-            <h3>Add Member</h3>
+            <i class="icon-group"></i>
+            <h3>Members</h3>
         </div> <!-- /widget-header -->
         <div class="widget-content">
             <div class="tabbable">
                 <ul class="nav nav-tabs">
-                    <li  class="active">
+                    <li class="active" >
+                        <a href="#jscontrols" data-toggle="tab">View Member</a>
+                    </li>
+                    <li  >
                         <a href="#formcontrols" data-toggle="tab">New Member</a>
                     </li>
-                    <li >
-                        <a href="#jscontrols" data-toggle="tab">View Member</a></li>
+
                 </ul>
 
                 <br>
 
                 <div class="tab-content ">
-                    <div class="tab-pane active" id="formcontrols">
+                    <div class="tab-pane " id="formcontrols">
                         <?php
                         echo $this->Form->create('User', array(
                             'class' => 'form-horizontal'
@@ -27,26 +29,6 @@
                         ?>
 
                         <fieldset>
-
-                            <div class="form-group">			
-                                <div class="col-md-6">
-                                    <label class="control-label" for="username">Email</label>
-                                    <div class="controls">
-                                        <?php
-                                        echo $this->Form->input('email', array(
-                                            'class' => 'form-control',
-                                            'placeholder' => 'Provide valid email id',
-                                            'label' => false,
-                                            'div' => false));
-                                        ?>
-
-                                        <p class="help-block">This is going to be the login id.</p>
-                                    </div>
-                                </div>
-
-                            </div> 
-
-
                             <div class="form-group">
                                 <div class="col-md-6">
 
@@ -55,7 +37,7 @@
                                         <?php
                                         echo $this->Form->input('fname', array(
                                             'class' => 'form-control',
-                                            'div' => false, 'label' => false));
+                                            'div' => false, 'label' => false, 'required' => 'required'));
                                         ?>
 
                                     </div>
@@ -76,24 +58,25 @@
                             </div>
 
 
-
-                            <div class="form-group">
+                            <div class="form-group">			
                                 <div class="col-md-6">
-                                    <label class="control-label">Rights</label>
-
-
+                                    <label class="control-label" for="username">Email</label>
                                     <div class="controls">
-                                        <label class="checkbox inline">
-                                            <input type="checkbox"> Option 01
-                                        </label>
+                                        <?php
+                                        echo $this->Form->input('email', array(
+                                            'class' => 'form-control',
+                                            'placeholder' => 'Provide valid email id',
+                                            'label' => false,
+                                            'div' => false));
+                                        ?>
 
-                                        <label class="checkbox inline">
-                                            <input type="checkbox"> Option 02
-                                        </label>
-                                    </div> 
+                                       
+                                    </div>
                                 </div>
 
                             </div> 
+
+
 
 
                             <br />
@@ -106,38 +89,53 @@
                             </div> <!-- /form-actions -->
                         </fieldset>
                         <?php
-                        $this->Form->end();
+                       echo  $this->Form->end();
                         ?>
                     </div>
 
-                    <div class="tab-pane " id="jscontrols">
-                        <table class="table table-bordered">
-                            <tr>
-                                
-                                <th>Organization Name</th>
-                                <th>User Name</th>
-                                <th>status</th>
-                            </tr>
-                            <?php
-                            foreach ($membersList as $memlist) {
+                    <div class="tab-pane active " id="jscontrols">
+                        <div class="12">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Sn</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+
+
+
+
+                                <?php
+                                $i = 1;
+                                foreach ($membersList as $memlist) {
+                                    ?>
+                                    <tr>
+                                        <td>
+                                            <?php echo $i; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $memlist['User']['fname'] . ' ' . $memlist['User']['lname']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $memlist['User']['email']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $memlist['User']['status']; ?>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                </tr>
+                                <?
+                                $i ++;
+                                }
+
                                 ?>
-                            <tr>
-                                <td>
-                                    <?php echo $memlist['OrganizationMember']['organization_id']?>
-                                </td>
-                                <td>
-                                    <?php echo $memlist['OrganizationMember']['user_id']?>
-                                </td>
-                                <td>
-                                    <?php echo $memlist['OrganizationMember']['status']?>
-                                </td>
-                            </tr>
-                            <?
-                            }
 
-                            ?>
-
-                        </table>
+                            </table>
+                        </div>
                     </div>
 
                 </div>

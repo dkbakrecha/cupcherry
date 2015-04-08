@@ -39,7 +39,8 @@ $cakeDescription = __d('cake_dev', 'Cup Cherry - ');
             'plus/style',
             'plus/pages/dashboard',
             'plus/font-awesome',
-            'plus/customcss'
+            'plus/customcss',
+            'plus/user_card'
         ));
         echo $this->Html->script(array(
             'jQueryv1.11.1',
@@ -60,8 +61,9 @@ $cakeDescription = __d('cake_dev', 'Cup Cherry - ');
             <div class="main-inner">
                 <div class="container">
                     <?php echo $this->Element('plus/imp_shortcuts');?>
-                    <?php echo $this->Session->flash(); ?>
-
+                    <div class="row">
+                    <?php echo $this->Element('flash_msg'); ?>
+                    </div>    
                     <?php echo $this->fetch('content'); ?>
                 </div>
             </div>

@@ -93,4 +93,16 @@ class PagesController extends AppController {
         $this->set('categories', $categories);
     }
 
+    public function plus_types() {
+        $this->set('title_for_layout', 'Types');
+    }
+
+    public function plus_categories() {
+        $this->set('title_for_layout', 'Categories');
+    }
+
+    public function plus_help() {
+        $this->set('title_for_layout', 'Help');
+    }
+
 }

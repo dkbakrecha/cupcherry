@@ -23,6 +23,9 @@ $(document).ready(function() {
     $('#manageGrp').click(function(){
             $('#manageGrpList').toggle();
     });
+    $('#orgToggle').click(function(){
+            $('#org-drop-list').toggle();
+    });
     
     
     

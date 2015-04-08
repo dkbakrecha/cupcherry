@@ -25,7 +25,7 @@ if ($this->Session->read('Message.flash.params.id') == 'success') {
 
 <script>
     $(document).ready( function() {
-        $('.alert').delay(3000).fadeOut('slow');
+        $('.alert').delay(5000).fadeOut('slow');
       });
 </script>
 
