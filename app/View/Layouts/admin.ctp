@@ -52,9 +52,11 @@
             'admin/blue',
             'admin/select2',
             'admin/fullcalendar',
+            //'/js/DataTables/media/js/jquery.dataTables.min',
             'admin/target-admin',
             'admin/custom',
         ));
+        
         echo $this->Html->script(array(
             'jQueryv1.11.1',
             'bootstrap/bootstrap.min',
@@ -70,6 +72,7 @@
             'admin/jquery',
             'admin/fullcalendar',
             'admin/target-admin',
+            'DataTables/media/js/jquery.dataTables.min',
             'admin/dashboard',
             'admin/calendar',
             'admin/area',

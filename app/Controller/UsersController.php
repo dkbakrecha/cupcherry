@@ -1,10 +1,7 @@
 <?php
-
 App::uses('AppController', 'Controller');
 
 class UsersController extends AppController {
-
-    public $uses = array();
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -13,7 +10,8 @@ class UsersController extends AppController {
                 'admin_login', 'register', 'add', 'signup', 'registration', 'verification'
         );
     }
-
+    
+    //Need to remove - 29 March 
     public function register() {
         if ($this->request->is('post')) {
             $this->User->create();
@@ -136,10 +134,10 @@ class UsersController extends AppController {
                     $emailObj = new EmailContent;
                     $emailObj->registration_mail($status, $name, $email, $key);
 
-                    $this->flash_msg(1, 'An Email has been send to your email id. Please check');
+                    $this->flash_msg('An Email has been send to your email id. Please check');
                     $this->redirect(array('controller' => 'pages', 'action' => 'index'));
                 }
-                $this->flash_msg(2, 'Some error occurred in registration.');
+                $this->flash_msg('Some error occurred in registration.',2);
                 $this->redirect(array('controller' => 'pages', 'action' => 'index'));
             } else {
                 $errors = $this->User->validationErrors;
@@ -311,9 +309,6 @@ class UsersController extends AppController {
                         $msg = __('Your account is not activated. Resend activation code?');
                         $click = __('click here');
                         $msg .= ('<a href="' . $link . '" target="_BLANK">' . $click . '</a>.');
-
-
-                        //$msg = _('Your account is not activated');
                         break;
                     case '0':
                         $msg = _('Your account is disabled by Administrator');
@@ -414,12 +409,13 @@ class UsersController extends AppController {
     }
 
     public function logout() {
+        //prd("asd");
         $this->Session->delete('Auth.User');
-        $this->redirect(array('controller' => 'users', 'action' => 'login'));
+        $this->redirect($this->Auth->logoutRedirect);
     }
 
     public function dashboard() {
-        
+        //prd("User Dashboard");
     }
 
     public function admin_index() {
@@ -680,14 +676,15 @@ class UsersController extends AppController {
 
     public function admin_edit($id) {
         $this->set('title_for_layout', 'Admin - Edit User');
-
         $data = $this->request->data;
+        
         if (isset($data) && !empty($data)) {
-            //prd($data);
+            
             if (empty($data['User']['password'])) {
                 unset($data['User']['password']);
+                unset($data['User']['confirm_password']);
             }
-            //prd($data);
+            
             if ($this->User->save($data)) {
                 $this->Session->setFlash("User  update successfully", 'default', 'success');
             } else {

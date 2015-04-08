@@ -1,20 +1,20 @@
-<?php 
-    echo $this->Html->css(array(
-        'bootstrap/wysihtml5/bootstrap-wysihtml5'
-        ));
-    echo $this->Html->script(array(
-        'bootstrap/wysihtml5/lib/wysihtml5-0.3.0',
-        'bootstrap/wysihtml5/bootstrap-wysihtml5'
-        ));
+<?php
+    echo $this->Html->css(array('/js/summernote/dist/summernote'));
+    echo $this->Html->script(array('summernote/dist/summernote'));
 ?>
+
+<div class="row keynotes-view">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"> <i class="fa fa-file"></i> Create Notes
+                <a href="<?php echo $this->Html->url(array('controller' => 'key_notes', 'action' => 'mynotes')) ?>" class="btn pull-right btn-outline">My Notes</a>
+            </h3>
+        </div>
+        <div class="panel-body">
 
 <div class="row">
     <div class="col-md-12">
         <div class="portlet">
-            <div class="portlet-header">
-                    <i class="fa fa-file"></i> Create KeyNotes
-            </div>
-
             <div class="portlet-content">           
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
@@ -32,14 +32,14 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class='col-md-12'>
-                                    <?php 
+                                    <?php
                                     echo $this->Form->input('description', array(
                                         'type' => 'textarea',
-                                        'div' => false, 
-                                        'label' => false, 
-                                        'class' => 'form-control html5wysi', 
+                                        'div' => false,
+                                        'label' => false,
+                                        'class' => 'form-control html5wysi',
                                         'placeholder' => 'Enter KeyNote Here'
-                                    )); 
+                                    ));
                                     ?>
                                 </div>
                             </div>
@@ -49,7 +49,7 @@
                             <div class="row">
                                 <div class='col-md-6'>
                                     <?php
-                                    echo $this->Form->input('type_id', array(
+                                    echo $this->Form->input('standard_id', array(
                                         'options' => $listData['types'],
                                         'empty' => '( choose class type )',
                                         'label' => false,
@@ -61,7 +61,7 @@
 
                                 <div class='col-md-6'>
                                     <?php
-                                    echo $this->Form->input('cayegory_id', array(
+                                    echo $this->Form->input('category_id', array(
                                         'options' => $listData['categories'],
                                         'empty' => '( choose Category )',
                                         'label' => false,
@@ -82,7 +82,21 @@
         </div>
     </div>
 </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 <script>
-    $('.html5wysi').wysihtml5();
+    $('.html5wysi').summernote({
+        height: 250,
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough']],
+            ['fontsize', ['fontsize']],
+            ['para', ['ul', 'ol']],
+        ]
+    });
 </script>

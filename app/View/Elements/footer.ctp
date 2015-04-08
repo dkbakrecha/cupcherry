@@ -12,29 +12,35 @@
                                 </div>-->
                 <div class="copyright">
                     <div class="row">
-                        <div data-motopress-static-file="static/static-footer-nav.php" data-motopress-type="static" class="col-lg-6">
+                        <div data-motopress-static-file="static/static-footer-nav.php" data-motopress-type="static" class="col-lg-8">
                             
-                            <?php if(!empty( $this->user_id )){ ?>
+                            <?php 
+                            $cuer = $this->Session->read('Auth.User');
+                            if(isset($cuer['id']) && !empty( $cuer['id'] )){ 
+                            ?>
                             
                             <nav class="nav footer-nav">
-                                <ul class="menu" id="menu-footer-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-1797 current_page_item menu-item-1821" id="menu-item-1821"><a href="http://livedemo00.template-help.com/wordpress_52970/">About us</a></li>
-                                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1820" id="menu-item-1820"><a href="">In-home care</a></li>
-                                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1819" id="menu-item-1819"><a href="">Gallery</a></li>
-                                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1818" id="menu-item-1818"><a href="">Contacts</a></li>
-                                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1817" id="menu-item-1817"><a href="">Blog</a></li>
+                                <ul class="menu" id="menu-footer-menu">
+                                    <li class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item">
+                                        <a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'index')); ?>">Home</a></li>
+                                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'about')); ?>">About Us</a></li>
+                                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'howitworks')); ?>">How It Works</a></li>
+                                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="<?php echo $this->Html->url(array('controller' => 'faqs', 'action' => 'index')); ?>">FAQ's</a></li>
+                                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'terms')); ?>">Terms of Use</a></li>
+                                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'contact_us')); ?>">Contact Us</a></li>
                                 </ul> 
                             </nav>
                             
                             <?php } else { ?>
                             <nav class="nav footer-nav">
                                 <ul class="menu" id="menu-footer-menu">
-                                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1820" id="menu-item-1820"><a href=""> &lt; CODE &gt; WITH <i class="fa fa-heart-o"></i> BY CupCherry TEAM </a></li>
+                                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href=""> &lt; CODE &gt; WITH <i class="fa fa-heart-o"></i> BY CupCherry TEAM </a></li>
                                 </ul> 
                             </nav>
                             <?php } ?>
                             
                         </div>
-                        <div data-motopress-static-file="static/static-footer-text.php" data-motopress-type="static" class="col-lg-6">
+                        <div data-motopress-static-file="static/static-footer-text.php" data-motopress-type="static" class="col-lg-4">
                             <div class="footer-text" id="footer-text">
                                 <a class="site-name" title="" href="">Cup Cherry</a> &copy; 2015 <a title="Privacy Policy" href="">All Rights Reserved</a>
 

@@ -1,6 +1,7 @@
 <?php
 
 App::uses('Controller', 'Controller');
+App::uses('AuthComponent', 'Controller/Component');
 
 class AppController extends Controller {
 
@@ -15,8 +16,14 @@ class AppController extends Controller {
     );
 
     public function beforeFilter() {
+        $currentUserInfo = $this->Session->read('Auth');
+        
+        if(!empty($currentUserInfo['User'])){
+            $this->checkTerms($currentUserInfo['User']);
+        }
+        
         parent::beforeFilter();
-        $this->Auth->allow('account_recovery', 'recovery_token', 'index', 'plus_login', 'plus_registration');
+        $this->Auth->allow('account_recovery', 'recovery_token', 'plus_login', 'plus_registration');
 
         if (isset($this->request->params['admin'])) {
             $this->layout = 'admin';
@@ -34,7 +41,7 @@ class AppController extends Controller {
                 ),
             );
 
-            // to check session key if we not define this here then is will check with 'Auth.User' so dont remove it
+            // to check session key if we not define this here then is will check with 'Auth.Admin' so dont remove it
             AuthComponent::$sessionKey = 'Auth.Admin';
             $this->Auth->loginAction = array('admin' => true, 'controller' => 'users', 'action' => 'admin_login');
             $this->Auth->loginRedirect = array('admin' => true, 'controller' => 'users', 'action' => 'admin_dashboard');
@@ -72,6 +79,7 @@ class AppController extends Controller {
              *      2 => Student (learner)
              *      3 => Teacher 
              *      5 => Guardian
+             *      6 => unset (Initial value to type)
              */
             $this->Auth->authenticate = array(
                 'form' => array(
@@ -80,7 +88,7 @@ class AppController extends Controller {
                         'password' => 'password',
                     ),
                     'scope' => array(
-                        'User.type' => array('2', '3', '5'),
+                        'User.type' => array('2', '3', '5', '6'),
                         'User.status !=' => '2'
                         )
                 ),
@@ -91,28 +99,47 @@ class AppController extends Controller {
             $this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'dashboard');
             $this->Auth->logoutRedirect = array('controller' => 'users', 'action' => 'login');
         }
-
-        $currentUserInfo = $this->Session->read('Auth');
+        
+        //$this->Auth->authorize = array('Controller');
+        
+        
         if (isset($currentUserInfo) && !empty($currentUserInfo)) {
             $this->set('currentUserInfo', $currentUserInfo);
             $this->user_id = $this->Session->read('Auth.User.id');
         }
 
         Configure::write('currentUserInfo', $currentUserInfo);
-        $cont = $this->request->params['controller'];
-        $act = $this->request->params['action'];
 
-        $currentAction = $cont . "_" . $act;
-
-        $allowAction = array();
-        $allowAction[] = 'users_step1';
-        $allowAction[] = 'users_uprofile';
-        $allowAction[] = 'users_tprofile';
-        $allowAction[] = 'users_profile';
-
-        
+        //$this->checkTerms($currentUserInfo['User']);
         $this->SiteSettings();
         $this->commonData();
+    }
+    
+    public function checkTerms($user){
+         /* Conditions for Authorization */
+        $req = $this->request;
+        $cont = strtolower( $req->params['controller'] );
+        $act = strtolower( $req->params['action'] );
+        $currentAct = $cont . "_" . $act;
+        
+        $allowArray = array();
+        $allowArray[] = "pages_terms";
+        $allowArray[] = "pages_doandnot";
+        $allowArray[] = "users_logout";
+        
+        if($user['terms'] == '0' && in_array($currentAct,$allowArray)){
+            return true;
+        }elseif($user['terms'] == '0'){
+            $this->redirect(array('controller' => 'pages', 'action' => 'terms'));
+            $this->response->send();
+            $this->_stop();
+        }
+        
+        return true;
+    }
+    
+    public function isAuthorized($user){
+        return true;
     }
 
     public function __getUser() {

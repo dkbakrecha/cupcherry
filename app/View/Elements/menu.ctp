@@ -1,8 +1,8 @@
 <div class="header-menu">
-<div class="container">
-    <div class="row">
-        <nav class="navbar navbar-default myMenuClass">
-            
+    <div class="container">
+        <div class="row">
+            <nav class="navbar navbar-default myMenuClass">
+
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -16,19 +16,20 @@
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'about')); ?>">About Us</a></li>
-                        <li><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'howitworks')); ?>">How it Works</a></li>
-                        <li><a href="<?php echo $this->Html->url(array('controller' => 'faqs', 'action' => 'index')); ?>">FAQ's</a></li>
-                        <li><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'contact_us')); ?>">Contact Us</a></li>
-                    </ul>
-                    
+
+
                     <?php
                     if (isset($currentUserInfo) && !empty($currentUserInfo['User'])) {
                         ?>
+                        <ul class="nav navbar-nav">
+                            <li><a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'dashboard')); ?>"><i class="fa fa-bank"></i> &nbsp; Dashboard</a></li>
+                            <li><a href="<?php echo $this->Html->url(array('controller' => 'key_notes', 'action' => 'index')); ?>"><i class="fa fa-newspaper-o"></i> &nbsp; KeyNotes</a></li>
+                            <li><a href="<?php echo $this->Html->url(array('controller' => 'key_notes', 'action' => 'index')); ?>"><i class="fa fa-calendar-o"></i> &nbsp; Calendar</a></li>
+                        </ul>
+
                         <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo $currentUserInfo['User']['fname'] . " " .$currentUserInfo['User']['lname']; ?>  <span class="caret"></span></a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo $currentUserInfo['User']['fname'] . " " . $currentUserInfo['User']['lname']; ?>  <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
                                         <a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'edit_profile')); ?>">
@@ -50,23 +51,28 @@
                             </li>
                         </ul>
                         <?php
-                    }else{
-                    ?>
-                    
+                    } else {
+                        ?>
+                        <ul class="nav navbar-nav">
+                            <li><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'about')); ?>">About Us</a></li>
+                            <li><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'howitworks')); ?>">How it Works</a></li>
+                            <li><a href="<?php echo $this->Html->url(array('controller' => 'faqs', 'action' => 'index')); ?>">FAQ's</a></li>
+                            <li><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'contact_us')); ?>">Contact Us</a></li>
+                        </ul>
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'login')); ?>">Login</a></li>
                             <li><a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'registration')); ?>">Register</a></li>
                         </ul>
-                    
-                    <?php
+
+                        <?php
                     }
                     ?>
 
                 </div><!-- /.navbar-collapse -->
-            
-        </nav>
 
+            </nav>
+
+        </div>
     </div>
-</div>
 </div>
 <hr class="hr-noMargin">

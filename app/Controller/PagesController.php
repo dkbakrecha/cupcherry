@@ -9,14 +9,18 @@ class PagesController extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
         // Allow users to register and logout.
-        $this->Auth->allow('index', 'about', 'contact_us', 'faq', 'howitworks');
+        $this->Auth->allow('index', 'about', 'contact_us', 'faq', 'howitworks', 'terms');
     }
 
     public function index() {
         $this->layout = 'homenew';
         $this->set('title_for_layout', 'Eduction');
+        
         $user = $this->Session->read('Auth.User.id');
+        $userddd = $this->Session->read('Auth');
+        //prd($userddd);
         if (isset($user['id']) && !empty($user['id'])) {
+            //prd($user['id']);
             $this->redirect(array('controller' => 'users', 'action' => 'dashboard'));
         }
 
@@ -27,6 +31,7 @@ class PagesController extends AppController {
     }
 
     public function about() {
+        $this->layout = "cmsContent";
         $this->set('title_for_layout', 'About us');
         $this->loadModel('CmsPage');
         $cmsData = $this->CmsPage->find('all', array(
@@ -38,17 +43,18 @@ class PagesController extends AppController {
     }
 
     public function howitworks() {
+        $this->layout = "cmsContent";
         $this->set('title_for_layout', 'How It Works | CupCherry');
         $this->loadModel('CmsPage');
         $cmsData = $this->CmsPage->find('all', array(
             'conditions' => array('unique_name' => 'HOW_IT_WORKS')
         ));
 
-        //pr($cmsData);
         $this->set('cmsData', $cmsData[0]);
     }
 
     public function contact_us() {
+        $this->layout = "cmsContent";
         if ($this->request->is('post') || !empty($this->request->data)) {
             $this->loadModel('ContactUs');
             $this->ContactUs->set($this->request->data);
@@ -64,6 +70,7 @@ class PagesController extends AppController {
     }
 
     public function faq() {
+        $this->layout = "cmsContent";
         $this->loadModel('FaqCategory');
         $this->loadModel('Faq');
 
@@ -93,4 +100,14 @@ class PagesController extends AppController {
         $this->set('categories', $categories);
     }
 
+    public function terms(){
+        $this->layout = "cmsContent";
+        $this->set('title_for_layout', 'Terms of Use | CupCherry');
+        $this->loadModel('CmsPage');
+        $cmsData = $this->CmsPage->find('all', array(
+            'conditions' => array('unique_name' => 'TERMS')
+        ));
+
+        $this->set('cmsData', $cmsData[0]);
+    }
 }
