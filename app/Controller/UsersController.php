@@ -1,4 +1,5 @@
 <?php
+
 App::uses('AppController', 'Controller');
 
 class UsersController extends AppController {
@@ -10,7 +11,7 @@ class UsersController extends AppController {
                 'admin_login', 'register', 'add', 'signup', 'registration', 'verification', 'mem_verify'
         );
     }
-    
+
     //Need to remove - 29 March 
     public function register() {
         if ($this->request->is('post')) {
@@ -137,7 +138,7 @@ class UsersController extends AppController {
                     $this->flash_msg('An Email has been send to your email id. Please check');
                     $this->redirect(array('controller' => 'pages', 'action' => 'index'));
                 }
-                $this->flash_msg('Some error occurred in registration.',2);
+                $this->flash_msg('Some error occurred in registration.', 2);
 
                 $this->redirect(array('controller' => 'pages', 'action' => 'index'));
             } else {
@@ -485,7 +486,6 @@ class UsersController extends AppController {
     }
 
     public function dashboard() {
-        $user = Configure::read('currentUserInfo.User');
 
     }
 
@@ -748,14 +748,14 @@ class UsersController extends AppController {
     public function admin_edit($id) {
         $this->set('title_for_layout', 'Admin - Edit User');
         $data = $this->request->data;
-        
+
         if (isset($data) && !empty($data)) {
-            
+
             if (empty($data['User']['password'])) {
                 unset($data['User']['password']);
                 unset($data['User']['confirm_password']);
             }
-            
+
             if ($this->User->save($data)) {
                 $this->Session->setFlash("User  update successfully", 'default', 'success');
             } else {
@@ -863,14 +863,35 @@ class UsersController extends AppController {
     public function plus_addmember() {
         $this->set('title_for_layout', 'Add New Member');
         $this->loadModel('User');
-        $this->loadModel('OrganizationMember');
+        $this->loadModel('OrgMember');
         $this->loadModel('EmailContent');
+
         $user = Configure::read('currentUserInfo.Plus');
         //  prd($user);
         $flag = 0;
-        $membersList = $this->User->find('all', array(
-            'conditions' => array('User.created_under' => $user['id'], 'status' => 1),
-            'fields' => array('id', 'fname', 'lname', 'email', 'created_under', 'status'),
+        //Model Bind with Group Resources
+        $this->OrgMember->bindModel(
+                array('hasOne' => array(
+                        'User' => array(
+                            'foreignKey' => false,
+                            'conditions' => array(
+                                'OrgMember.user_id = User.id',
+                            ),
+                        ),
+                        'UserProfile' => array(
+                            'foreignKey' => false,
+                            'conditions' => array(
+                                'User.id = UserProfile.user_id',
+                            ),
+                        ),
+                    )
+                )
+        );
+
+
+
+        $membersList = $this->OrgMember->find('all', array(
+            'conditions' => array('OrgMember.org_id' => $user['id'])
         ));
         //prd($membersList);
         $this->set('membersList', $membersList);
@@ -880,7 +901,7 @@ class UsersController extends AppController {
         @$emailId = $data['User']['email'];
         $userCheck = $this->User->find('first', array(
             'conditions' => array('User.email' => $emailId, 'User.status' => 1),
-            'fields' => array('id', 'email', 'username', 'fname', 'status')
+            'fields' => array('id', 'email', 'username', 'status')
         ));
         // prd($userCheck);
 
@@ -986,7 +1007,7 @@ class UsersController extends AppController {
     }
 
     public function plus_profile($id = null) {
-       // prd($this->request);
+        // prd($this->request);
         $this->set('title_for_layout', 'Profile');
         $this->loadModel('UserProfile');
         $this->loadModel('Organization');
@@ -994,7 +1015,7 @@ class UsersController extends AppController {
         $user = Configure::read('currentUserInfo.Plus');
 
         $organData = $this->Organization->find('first', array(
-            'conditions' => array('Organization.user_id' => $user['id'], 'status' => 1),
+            'conditions' => array('Organization.user_id' => $user['id'], 'Organization.status' => 1),
             'fields' => array(
                 'id',
                 'organization_name',
@@ -1004,10 +1025,10 @@ class UsersController extends AppController {
                 'type',
                 'status')
         ));
-       // prd($organData);
+        // prd($organData);
         $organProData = $this->OrganizationProfile->find('first', array(
             'conditions' => array(
-                'OrganizationProfile.organization_id' => $organData['Organization']['id'], 
+                'OrganizationProfile.organization_id' => $organData['Organization']['id'],
                 'OrganizationProfile.status' => 1)
         ));
 
@@ -1017,11 +1038,11 @@ class UsersController extends AppController {
 
 
 
-        if ($this->request->is = array('post','put')) {
-         //   prd($this->request);
+        if ($this->request->is = array('post', 'put')) {
+            //   prd($this->request);
             @$userPro = $this->request->data['UserProfile'];
             @$organPro = $this->request->data['OrganizationProfile'];
-           // prd($organPro);
+            // prd($organPro);
             // updates UserProfile 
             if (isset($userPro) && !empty($userPro)) {
                 $userPro['id'] = $userProData['UserProfile']['id'];
@@ -1036,7 +1057,7 @@ class UsersController extends AppController {
             // updates OrganizationProfile
             if (isset($organPro) && !empty($organPro)) {
                 $organPro['id'] = $organProData['OrganizationProfile']['id'];
-               // prd($organPro);
+                // prd($organPro);
                 if ($this->OrganizationProfile->save($organPro)) {
                     $this->flash_msg('Organization profile updated.');
                     $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'profile'));

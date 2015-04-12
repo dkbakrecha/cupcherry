@@ -6,7 +6,7 @@
                     <i class="fa fa-users"></i>
                     Type (Primary Content Type)
                 </h3>
-                <a class="btn btn-primary pull-right" href="<?php echo $this->Html->url(array('admin' => true, 'controller' => 'types', 'action' => 'add')); ?>">Add New Types</a>
+                <a class="btn btn-primary pull-right" href="<?php echo $this->Html->url(array('admin' => true, 'controller' => 'standards', 'action' => 'add')); ?>">Add New Types</a>
             </div> 
 
             <div class="portlet-content">           
@@ -29,13 +29,29 @@
                                     ?>
                                     <tr class="odd">
                                         <td class="sorting_1">   
-                                            <?php echo $typeRow['Type']['id']; ?>
+                                            <?php echo $typeRow['Standard']['id']; ?>
                                         </td>
-                                        <td class="  sorting_2"><?php echo $typeRow['Type']['title'] ?></td>
-                                        <td class=" "><?php echo $typeRow['Type']['updated'] ?></td>
+                                        <td class="  sorting_2"><?php echo $typeRow['Standard']['title'] ?></td>
+                                        <td class=" "><?php echo $typeRow['Standard']['updated'] ?></td>
                                         <td class="hidden-xs hidden-sm ">
-                                            &nbsp; <a href="<?php echo $this->Html->url(array('controller' => 'types', 'action' => 'admin_edit', $typeRow['Type']['id'])); ?>"><i class="fa fa-edit fa-2x "></i></a> 
+                                            &nbsp; <a href="<?php echo $this->Html->url(array('controller' => 'standards', 'action' => 'admin_edit', $typeRow['Standard']['id'])); ?>"><i class="fa fa-edit fa-2x "></i></a> 
+                                            &nbsp;  <?php
+                                                echo $this->Form->postLink('<i class="fa fa-remove fa-2x"></i>', array(
+                                                    'action' => 'admin_delete', $typeRow['Standard']['id']
+                                                        ), array(
+                                                    'class' => 'tip',
+                                                    'escape' => false,
+                                                    'confirm' => 'Are you sure ?'
+                                                ));
+                                                ?>
+                                            
+
+
+
+
                                         </td>
+
+
 
                                     </tr>
                                     <?php

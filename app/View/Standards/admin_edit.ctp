@@ -11,14 +11,22 @@
                 <div class="row">
                     <div class="col-md-6 col-md-offset-1">
                         <?php
-                        echo $this->Form->create('Type', array('role' => 'form'));
+                        echo $this->Form->create('Standard', array('role' => 'form'));
                         echo $this->Form->hidden('id');
                         ?>
                         <div class="form-group">
                             <div class="row">
                                 <div class='col-md-12'>
-                                    <label for="exampleInputEmail1">Enter new class</label>
+                                    <label for="exampleInputEmail1">Standard Name</label>
                                     <?php echo $this->Form->input('title', array('div' => false, 'label' => false, 'class' => 'form-control ', 'placeholder' => 'First Name')); ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class='col-md-12'>
+                                    <label for="exampleInputEmail1">Description</label>
+                                    <?php echo $this->Form->input('description', array('div' => false, 'label' => false, 'class' => 'form-control ', 'placeholder' => 'First Name')); ?>
                                 </div>
                             </div>
                         </div>

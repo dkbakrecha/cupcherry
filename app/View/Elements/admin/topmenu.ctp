@@ -26,7 +26,7 @@
                     </a>
 
                     <ul class="dropdown-menu">   
-                        <li><a href="<?php echo $this->Html->url(array('controller' => 'types', 'action' => 'admin_index', 'admin' => true)) ?>"><i class="fa fa-bars nav-icon"></i> Types (Standard)</a></li>
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'standards', 'action' => 'admin_index', 'admin' => true)) ?>"><i class="fa fa-bars nav-icon"></i> Types (Standard)</a></li>
                         <li><a href="<?php echo $this->Html->url(array('controller' => 'categories', 'action' => 'admin_index', 'admin' => true)) ?>"><i class="fa fa-bars nav-icon"></i> Categories</a></li>
                     </ul>
                 </li>

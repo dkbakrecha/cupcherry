@@ -116,7 +116,7 @@
                                             <?php echo $i; ?>
                                         </td>
                                         <td>
-                                            <?php echo $memlist['User']['fname'] . ' ' . $memlist['User']['lname']; ?>
+                                            <?php echo $memlist['UserProfile']['fname'] . ' ' . $memlist['UserProfile']['lname']; ?>
                                         </td>
                                         <td>
                                             <?php echo $memlist['User']['email']; ?>

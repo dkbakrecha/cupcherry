@@ -44,8 +44,8 @@
                     <?php
                     foreach ($groupList as $grps) {
                         ?>
-                    <li class="list-padding list-group-item">
-                        <span>
+                        <li class="list-padding list-group-item">
+                            <span>
                                 <?php
                                 echo $this->Html->link($grps['Group']['title'], array(
                                     'controller' => 'groups',
@@ -53,8 +53,8 @@
                                 ));
                                 ?>
 
-                        </span>
-                    </li>
+                            </span>
+                        </li>
                         <?php
                     }
                     ?>
@@ -74,8 +74,8 @@
                     <?php
                     foreach ($joinedGropus as $jGroups) {
                         ?>
-                    <li class="list-padding list-group-item">
-                        <span>
+                        <li class="list-padding list-group-item">
+                            <span>
                                 <?php
                                 echo $this->Html->link($jGroups['Group']['title'], array(
                                     'controller' => 'groups',
@@ -83,8 +83,8 @@
                                 ));
                                 ?>
 
-                        </span>
-                    </li>
+                            </span>
+                        </li>
                         <?php
                     }
                     ?>
@@ -113,32 +113,58 @@
         <a href="<?php echo $this->Html->url(array('controller' => 'keynotes', 'action' => 'index')); ?>">
             <li class="list-group-item"><i class="fa fa-book" ></i><span>KeyNotes</span></li>
         </a>
-           <?php
-         $userCreatedUnder = Configure::read('currentUserInfo.User.created_under');
-            
-           if($userCreatedUnder != 0 && 1 ){
-               ?>
-        <a id="orgToggle">
-            <li class="list-group-item"><i class="fa fa-hospital-o" ></i><span>Organizations</span>
-                <div class="dashboard-plusIcon pull-right">
-                    <i class="fa fa-plus"></i>    
-                </div>
-            </li>
-        </a>
-        <ul id="org-drop-list" class="list-group">
-            <li class="list-padding list-group-item">
-                <span>
-                    <a href="<?php // echo $this->Html->url(array('controller' => 'groups', 'action' => 'add')); ?>">
-                        <?php echo $org['Organization']['organization_name']?>
-                    </a>
-                </span>
-            </li>
-        </ul>
-        
         <?php
-           }
-           
-           ?>
+        $userCreatedUnder = Configure::read('currentUserInfo.User.created_under');
+
+        if ($userCreatedUnder != 0 && 1) {
+            ?>
+            <a id="orgToggle">
+                <li class="list-group-item"><i class="fa fa-hospital-o" ></i><span>Organizations</span>
+                    <div class="dashboard-plusIcon pull-right">
+                        <i class="fa fa-plus"></i>    
+                    </div>
+                </li>
+            </a>
+
+            <ul id="org-drop-list" class="list-group">
+                <li id="OrgGrps" class="list-padding list-group-item">
+                    <span>
+                        <a>
+                            <?php echo $org['Organization']['organization_name'] ?>
+                        </a>
+                        <i class="fa fa-plus pull-right"></i>
+                    </span>
+                    <ul id="org-grps-list" class="list-group">
+                        <?php
+                        foreach ($orgGrps as $orgGroups) {
+                            ?>
+                            <li class="list-padding list-group-item">
+                                <span>
+                                    <?php
+                                    echo $this->Html->link($orgGroups['Group']['title'], array(
+                                        'controller' => 'groups',
+                                        'action' => 'view', $orgGroups['Group']['group_unique_name']
+                                    ));
+                                    ?>
+
+                                </span>
+                            </li>
+                            <?php
+                        }
+                        ?>
+
+
+                    </ul>
+
+                </li>
+
+            </ul>
+
+
+
+            <?php
+        }
+        ?>
 
 
     </ul>
