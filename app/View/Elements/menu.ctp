@@ -24,7 +24,7 @@
                         <ul class="nav navbar-nav">
                             <li><a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'dashboard')); ?>"><i class="fa fa-bank"></i> &nbsp; Dashboard</a></li>
                             <li><a href="<?php echo $this->Html->url(array('controller' => 'key_notes', 'action' => 'index')); ?>"><i class="fa fa-newspaper-o"></i> &nbsp; KeyNotes</a></li>
-                            <li><a href="<?php echo $this->Html->url(array('controller' => 'key_notes', 'action' => 'index')); ?>"><i class="fa fa-calendar-o"></i> &nbsp; Calendar</a></li>
+                            <li><a href="<?php echo $this->Html->url(array('controller' => 'events', 'action' => 'index')); ?>"><i class="fa fa-calendar-o"></i> &nbsp; Calendar</a></li>
                         </ul>
 
                         <ul class="nav navbar-nav navbar-right">

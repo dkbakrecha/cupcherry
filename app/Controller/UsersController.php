@@ -485,12 +485,8 @@ class UsersController extends AppController {
     }
 
     public function dashboard() {
-<<<<<<< HEAD
-        //prd("User Dashboard");
-=======
         $user = Configure::read('currentUserInfo.User');
-       // prd($user);
->>>>>>> 0b62778b5e126b68c2ce83113e9c0131171e034f
+
     }
 
     public function admin_index() {

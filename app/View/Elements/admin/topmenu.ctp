@@ -41,7 +41,7 @@
                     <ul class="dropdown-menu">   
                         <li><a href="<?php echo $this->Html->url(array('controller' => 'keynotes', 'action' => 'admin_index', 'admin' => true)) ?>"><i class="fa fa-user nav-icon"></i> KeyNotes</a></li>
                         <li><a href=""><i class="fa fa-bars nav-icon"></i> Resources</a></li>
-                        <li><a href=""><i class="fa fa-asterisk nav-icon"></i> Events Calendar</a></li>
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'events', 'action' => 'admin_index', 'admin' => true)) ?>"><i class="fa fa-asterisk nav-icon"></i> Events Calendar</a></li>
                         <li><a href=""><i class="fa fa-tasks nav-icon"></i> Groups</a></li>
                         <li><a href=""><i class="fa fa-font nav-icon"></i> Private Courses</a></li>
                         <li><a href=""><i class="fa fa-list-alt nav-icon"></i> Advertisment</a></li>
@@ -143,7 +143,7 @@
                     <ul class="dropdown-menu">
                         <!--<li class="dropdown-header">Site Content</li>-->
                         <li><a href="<?php echo $this->Html->url(array('controller' => 'cms_pages', 'action' => 'admin_index', 'admin' => true)) ?>"><i class="fa fa-files-o nav-icon"></i> CMS Pages</a></li>
-                        <li><a href=""><i class="fa fa-file-text nav-icon"></i> Email Content</a></li>
+                        <li><a href="<?php echo $this->Html->url(array('controller' => 'email_contents', 'action' => 'admin_index', 'admin' => true)) ?>"><i class="fa fa-file-text nav-icon"></i> Email Content</a></li>
                         <li><a href="<?php echo $this->Html->url(array('controller' => 'faqs', 'action' => 'admin_list', 'admin' => true)) ?>"><i class="fa fa-file-powerpoint-o nav-icon"></i> FAQ'S Section</a></li>
                         <!--                        <li class="divider"></li>
                         <li class="dropdown-header">Client Content</li>
