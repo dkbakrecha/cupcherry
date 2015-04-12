@@ -65,7 +65,7 @@ class EmailContent extends AppModel {
             $mail_refined_content = str_replace('{{email}}', $contactEmail, $mail_refined_content);
             $mail_refined_content = str_replace('{{number}}', $contactNumber, $mail_refined_content);
 
-          //  prd($mail_refined_content);
+            //  prd($mail_refined_content);
             // $admin_email = strtolower(Configure::read('ADMIN_MAIL'));
 
             $sent_to = 'cupcherry3@gmail.com';
@@ -204,14 +204,14 @@ class EmailContent extends AppModel {
             return true;
         }
     }
-    
-    public function add_member_request($organ_name, $name, $email,$temPassword, $key) {
+
+    public function add_member_request($organ_name, $name, $email, $temPassword, $key) {
         //prd($this->request);
         $mail_content = $this->getMailContent('ADD_MEMBER_REQUEST');
 
-        $link = Router::url(array('plus'=>false,'controller' => 'users', 'action' => 'mem_verify', $key), true);
-       
-       // prd($mail_content);
+        $link = Router::url(array('plus' => false, 'controller' => 'users', 'action' => 'mem_verify', $key), true);
+
+        // prd($mail_content);
         if (is_array($mail_content) && !empty($mail_content)) {
 
             $UserName = ucwords($name);
@@ -221,8 +221,8 @@ class EmailContent extends AppModel {
             $mail_refined_content = str_replace('{{name}}', $UserName, $mail_refined_content);
             $mail_refined_content = str_replace('{{email}}', $UserEmail, $mail_refined_content);
             $mail_refined_content = str_replace('{{link}}', $link, $mail_refined_content);
-            $mail_refined_content = str_replace('{{organ_name}}',$organ_name,$mail_refined_content);
-             $mail_refined_content = str_replace('{{password}}',$temPassword,$mail_refined_content);
+            $mail_refined_content = str_replace('{{organ_name}}', $organ_name, $mail_refined_content);
+            $mail_refined_content = str_replace('{{password}}', $temPassword, $mail_refined_content);
             // prd($mail_refined_content);
 
             $admin_email = strtolower(Configure::read('ADMIN_MAIL'));
@@ -258,13 +258,13 @@ class EmailContent extends AppModel {
             return true;
         }
     }
-    
+
     public function add_request($organ_name, $name, $email, $key) {
-     //   prd($this->request);
+        //   prd($this->request);
         $mail_content = $this->getMailContent('ADD_REQUEST');
 
-        $link = Router::url(array('plus'=>false,'controller' => 'users', 'action' => 'mem_verify', $key), true);
-       
+        $link = Router::url(array('plus' => false, 'controller' => 'users', 'action' => 'mem_verify', $key), true);
+
         //prd($mail_content);
         if (is_array($mail_content) && !empty($mail_content)) {
 
@@ -275,8 +275,8 @@ class EmailContent extends AppModel {
             $mail_refined_content = str_replace('{{name}}', $UserName, $mail_refined_content);
             $mail_refined_content = str_replace('{{email}}', $UserEmail, $mail_refined_content);
             $mail_refined_content = str_replace('{{link}}', $link, $mail_refined_content);
-            $mail_refined_content = str_replace('{{organ_name}}',$organ_name,$mail_refined_content);
-           //  prd($mail_refined_content);
+            $mail_refined_content = str_replace('{{organ_name}}', $organ_name, $mail_refined_content);
+            //  prd($mail_refined_content);
 
             $admin_email = strtolower(Configure::read('ADMIN_MAIL'));
 
@@ -356,6 +356,51 @@ class EmailContent extends AppModel {
                 //print_r ($cake_email);exit;
                 //	return true;
                 //}
+
+                $cake_email->send();
+            } catch (Exception $e) {
+                return false;
+            }
+            return true;
+        }
+    }
+
+    public function registration_plus($userName, $userEmail, $key,$pass) {
+        //prd($this->request);
+        $mail_content = $this->getMailContent('REGISTRATION_PLUS');
+
+        $link = Router::url(array('plus'=>false,'controller' => 'users', 'action' => 'verification', $key), true);
+
+       // prd($mail_content);
+        if (is_array($mail_content) && !empty($mail_content)) {
+
+            $userName = ucwords($userName);
+            $userEmail = strtolower($userEmail);
+
+            $mail_refined_content = $mail_content['content'];
+            $mail_refined_content = str_replace('{{name}}', $userName, $mail_refined_content);
+            $mail_refined_content = str_replace('{{email}}', $userEmail, $mail_refined_content);
+            $mail_refined_content = str_replace('{{link}}', $link, $mail_refined_content);
+            $mail_refined_content = str_replace('{{pass}}',$pass,$mail_refined_content);
+           // prd($mail_refined_content);
+
+            $admin_email = strtolower(Configure::read('ADMIN_MAIL'));
+
+            App::uses('CakeEmail', 'Network/Email');
+
+            $cake_email = new CakeEmail();
+            $cake_email->config('gmail');
+            $cake_email->to($userEmail);
+            $cake_email->from(array('cupcherry2@gmail.com' => 'cupcherry'));
+            $cake_email->replyTo("no-replay@cupcherry.com", "cupcherry");
+            $cake_email->subject("Confirm your email address");
+            $cake_email->template('default', 'default');
+            $cake_email->emailFormat('html');
+            $cake_email->viewVars(array(
+                'content' => $mail_refined_content,
+            ));
+
+            try {
 
                 $cake_email->send();
             } catch (Exception $e) {

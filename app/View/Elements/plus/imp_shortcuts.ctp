@@ -42,9 +42,9 @@
                         <i class="shortcut-icon icon-picture"></i>
                         <span class="shortcut-label">Settings</span> 
                     </a>
-                    <a href="javascript:;" class="shortcut"> 
+                    <a href="<?php echo $this->Html->url(array('plus'=>true,'controller'=>'studetns','action'=>'reports'));?>" class="shortcut"> 
                         <i class="shortcut-icon icon-tag"></i>
-                        <span class="shortcut-label">Tags</span>
+                        <span class="shortcut-label">Reports</span>
                     </a>
                 </div>
                 <!-- /shortcuts --> 

@@ -81,7 +81,7 @@ class GroupsController extends AppController {
         $this->loadModel('User');
         $data = array();
         $groupData = $this->Group->find('all', array(
-            'conditions' => array('Group.id' => $id, 'Group.status' => 1),
+            'conditions' => array('Group.group_unique_name' => $id, 'Group.status' => 1),
         ));
         $this->set('groupData', $groupData);
 
@@ -417,59 +417,71 @@ class GroupsController extends AppController {
     public function plus_index() {
         $this->set('title_for_layout', 'Create Group');
         $this->loadModel('User');
-        $this->loadModel('Type');
+        $this->loadModel('Standard');
+        $this->loadModel('OrgMember');
         $user = Configure::read('currentUserInfo.Plus');
         // prd($user);
-        //Model Bind with Group Resources
+        //Model Bind with Group Model with user
         $this->Group->bindModel(
                 array('belongsTo' => array(
                         'User' => array(
                             'foreignKey' => 'managed_by',
                             'conditions' => array(
                                 'User.status = 1',
-                            //'GroupMessage.group_resource_id != 0'
                             ),
-                            'fields' => array('fname', 'lname', 'email', 'status')
+                            'fields' => array('email', 'status')
                         )
                     )
                 )
         );
-        
-        
-       
-       
-        
-        
-        
+
+        $this->Group->bindModel(
+                array('hasOne' => array(
+                        'Standard' => array(
+                            'foreignKey' => false,
+                            'conditions' => array(
+                                'Group.standard_id = Standard.id',
+                            ),
+                        //'fields' => array('fname', 'lname', 'email', 'status')
+                        )
+                    )
+                )
+        );
 
 
-        $memberList = $this->User->find('all', array(
-            'conditions' => array('User.created_under' => $user['id'], 'User.status' => 1),
-            'fields' => array('id', 'fname', 'lname', 'status', 'type', 'email'),
+
+
+        $memberList = $this->OrgMember->find('all', array(
+            'conditions' => array('OrgMember.org_id' => $user['id'],),
+           // 'fields' => array('id', 'status', 'email'),
         ));
-        $types = $this->Type->find('all', array(
-            'conditions' => array('Type.status' => 1),
+        $types = $this->Standard->find('all', array(
+            'conditions' => array('Standard.status' => 1),
             'fields' => array('id', 'title', 'description', 'status'),
         ));
         $grpList = $this->Group->find('all', array(
             'conditions' => array('Group.created_by' => $user['id'], 'Group.status' => 1),
             'fields' => array(
-                'id', 
+                'id',
                 'group_unique_name',
-                'title', 
+                'title',
                 'created_by',
-                'managed_by', 
-                'type_id', 
-                'total_member', 
+                'managed_by',
+                'standard_id',
+                'total_member',
                 'status',
-                'User.fname',
-                'User.lname',
+                'User.id',
+               
                 'User.email',
-                'User.status')
+                'User.status',
+                'Standard.id',
+                'Standard.title',
+                'Standard.description',
+                'Standard.status',)
         ));
         $this->set(compact('types', 'memberList', 'grpList'));
 
-        // prd($types);
+        // prd($grpList);
         $data = array();
         $data = $this->request->data;
 

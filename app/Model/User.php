@@ -6,23 +6,13 @@ App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
 class User extends AppModel {
 
     var $name = 'User';
-//    public $hasOne = array(
-//        'Organization' => array(
-//            'className' => 'Organization',
-//            'foreignKey' => 'user_id',
-//            'conditions' => array('Organization.status' => '1'),
-//
-//        ),
-//        'UserProfile' => array(
-//            'className' => 'UserProfile',
-//            'foreignKey' => 'user_id',
-//            'conditions' => array('UserProfile.status' => '1'),
-//
-//        ),
-//        
-//        
-//    );
-  
+    
+    public $hasOne = array(
+        'UserProfile' => array(
+            'className' => 'UserProfile',
+            'foreignKey' => 'user_id',
+        ),
+    );
     
     
     public $validate = array(
