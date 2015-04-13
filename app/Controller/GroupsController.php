@@ -421,6 +421,31 @@ class GroupsController extends AppController {
         $this->loadModel('OrgMember');
         $user = Configure::read('currentUserInfo.Plus');
         // prd($user);
+        //Model Bind with User and UserProfile Resources
+        $this->OrgMember->bindModel(
+                array('hasOne' => array(
+                        'User' => array(
+                            'foreignKey' => false,
+                            'conditions' => array(
+                                'OrgMember.user_id = User.id',
+                            ),
+                            'fields' => array(
+                                'id', 'profile_id', 'email', 'username', 'type', 'contact', 'status'
+                            )
+                        ),
+                        'UserProfile' => array(
+                            'foreignKey' => false,
+                            'conditions' => array(
+                                'User.id = UserProfile.user_id',
+                            ),
+                            'fields' => array(
+                                'id', 'user_id', 'fname', 'lname', 'gender', 'image_name'
+                            )
+                        ),
+                    )
+                )
+        );
+
         //Model Bind with Group Model with user
         $this->Group->bindModel(
                 array('belongsTo' => array(
@@ -430,7 +455,16 @@ class GroupsController extends AppController {
                                 'User.status = 1',
                             ),
                             'fields' => array('email', 'status')
-                        )
+                        ),
+                        'UserProfile' => array(
+                            'foreignKey' => false,
+                            'conditions' => array(
+                                'User.id = UserProfile.user_id',
+                            ),
+                            'fields' => array(
+                                'id', 'user_id', 'fname', 'lname', 'gender', 'image_name'
+                            )
+                        ),
                     )
                 )
         );
@@ -453,7 +487,7 @@ class GroupsController extends AppController {
 
         $memberList = $this->OrgMember->find('all', array(
             'conditions' => array('OrgMember.org_id' => $user['id'],),
-           // 'fields' => array('id', 'status', 'email'),
+                //'fields' => array('id', 'status', 'user_id', 'org_id',),
         ));
         $types = $this->Standard->find('all', array(
             'conditions' => array('Standard.status' => 1),
@@ -471,17 +505,19 @@ class GroupsController extends AppController {
                 'total_member',
                 'status',
                 'User.id',
-               
                 'User.email',
                 'User.status',
                 'Standard.id',
                 'Standard.title',
                 'Standard.description',
-                'Standard.status',)
+                'Standard.status',
+                'UserProfile.id',
+                'UserProfile.fname',
+                'UserProfile.lname')
         ));
         $this->set(compact('types', 'memberList', 'grpList'));
 
-        // prd($grpList);
+       // prd($grpList);
         $data = array();
         $data = $this->request->data;
 

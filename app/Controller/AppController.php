@@ -17,11 +17,11 @@ class AppController extends Controller {
 
     public function beforeFilter() {
         $currentUserInfo = $this->Session->read('Auth');
-        
-        if(!empty($currentUserInfo['User'])){
+
+        if (!empty($currentUserInfo['User'])) {
             $this->checkTerms($currentUserInfo['User']);
         }
-        
+
         parent::beforeFilter();
         $this->Auth->allow('account_recovery', 'recovery_token', 'plus_login', 'plus_registration');
 
@@ -104,7 +104,7 @@ class AppController extends Controller {
 
         $currentUserInfo = $this->Session->read('Auth');
         //prd($currentUserInfo);
-        
+
         if (isset($currentUserInfo) && !empty($currentUserInfo)) {
             $this->set('currentUserInfo', $currentUserInfo);
             $this->user_id = $this->Session->read('Auth.User.id');
@@ -113,69 +113,74 @@ class AppController extends Controller {
         Configure::write('currentUserInfo', $currentUserInfo);
 
         $this->SiteSettings();
-        $this->commonDataFront();
+      //  $this->commonDataFront();
     }
-    
-    public function checkTerms($user){
-         /* Conditions for Authorization */
+
+    public function checkTerms($user) {
+        /* Conditions for Authorization */
         $req = $this->request;
-        $cont = strtolower( $req->params['controller'] );
-        $act = strtolower( $req->params['action'] );
+        $cont = strtolower($req->params['controller']);
+        $act = strtolower($req->params['action']);
         $currentAct = $cont . "_" . $act;
-        
+
         $allowArray = array();
         $allowArray[] = "pages_terms";
         $allowArray[] = "pages_doandnot";
         $allowArray[] = "users_logout";
-        
-        if($user['terms'] == '0' && in_array($currentAct,$allowArray)){
+
+        if ($user['terms'] == '0' && in_array($currentAct, $allowArray)) {
             return true;
-        }elseif($user['terms'] == '0'){
+        } elseif ($user['terms'] == '0') {
             $this->redirect(array('controller' => 'pages', 'action' => 'terms'));
             $this->response->send();
             $this->_stop();
         }
-        
+
         return true;
     }
-    
-    public function isAuthorized($user){
+
+    public function isAuthorized($user) {
         return true;
     }
 
     /* Function to find users information login */
+
     public function __getUserInfo($id = null) {
         $this->loadModel('User');
         $user_id = $id;
-        if(empty($id)){
+        if (empty($id)) {
             $user_id = $this->Session->read('Auth.User.id');
         }
-        
-        $userInfo = $this->User->find('first',array(
+
+        $userInfo = $this->User->find('first', array(
             'conditions' => array('User.id' => $user_id)
-            ));
+        ));
+       // pr($userInfo);
         return $userInfo;
     }
-    
+
     /* Get user information by email id */
+
     public function __getUserByMail($email = null) {
         $this->loadModel('User');
-        if(empty($email)){
+        if (empty($email)) {
             $email = $this->Session->read('Auth.User.email');
         }
-        
-        $userInfo = $this->User->find('first',array(
+
+        $userInfo = $this->User->find('first', array(
             'conditions' => array('User.email' => $email)
-            ));
+        ));
         return $userInfo;
     }
-    
+
     /* Get Teacher Information by user id */
-    public function __getTecherInfo($id){
+
+    public function __getTecherInfo($id) {
         
     }
 
     /* Common function for Flash Messges */
+
     public function flash_msg($msg, $flag = 1) {
         if ($flag == 1) {
             $this->Session->setFlash($msg, 'default', array('id' => 'success'));
@@ -191,11 +196,11 @@ class AppController extends Controller {
     public function commonDataFront() {
         $this->loadModel('Group');
         $this->loadModel('GroupMember');
-        
+
         // Query to fetch all joined groups by current User
         //$user = Configure::read('currentUserInfo.User');
         $user = $this->__getUserInfo();
-        //pr($user);
+       // pr($user);
         $groupList = $this->Group->find('all', array(
             'conditions' => array('Group.created_by' => $user['User']['id'], 'Group.status' => 1),
             'fields' => array('id', 'title', 'status'),
@@ -205,7 +210,7 @@ class AppController extends Controller {
         $joinedGropus = $this->GroupMember->find('all', array(
             'conditions' => array('GroupMember.user_id' => $user['User']['id'], 'GroupMember.status' => 1),
         ));
-        $this->set('joinedGropus',$joinedGropus);
+        $this->set('joinedGropus', $joinedGropus);
         //  prd($joinedGropus);
 //        if($user['created_under'] != 0 && 1){
 //           // $this->loadModel('Organization');
@@ -217,16 +222,15 @@ class AppController extends Controller {
 //            $this->set('org',$org);
 //            //prd($org);
 //        }
-        $orgGrps = $this->Group->find('all',array(
+        $orgGrps = $this->Group->find('all', array(
             'conditions' => array(
                 'Group.managed_by' => $user['User']['id'],
                 'Group.created_by' => $user['UserProfile']['created_under'],
                 'Group.status' => 1),
         ));
-        
-        $this->set('orgGrps',$orgGrps);
-       // prd($orgGrps);
-        
+
+        $this->set('orgGrps', $orgGrps);
+        // prd($orgGrps);
     }
 
     public function commonDataPlus() {

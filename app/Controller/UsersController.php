@@ -260,7 +260,7 @@ class UsersController extends AppController {
             $emailId = $this->request->data['User']['email'];
             $result = $this->User->find('all', array(
                 'conditions' => array('User.email' => $emailId, 'User.status' => 1),
-                'fields' => array('id', 'status', 'email', 'fname'),
+                'fields' => array('id', 'status', 'email',),
             ));
             if (isset($result) && !empty($result)) {
                 $flag = 1;
@@ -869,7 +869,7 @@ class UsersController extends AppController {
         $user = Configure::read('currentUserInfo.Plus');
         //  prd($user);
         $flag = 0;
-        //Model Bind with Group Resources
+        //Model Bind with User and UserProfile Resources
         $this->OrgMember->bindModel(
                 array('hasOne' => array(
                         'User' => array(

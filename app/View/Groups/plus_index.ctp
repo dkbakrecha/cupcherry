@@ -1,5 +1,5 @@
 <?php
-//prd($grpList);
+//prd($memberList);
 ?>
 
 <div class="row">
@@ -44,7 +44,7 @@
                                             <?php
                                             $options = array();
                                             foreach ($memberList as $list) {
-                                                $options[$list['User']['id']] = $list['User']['fname'] . ' ' . $list['User']['lname'] . ' (' . $list['User']['email'] . ')';
+                                                $options[$list['User']['id']] = $list['UserProfile']['fname'] . ' ' . $list['UserProfile']['lname'] . ' (' . $list['User']['email'] . ')';
                                             }
                                             echo $this->Form->input('managed_by', array(
                                                 'class' => 'form-control',
@@ -150,7 +150,7 @@
                                             <?php echo $gprlist['Group']['title']; ?>
                                         </td>
                                         <td>
-                                            <?php echo $gprlist['User']['fname'] . ' ' . $gprlist['User']['lname']; ?>
+                                            <?php echo $gprlist['UserProfile']['fname'] . ' ' . $gprlist['UserProfile']['lname']; ?>
                                         </td>
                                         <td>
                                             <?php echo $gprlist['User']['email']; ?>
