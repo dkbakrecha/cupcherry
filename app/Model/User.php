@@ -6,15 +6,17 @@ App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
 class User extends AppModel {
 
     var $name = 'User';
-    
     public $hasOne = array(
         'UserProfile' => array(
             'className' => 'UserProfile',
             'foreignKey' => 'user_id',
         ),
+        'OrgProfile' => array(
+            'className' => 'OrgProfile',
+            'foreignKey' => 'user_id',
+            'conditions' => array('User.type'=> 4)
+        )
     );
-    
-    
     public $validate = array(
         'username' => array(
             'required' => array(
@@ -110,7 +112,6 @@ class User extends AppModel {
 
             if (!empty($this->data)) {
                 $this->data['User']['dob'] = date('Y-m-d', strtotime($this->data['User']['dob']));
-               
             }
         }
         return true;

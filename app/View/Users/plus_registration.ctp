@@ -7,34 +7,40 @@
 
 
 
-        <h3>Signup request - Free Account</h3>			
+        <h3>Signup For Free Account</h3>			
         <hr>
         <div class="login-fields">
 
             <?php
-            echo $this->Form->create('PlusRequest');
+            echo $this->Form->create('User');
             ?>
             <div class="field">
                 <?php
-                echo $this->Form->input('organization_name', array(
+                echo $this->Form->input('org_name', array(
                     'class' => 'login',
                     'placeholder' => 'Organization Name',
                     'required' => 'required'));
                 ?>
             </div>
             <div class="field">
-
                 <?php
-                echo $this->Form->input('contact_person', array(
+                echo $this->Form->input('fname', array(
                     'class' => 'login',
-                    'placeholder' => 'Your name',
+                    'placeholder' => 'First Name',
                     'required' => 'required'));
                 ?>
             </div>
             <div class="field">
-
                 <?php
-                echo $this->Form->input('contact_number', array(
+                echo $this->Form->input('lname', array(
+                    'class' => 'login',
+                    'placeholder' => 'Last Name',
+                    'required' => 'required'));
+                ?>
+            </div>
+            <div class="field">
+                <?php
+                echo $this->Form->input('email', array(
                     'class' => 'login',
                     'placeholder' => 'Email',
                     'required' => 'required'));
@@ -43,7 +49,7 @@
             <div class="field">
 
                 <?php
-                echo $this->Form->input('contact_email', array(
+                echo $this->Form->input('contact', array(
                     'class' => 'login',
                     'placeholder' => 'Contact Number',
                     'required' => 'required'));
@@ -56,11 +62,12 @@
 
 
 
+
         </div> <!-- /login-fields -->
 
         <div class="login-actions">
             <span class="login-checkbox">
-                <label class="choice"> We Will contact you soon.</label>
+<!--                <label class="choice"> We Will contact you soon.</label>-->
             </span>
 
 <!--                <span class="login-checkbox">
