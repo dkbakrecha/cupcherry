@@ -521,6 +521,25 @@ h2, .h2 {
     color : #fff;
 }
 
+/* USER MENU */
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus{
+    background: #1D3F6B;
+}
+
+.loginrighttopmenu .loginpic {
+    float: left;
+    height: 35px;
+    margin-right: 15px;
+    margin-top: -10px;
+    width: 35px;
+}
+
+.loginrighttopmenu .loginpic img {
+    border: 2px solid #fff;
+    border-radius: 100px;
+    height: 40px;
+    width: 40px;
+}
 
 /* CONTACT US */
 .contact-info{
