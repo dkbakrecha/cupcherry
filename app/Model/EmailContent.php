@@ -1,6 +1,7 @@
 <?php
 
 App::uses('AppModel', 'Model');
+App::uses('CakeEmail', 'Network/Email');
 
 class EmailContent extends AppModel {
 
@@ -99,36 +100,16 @@ class EmailContent extends AppModel {
         if (is_array($mail_content) && !empty($mail_content)) {
             $userName = ucwords($name);
             $userEmail = strtolower($email);
-
+            $subject = "Password Reset Request";
             $link = Router::url(array('controller' => 'users', 'action' => 'recovery_token', $key), true);
-            //  $link = 'http://localhost/education/users/recovery_token/' . $key;
 
             $mail_refined_content = $mail_content['content'];
             $mail_refined_content = str_replace('{{receiver}}', $name, $mail_refined_content);
-            //  $mail_refined_content = str_replace('{{email}}', $email, $mail_refined_content);
             $mail_refined_content = str_replace('{{link}}', $link, $mail_refined_content);
 
-            // prd($mail_refined_content);
-            // $admin_email = strtolower(Configure::read('ADMIN_MAIL'));
 
-            App::uses('CakeEmail', 'Network/Email');
+            $this->_sendMail($userEmail, $subject, $mail_refined_content);
 
-            $cake_email = new CakeEmail();
-            $cake_email->config('gmail');
-            $cake_email->to($userEmail);
-            $cake_email->from(array('cupcherry2@gmail.com' => 'cupcherry'));
-            $cake_email->replyTo("no-replay@cupcherry.com", "cupcherry");
-            $cake_email->subject("Password Reset Request");
-            $cake_email->template('default', 'default');
-            $cake_email->emailFormat('html');
-            $cake_email->viewVars(array(
-                'content' => $mail_refined_content,
-            ));
-            try {
-                $cake_email->send();
-            } catch (Exception $e) {
-                return false;
-            }
             return true;
         }
     }
@@ -365,13 +346,13 @@ class EmailContent extends AppModel {
         }
     }
 
-    public function registration_plus($userName, $userEmail, $key,$pass) {
+    public function registration_plus($userName, $userEmail, $key, $pass) {
         //prd($this->request);
         $mail_content = $this->getMailContent('REGISTRATION_PLUS');
 
-        $link = Router::url(array('plus'=>false,'controller' => 'users', 'action' => 'verification', $key), true);
+        $link = Router::url(array('plus' => false, 'controller' => 'users', 'action' => 'verification', $key), true);
 
-       // prd($mail_content);
+        // prd($mail_content);
         if (is_array($mail_content) && !empty($mail_content)) {
 
             $userName = ucwords($userName);
@@ -381,8 +362,8 @@ class EmailContent extends AppModel {
             $mail_refined_content = str_replace('{{name}}', $userName, $mail_refined_content);
             $mail_refined_content = str_replace('{{email}}', $userEmail, $mail_refined_content);
             $mail_refined_content = str_replace('{{link}}', $link, $mail_refined_content);
-            $mail_refined_content = str_replace('{{pass}}',$pass,$mail_refined_content);
-           // prd($mail_refined_content);
+            $mail_refined_content = str_replace('{{pass}}', $pass, $mail_refined_content);
+            // prd($mail_refined_content);
 
             $admin_email = strtolower(Configure::read('ADMIN_MAIL'));
 
@@ -476,39 +457,96 @@ class EmailContent extends AppModel {
         }
     }
 
-    public function __SendMail($to, $subject, $content, $from) {
-        if (empty($from)) {
-            strtolower(Configure::read('ADMIN_MAIL'));
+    public function ComposeToManyMail($subject = NULL, $message = NULL, $userEmails = NULL) {
+        $email_record = $this->getMailContent('COMPOSE_MAIL');
+        //prd($email_record);
+        if (is_array($email_record) && !empty($email_record)) {
+            if (!empty($subject)) {
+                $sub = $subject;
+            } else {
+                $sub = $email_record['subject'];
+            }
+
+            foreach ($userEmails as $email) {
+                $content = $email_record['content'] . "<br>" . $message;
+                $content = str_replace("{{receiver}}", '<b>' . $email . '</b>', $content);
+                $this->_sendMail($email, $sub, $content);
+            }
+
+            return TRUE;
         }
-        $to = strtolower($to);
-
-        App::uses('CakeEmail', 'Network/Email');
-
-        $cake_email = new CakeEmail();
-        $cake_email->config('default');
-        $cake_email->to($to);
-        $cake_email->from($from);
-        $cake_email->subject($subject);
-        $cake_email->template('default', 'mail_content');
-        $cake_email->emailFormat('html');
-        $cake_email->viewVars(array(
-            'mail_message' => $content,
-        ));
-
-        //print_r ($content);
-
-        try {
-            //if(CakeRequest::host()=='192.168.1.2'){
-            //print_r ($cake_email);exit;
-            //	return true;
-            //}
-
-            $cake_email->send();
-        } catch (Exception $e) {
-            return false;
-        }
-        return true;
+        return FALSE;
     }
+
+    public function _sendMail($to, $sub = '', $contents = '', $attachments = null, $cc = null, $bcc = null) {
+
+        $Email = new CakeEmail();
+        $Email->config('default');
+        $Email->emailFormat('html');
+        $Email->subject($sub);
+        $Email->template('default');
+        $Email->to($to);
+        $Email->from(array('feedback@cupcherry.com' => 'CupCherry'));
+
+        if (!empty($cc)) {
+            $Email->cc($cc);
+        }
+
+        if (!empty($bcc)) {
+            $Email->bcc($bcc);
+        }
+
+        if (!empty($attachments) && $attachments != '' && is_array($attachments)) {
+            $Email->attachments($attachments);
+        }
+
+        $Email->viewVars(array('mailContents' => $contents));
+        //prd($Email);
+        try {
+            if ($Email->send()) {
+                return true;
+            }
+            return false;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    /*
+      public function __SendMail($to, $subject, $content, $from) {
+      if (empty($from)) {
+      strtolower(Configure::read('ADMIN_MAIL'));
+      }
+      $to = strtolower($to);
+
+      App::uses('CakeEmail', 'Network/Email');
+
+      $cake_email = new CakeEmail();
+      $cake_email->config('default');
+      $cake_email->to($to);
+      $cake_email->from($from);
+      $cake_email->subject($subject);
+      $cake_email->template('default', 'mail_content');
+      $cake_email->emailFormat('html');
+      $cake_email->viewVars(array(
+      'mail_message' => $content,
+      ));
+
+      //print_r ($content);
+
+      try {
+      //if(CakeRequest::host()=='192.168.1.2'){
+      //print_r ($cake_email);exit;
+      //	return true;
+      //}
+
+      $cake_email->send();
+      } catch (Exception $e) {
+      return false;
+      }
+      return true;
+      }
+     */
 
     public function beforeSave($options = array()) {
         foreach ($this->data[$this->alias] as $key => $val) {

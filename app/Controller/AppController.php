@@ -154,8 +154,8 @@ class AppController extends Controller {
 
         $userInfo = $this->User->find('first', array(
             'conditions' => array('User.id' => $user_id)
-        ));
-       // pr($userInfo);
+            ));
+
         return $userInfo;
     }
 

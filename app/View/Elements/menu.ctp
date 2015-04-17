@@ -28,8 +28,14 @@
                         </ul>
 
                         <ul class="nav navbar-nav navbar-right">
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><?php echo $currentUserInfo['User']['UserProfile']['fname'] . " " . $currentUserInfo['User']['UserProfile']['lname']; ?>  <span class="caret"></span></a>
+                            <li class="dropdown loginrighttopmenu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    <div class="loginpic">
+                                        <?php echo $this->Html->image('no_img.jpg',array('alt' => 'CC')); ?>
+                                    </div>
+                                    <?php echo $currentUserInfo['User']['UserProfile']['fname'] . " " . $currentUserInfo['User']['UserProfile']['lname']; ?>  
+                                    <span class="caret"></span>
+                                </a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
                                         <a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'edit_profile')); ?>">

@@ -281,43 +281,40 @@ class UsersController extends AppController {
     public function account_recovery() {
         $this->set('title_for_layout', 'Password Reset');
         $this->loadModel('EmailContent');
-        $flag = 0;
+
         if ($this->request->is('post')) {
             // prd($this->request->data);
             $emailId = $this->request->data['User']['email'];
-            $result = $this->User->find('all', array(
+
+            $result = $this->User->find('first', array(
                 'conditions' => array('User.email' => $emailId, 'User.status' => 1),
-                'fields' => array('id', 'status', 'email',),
+                'fields' => array(
+                    'User.id', 'User.status', 'User.email',
+                    'UserProfile.fname', 'UserProfile.lname'
+                ),
             ));
+            
             if (isset($result) && !empty($result)) {
-                $flag = 1;
+                $data = array();
+                $uniqueCode = uniqid();
+                $data['User']['id'] = $result['User']['id'];
+                $data['User']['password_reset_key'] = $uniqueCode;
+                //Updating password_reset_key field with uniqueCode
+                $this->User->save($data);
+
+                $name = $result['UserProfile']['fname'] . " " .$result['UserProfile']['fname'];
+                $email = $result['User']['email'];
+                $key = $uniqueCode;
+
+                // Initializing Email Object
+                $emailObj = new EmailContent;
+                $emailObj->forgetPassword($name, $email, $key);
+                
+                $this->flash_msg("An Email has been send to your email address. Please Check.", 1);
+                $this->redirect(array('controller' => 'users', 'action' => 'login'));
             } else {
-                $flag = 2;
+                $this->flash_msg("This email address doesn't exist.", 2);
             }
-        }
-        if ($flag == 1) {
-
-            $data = array();
-            $uniqueCode = uniqid();
-            $data['User']['id'] = $result[0]['User']['id'];
-            $data['User']['password_reset_key'] = $uniqueCode;
-            //Updating password_reset_key field with uniqueCode
-            $this->User->save($data);
-
-            $name = $result[0]['User']['fname'];
-            $email = $result[0]['User']['email'];
-            $key = $uniqueCode;
-
-            // Initializing Email Object
-            $emailObj = new EmailContent;
-            $emailObj->forgetPassword($name, $email, $key);
-
-
-
-            $this->flash_msg("An Email has been send to your email address. Please Check.", 1);
-            $this->redirect(array('controller' => 'users', 'action' => 'login'));
-        } else if ($flag == 2) {
-            $this->flash_msg("This email address doesn't exist.", 2);
         }
     }
 
@@ -746,18 +743,22 @@ class UsersController extends AppController {
         $this->set('title_for_layout', 'Admin - User List');
 
         $users = $this->User->find('all', array(
+            'conditions' => array(
+                'User.type != 0',
+                'User.status != 2'
+            ),
             'fields' => array(
                 'User.id',
                 'User.email',
-                'User.fname',
-                'User.lname',
+                'UserProfile.fname',
+                'UserProfile.lname',
                 'User.type',
                 'User.accesskey',
                 'User.contact',
-                'User.address',
-                'User.dob',
+                'UserProfile.address',
+                'UserProfile.dob',
                 'User.status',
-                'User.gender',
+                'UserProfile.gender',
                 'User.created')
                 ,));
 

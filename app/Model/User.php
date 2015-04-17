@@ -110,9 +110,12 @@ class User extends AppModel {
                     $this->data[$this->alias]['password']
             );
 
+            /*
             if (!empty($this->data)) {
                 $this->data['User']['dob'] = date('Y-m-d', strtotime($this->data['User']['dob']));
             }
+             * 
+             */
         }
         return true;
     }
