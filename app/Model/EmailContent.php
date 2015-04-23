@@ -106,18 +106,45 @@ class EmailContent extends AppModel {
             $mail_refined_content = $mail_content['content'];
             $mail_refined_content = str_replace('{{receiver}}', $name, $mail_refined_content);
             $mail_refined_content = str_replace('{{link}}', $link, $mail_refined_content);
+           // prd($mail_refined_content);
 
 
-            $this->_sendMail($userEmail, $subject, $mail_refined_content);
+            $admin_email = strtolower(Configure::read('ADMIN_MAIL'));
 
+            App::uses('CakeEmail', 'Network/Email');
+
+            $cake_email = new CakeEmail();
+            $cake_email->config('gmail');
+            $cake_email->to($userEmail);
+            $cake_email->from(array('cupcherry2@gmail.com' => 'cupcherry'));
+            $cake_email->replyTo("no-replay@cupcherry.com", "cupcherry");
+            $cake_email->subject("Password Reset Request");
+            $cake_email->template('default', 'default');
+            $cake_email->emailFormat('html');
+            $cake_email->viewVars(array(
+                'content' => $mail_refined_content,
+            ));
+
+
+            try {
+                $cake_email->send();
+            } catch (Exception $e) {
+                return false;
+            }
             return true;
         }
+
+
+        // Not working as local, So i comment this code.
+//            $this->_sendMail($userEmail, $subject, $mail_refined_content);
+//
+//            return true;
     }
 
     public function userEnquiryMail($type, $product_id, $pcode, $userName, $userEmail, $contactNo, $message) {
         $mail_content = $this->getMailContent('ENQUIRY');
         $user_content = $this->getMailContent('USER_MAIL');
-        // prd($user_content);
+// prd($user_content);
 
         if (is_array($mail_content) && !empty($mail_content)) {
             $userName = ucwords($userName);
@@ -125,7 +152,7 @@ class EmailContent extends AppModel {
 
             $path = 'http://www.samrudhexim.com/products/view/';
 
-            // Admin Mail Content
+// Admin Mail Content
             $mail_refined_content = $mail_content['content'];
             $mail_refined_content = str_replace('{{product_id}}', $path . $product_id, $mail_refined_content);
             $mail_refined_content = str_replace('{{pcode}}', $pcode, $mail_refined_content);
@@ -133,8 +160,8 @@ class EmailContent extends AppModel {
             $mail_refined_content = str_replace('{{email}}', $userEmail, $mail_refined_content);
             $mail_refined_content = str_replace('{{contact}}', $contactNo, $mail_refined_content);
             $mail_refined_content = str_replace('{{message}}', $message, $mail_refined_content);
-            //prd($mail_refined_content);
-            // User Mail Content
+//prd($mail_refined_content);
+// User Mail Content
             $userMail_refined_content = $user_content['content'];
             $userMail_refined_content = str_replace('{{product_id}}', $path . $product_id, $userMail_refined_content);
             $userMail_refined_content = str_replace('{{pcode}}', $pcode, $userMail_refined_content);
@@ -142,12 +169,12 @@ class EmailContent extends AppModel {
             $userMail_refined_content = str_replace('{{email}}', $userEmail, $userMail_refined_content);
             $userMail_refined_content = str_replace('{{contact}}', $contactNo, $userMail_refined_content);
             $userMail_refined_content = str_replace('{{message}}', $message, $userMail_refined_content);
-            //prd($userMail_refined_content);
+//prd($userMail_refined_content);
             $admin_email = strtolower(Configure::read('ADMIN_MAIL'));
 
             App::uses('CakeEmail', 'Network/Email');
 
-            // Sending Mail to Admin
+// Sending Mail to Admin
             $cake_email = new CakeEmail();
             $cake_email->config('default');
             $cake_email->to(array($admin_email => 'Samrudh Exports'));
@@ -160,7 +187,7 @@ class EmailContent extends AppModel {
                 'content' => $mail_refined_content,
             ));
 
-            // Sending Mail to User.
+// Sending Mail to User.
             $cake_client_mail = new CakeEmail;
             $cake_client_mail->config('default');
             $cake_client_mail->to(array($userEmail => 'Samrudh Exports'));
@@ -173,10 +200,10 @@ class EmailContent extends AppModel {
                 'content' => $userMail_refined_content,
             ));
             try {
-                //if(CakeRequest::host()=='192.168.1.2'){
-                //print_r ($cake_email);exit;
-                //	return true;
-                //}
+//if(CakeRequest::host()=='192.168.1.2'){
+//print_r ($cake_email);exit;
+//	return true;
+//}
                 $cake_client_mail->send();
                 $cake_email->send();
             } catch (Exception $e) {
@@ -187,12 +214,12 @@ class EmailContent extends AppModel {
     }
 
     public function add_member_request($organ_name, $name, $email, $temPassword, $key) {
-        //prd($this->request);
+//prd($this->request);
         $mail_content = $this->getMailContent('ADD_MEMBER_REQUEST');
 
         $link = Router::url(array('plus' => false, 'controller' => 'users', 'action' => 'mem_verify', $key), true);
 
-        // prd($mail_content);
+// prd($mail_content);
         if (is_array($mail_content) && !empty($mail_content)) {
 
             $UserName = ucwords($name);
@@ -204,7 +231,7 @@ class EmailContent extends AppModel {
             $mail_refined_content = str_replace('{{link}}', $link, $mail_refined_content);
             $mail_refined_content = str_replace('{{organ_name}}', $organ_name, $mail_refined_content);
             $mail_refined_content = str_replace('{{password}}', $temPassword, $mail_refined_content);
-            // prd($mail_refined_content);
+// prd($mail_refined_content);
 
             $admin_email = strtolower(Configure::read('ADMIN_MAIL'));
 
@@ -221,17 +248,9 @@ class EmailContent extends AppModel {
             $cake_email->viewVars(array(
                 'content' => $mail_refined_content,
             ));
-            //pr($this->request);
-            //prd($mail_refined_content);
-            //prd($cake_email->send());
-            //print_r ($cake_email);exit;
+
 
             try {
-                //if(CakeRequest::host()=='192.168.1.2'){
-                //print_r ($cake_email);exit;
-                //	return true;
-                //}
-
                 $cake_email->send();
             } catch (Exception $e) {
                 return false;
@@ -241,12 +260,12 @@ class EmailContent extends AppModel {
     }
 
     public function add_request($organ_name, $name, $email, $key) {
-        //   prd($this->request);
+//   prd($this->request);
         $mail_content = $this->getMailContent('ADD_REQUEST');
 
         $link = Router::url(array('plus' => false, 'controller' => 'users', 'action' => 'mem_verify', $key), true);
 
-        //prd($mail_content);
+//prd($mail_content);
         if (is_array($mail_content) && !empty($mail_content)) {
 
             $UserName = ucwords($name);
@@ -257,7 +276,7 @@ class EmailContent extends AppModel {
             $mail_refined_content = str_replace('{{email}}', $UserEmail, $mail_refined_content);
             $mail_refined_content = str_replace('{{link}}', $link, $mail_refined_content);
             $mail_refined_content = str_replace('{{organ_name}}', $organ_name, $mail_refined_content);
-            //  prd($mail_refined_content);
+//  prd($mail_refined_content);
 
             $admin_email = strtolower(Configure::read('ADMIN_MAIL'));
 
@@ -274,16 +293,16 @@ class EmailContent extends AppModel {
             $cake_email->viewVars(array(
                 'content' => $mail_refined_content,
             ));
-            //pr($this->request);
-            //prd($mail_refined_content);
-            //prd($cake_email->send());
-            //print_r ($cake_email);exit;
+//pr($this->request);
+//prd($mail_refined_content);
+//prd($cake_email->send());
+//print_r ($cake_email);exit;
 
             try {
-                //if(CakeRequest::host()=='192.168.1.2'){
-                //print_r ($cake_email);exit;
-                //	return true;
-                //}
+//if(CakeRequest::host()=='192.168.1.2'){
+//print_r ($cake_email);exit;
+//	return true;
+//}
 
                 $cake_email->send();
             } catch (Exception $e) {
@@ -294,12 +313,12 @@ class EmailContent extends AppModel {
     }
 
     public function registration_mail($status, $userName, $userEmail, $key) {
-        //prd($this->request);
+//prd($this->request);
         $mail_content = $this->getMailContent('REGISTRATION_MAIL');
 
         $link = Router::url(array('controller' => 'users', 'action' => 'verification', $key), true);
-        // $link = 'http://localhost/education/users/verification/' . $key;
-        //prd($mail_content);
+// $link = 'http://localhost/education/users/verification/' . $key;
+//prd($mail_content);
         if (is_array($mail_content) && !empty($mail_content)) {
 
             $userName = ucwords($userName);
@@ -309,8 +328,8 @@ class EmailContent extends AppModel {
             $mail_refined_content = str_replace('{{name}}', $userName, $mail_refined_content);
             $mail_refined_content = str_replace('{{email}}', $userEmail, $mail_refined_content);
             $mail_refined_content = str_replace('{{link}}', $link, $mail_refined_content);
-            //$mail_refined_content = str_replace('{{message}}',$message,$mail_refined_content);
-            // prd($mail_refined_content);
+//$mail_refined_content = str_replace('{{message}}',$message,$mail_refined_content);
+// prd($mail_refined_content);
 
             $admin_email = strtolower(Configure::read('ADMIN_MAIL'));
 
@@ -327,16 +346,64 @@ class EmailContent extends AppModel {
             $cake_email->viewVars(array(
                 'content' => $mail_refined_content,
             ));
-            //pr($this->request);
-            //prd($mail_refined_content);
-            //prd($cake_email->send());
-            //print_r ($cake_email);exit;
+//pr($this->request);
+//prd($mail_refined_content);
+//prd($cake_email->send());
+//print_r ($cake_email);exit;
 
             try {
-                //if(CakeRequest::host()=='192.168.1.2'){
-                //print_r ($cake_email);exit;
-                //	return true;
-                //}
+//if(CakeRequest::host()=='192.168.1.2'){
+//print_r ($cake_email);exit;
+//	return true;
+//}
+
+                $cake_email->send();
+            } catch (Exception $e) {
+                return false;
+            }
+            return true;
+        }
+    }
+
+    public function plus_signup($orgname, $userName, $userEmail, $pass, $key) {
+//prd($this->request);
+        $mail_content = $this->getMailContent('PLUS_SIGNUP');
+
+        $link = Router::url(array('plus' => false, 'controller' => 'users', 'action' => 'verification', $key), true);
+
+// prd($mail_content);
+        if (is_array($mail_content) && !empty($mail_content)) {
+
+            $userName = ucwords($userName);
+            $userEmail = strtolower($userEmail);
+// $subject = 'Welcome to CupCherry Plus, Please verify your organziation.';
+
+            $mail_refined_content = $mail_content['content'];
+            $mail_refined_content = str_replace('{{name}}', $userName, $mail_refined_content);
+            $mail_refined_content = str_replace('{{email}}', $userEmail, $mail_refined_content);
+            $mail_refined_content = str_replace('{{link}}', $link, $mail_refined_content);
+            $mail_refined_content = str_replace('{{pass}}', $pass, $mail_refined_content);
+            $mail_refined_content = str_replace('{{orgname}}', $orgname, $mail_refined_content);
+// prd($mail_refined_content);
+
+
+            $admin_email = strtolower(Configure::read('ADMIN_MAIL'));
+
+            App::uses('CakeEmail', 'Network/Email');
+
+            $cake_email = new CakeEmail();
+            $cake_email->config('gmail');
+            $cake_email->to($userEmail);
+            $cake_email->from(array('cupcherry2@gmail.com' => 'cupcherry'));
+            $cake_email->replyTo("no-replay@cupcherry.com", "cupcherry");
+            $cake_email->subject("Welcome to CupCherry Plus, Please verify your organziation.");
+            $cake_email->template('default', 'default');
+            $cake_email->emailFormat('html');
+            $cake_email->viewVars(array(
+                'content' => $mail_refined_content,
+            ));
+
+            try {
 
                 $cake_email->send();
             } catch (Exception $e) {
@@ -347,12 +414,12 @@ class EmailContent extends AppModel {
     }
 
     public function registration_plus($userName, $userEmail, $key, $pass) {
-        //prd($this->request);
+//prd($this->request);
         $mail_content = $this->getMailContent('REGISTRATION_PLUS');
 
         $link = Router::url(array('plus' => false, 'controller' => 'users', 'action' => 'verification', $key), true);
 
-        // prd($mail_content);
+// prd($mail_content);
         if (is_array($mail_content) && !empty($mail_content)) {
 
             $userName = ucwords($userName);
@@ -363,7 +430,7 @@ class EmailContent extends AppModel {
             $mail_refined_content = str_replace('{{email}}', $userEmail, $mail_refined_content);
             $mail_refined_content = str_replace('{{link}}', $link, $mail_refined_content);
             $mail_refined_content = str_replace('{{pass}}', $pass, $mail_refined_content);
-            // prd($mail_refined_content);
+// prd($mail_refined_content);
 
             $admin_email = strtolower(Configure::read('ADMIN_MAIL'));
 
@@ -392,9 +459,9 @@ class EmailContent extends AppModel {
     }
 
     public function contactUsMail($userName, $userEmail, $message, $contactNo) {
-        //prd($this->request);
+//prd($this->request);
         $mail_content = $this->getMailContent('CONTACT_US');
-        //prd($mail_content);
+//prd($mail_content);
         if (is_array($mail_content) && !empty($mail_content)) {
 
             $userName = ucwords($userName);
@@ -422,16 +489,16 @@ class EmailContent extends AppModel {
             $cake_email->viewVars(array(
                 'content' => $mail_refined_content,
             ));
-            //pr($this->request);
-            //prd($mail_refined_content);
-            //prd($cake_email->send());
-            //print_r ($cake_email);exit;
+//pr($this->request);
+//prd($mail_refined_content);
+//prd($cake_email->send());
+//print_r ($cake_email);exit;
 
             try {
-                //if(CakeRequest::host()=='192.168.1.2'){
-                //print_r ($cake_email);exit;
-                //	return true;
-                //}
+//if(CakeRequest::host()=='192.168.1.2'){
+//print_r ($cake_email);exit;
+//	return true;
+//}
 
                 $cake_email->send();
             } catch (Exception $e) {
@@ -459,7 +526,7 @@ class EmailContent extends AppModel {
 
     public function ComposeToManyMail($subject = NULL, $message = NULL, $userEmails = NULL) {
         $email_record = $this->getMailContent('COMPOSE_MAIL');
-        //prd($email_record);
+//prd($email_record);
         if (is_array($email_record) && !empty($email_record)) {
             if (!empty($subject)) {
                 $sub = $subject;
@@ -501,7 +568,7 @@ class EmailContent extends AppModel {
         }
 
         $Email->viewVars(array('mailContents' => $contents));
-        //prd($Email);
+//prd($Email);
         try {
             if ($Email->send()) {
                 return true;

@@ -14,7 +14,7 @@ class User extends AppModel {
         'OrgProfile' => array(
             'className' => 'OrgProfile',
             'foreignKey' => 'user_id',
-            'conditions' => array('User.type'=> 4)
+            'conditions' => array('User.type' => 4)
         )
     );
     public $validate = array(
@@ -111,13 +111,30 @@ class User extends AppModel {
             );
 
             /*
-            if (!empty($this->data)) {
-                $this->data['User']['dob'] = date('Y-m-d', strtotime($this->data['User']['dob']));
-            }
+              if (!empty($this->data)) {
+              $this->data['User']['dob'] = date('Y-m-d', strtotime($this->data['User']['dob']));
+              }
              * 
              */
         }
         return true;
     }
+
+//    public function beforeFind($queryData) {
+//       //prd($queryData);
+//        if (empty($queryData['fields'])) {
+//            $schema = $this->schema();
+//            prd($schema);
+//            unset($schema['password']);
+//            unset($schema['email']);
+//
+//            foreach (array_keys($schema) as $field) {
+//                $queryData['fields'][] = $this->alias . '.' . $field;
+//            }
+//            return $queryData;
+//        }
+//
+//        return parent::beforeFind($queryData);
+//    }
 
 }

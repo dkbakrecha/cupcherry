@@ -68,12 +68,12 @@
                             <div class="controls">
                                 <?php
                                 echo $this->Form->input('lname', array(
-    'label' => false,
-    'div' => false,
-    'class' => 'form-control',
-    'required' => 'required'
-));
-?>
+                                    'label' => false,
+                                    'div' => false,
+                                    'class' => 'form-control',
+                                    'required' => 'required'
+                                ));
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -108,7 +108,7 @@
                                     'class' => 'form-control',
                                     'separator' => '',
                                     'required' => 'required'
-                               ));
+                                ));
                                 ?>
                             </div>
                         </div>
@@ -138,7 +138,7 @@
                                     'label' => false,
                                     'div' => false,
                                     'class' => 'form-control',
-                                    'required' => 'required'
+                                        //'required' => 'required'
                                 ));
                                 ?>
                             </div>
@@ -153,7 +153,7 @@
                                     'label' => false,
                                     'div' => false,
                                     'class' => 'form-control',
-                                    'required' => 'required'
+                                        // 'required' => 'required'
                                 ));
                                 ?>
                             </div>
@@ -168,32 +168,32 @@
                                     'label' => false,
                                     'div' => false,
                                     'class' => 'form-control',
-                                    'required' => 'required'
+                                        // 'required' => 'required'
                                 ));
                                 ?>
                             </div>
                         </div>
                     </div>
-<!--                    <h3>For Students Login 
-                      
-                    </h3>
-                    <hr>-->
+                    <!--                    <h3>For Students Login 
+                                          
+                                        </h3>
+                                        <hr>-->
 
-<!--                    <div class="form-group">			
-                        <div class="col-md-12">
-                            <label class="control-label" for="firstname">Email Address</label>
-                            <div class="controls">
-                                <?php
+                    <!--                    <div class="form-group">			
+                                            <div class="col-md-12">
+                                                <label class="control-label" for="firstname">Email Address</label>
+                                                <div class="controls">
+                    <?php
 //                                echo $this->Form->input('email', array(
 //                                    'label' => false,
 //                                    'div' => false,
 //                                    'class' => 'form-control',
 //                                ));
-                                ?>
-                                <p>Cupcherry login access. Student can use all other facilities. </p>
-                            </div>
-                        </div>
-                    </div>-->
+                    ?>
+                                                    <p>Cupcherry login access. Student can use all other facilities. </p>
+                                                </div>
+                                            </div>
+                                        </div>-->
 
 
 
@@ -202,9 +202,8 @@
                 </div>
                 <div class="col-md-6">
 
-                    <h3>Parents Detail</h3>
-                    <hr>
-                    <div class="slt-opt clearfix">
+                    
+<!--                    <div class="slt-opt clearfix">
 
                         <div class="pull-right">
                             <div id="new-ent" class="btn btn-primary"> New Entry </div> 
@@ -212,7 +211,7 @@
                         </div>
 
 
-                    </div>
+                    </div>-->
                     <div id="search-box">
                         <div class="form-group form-alter">			
                             <div class="col-md-12">
@@ -231,6 +230,26 @@
                             </div>
                         </div>
                     </div>
+                    <h3>For Parents Login</h3>
+                    <hr>
+
+                    <div class="form-group form-alter">			
+                        <div class="col-md-12">
+                            <label class="control-label" >Email</label>
+                            <div class="controls">
+                                <?php
+                                echo $this->Form->input('parent_email', array(
+                                    'label' => false,
+                                    'div' => false,
+                                    'class' => 'form-control',
+                                ));
+                                ?>
+                                <p>Cupcherry access for parents.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Parents Detail</h3>
+                    <hr>
 
                     <div id="p-form">
                         <div class="form-group form-alter">			
@@ -299,7 +318,7 @@
                                         'div' => false,
                                         'class' => 'form-control',
                                         'required' => 'required'
-                                   ));
+                                    ));
                                     ?>
                                 </div>
                             </div>
@@ -329,31 +348,13 @@
                                         'label' => false,
                                         'div' => false,
                                         'class' => 'form-control',
-                                        'required' => 'required'
+                                            //  'required' => 'required'
                                     ));
                                     ?>
                                 </div>
                             </div>
                         </div>
-                        <h3>For Parents Login</h3>
-                        <hr>
 
-                        <div class="form-group form-alter">			
-                            <div class="col-md-12">
-                                <label class="control-label" >Email</label>
-                                <div class="controls">
-                                    <?php
-                                    echo $this->Form->input('parent_email', array(
-                                        'label' => false,
-                                        'div' => false,
-                                        'class' => 'form-control',
-                                        
-                                    ));
-                                    ?>
-                                    <p>Cupcherry access for parents.</p>
-                                </div>
-                            </div>
-                        </div>
 
 
 

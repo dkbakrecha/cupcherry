@@ -8,7 +8,9 @@ class UsersController extends AppController {
         parent::beforeFilter();
         // Allow users to register and logout.
         $this->Auth->allow(
-                'admin_login', 'register', 'add', 'signup', 'registration', 'verification', 'mem_verify'
+                'admin_login', 'register',
+                //'add',
+                'signup', 'registration', 'verification', 'mem_verify'
         );
     }
 
@@ -43,7 +45,8 @@ class UsersController extends AppController {
     public function changepassword() {
         $this->set('title_for_layout', 'Change Password');
         // pr($this->request->data);
-        $currentId = Configure::read('currentUserInfo.id');
+        $currentId = Configure::read('currentUserInfo.User.id');
+        //prd($currentId);
         $data = $this->request->data;
 
 
@@ -220,10 +223,16 @@ class UsersController extends AppController {
             ),
         ));
         // prd($data);
-        $dot = explode('.', $data[0]['User']['member_verify_key']);
-        // prd($dot);
-        $countArrayValue = count($dot);
-        // prd($countArrayValue);
+
+        if (isset($data) && !empty($data)) {
+            $dot = explode('.', $data[0]['User']['member_verify_key']);
+            // prd($dot);
+            $countArrayValue = count($dot);
+            // prd($countArrayValue);
+        } else {
+            $this->flash_msg('Invalid request.', 2);
+            $this->redirect(array('controller' => 'pages', 'action' => 'index'));
+        }
         if ($countArrayValue == 3) {
             if (isset($data) && !empty($data)) {
                 $save['User']['id'] = $data[0]['User']['id'];
@@ -257,7 +266,6 @@ class UsersController extends AppController {
             if (isset($data) && !empty($data)) {
                 $save['User']['id'] = $data[0]['User']['id'];
                 $save['User']['type'] = 2;
-                //$save['User']['created_under'] = $dot[1];
                 $save['User']['member_verify_key'] = 0;
                 $save2['OrgMember']['org_id'] = $dot[1];
                 $save2['OrgMember']['user_id'] = $data[0]['User']['id'];
@@ -293,7 +301,7 @@ class UsersController extends AppController {
                     'UserProfile.fname', 'UserProfile.lname'
                 ),
             ));
-            
+
             if (isset($result) && !empty($result)) {
                 $data = array();
                 $uniqueCode = uniqid();
@@ -302,19 +310,105 @@ class UsersController extends AppController {
                 //Updating password_reset_key field with uniqueCode
                 $this->User->save($data);
 
-                $name = $result['UserProfile']['fname'] . " " .$result['UserProfile']['fname'];
+                $name = $result['UserProfile']['fname'] . " " . $result['UserProfile']['fname'];
                 $email = $result['User']['email'];
                 $key = $uniqueCode;
 
                 // Initializing Email Object
                 $emailObj = new EmailContent;
                 $emailObj->forgetPassword($name, $email, $key);
-                
+
                 $this->flash_msg("An Email has been send to your email address. Please Check.", 1);
                 $this->redirect(array('controller' => 'users', 'action' => 'login'));
             } else {
                 $this->flash_msg("This email address doesn't exist.", 2);
             }
+        }
+    }
+
+    public function plus_account_recovery() {
+        $this->layout = 'plus_login';
+        $this->set('title_for_layout', 'Password Reset');
+        $this->loadModel('EmailContent');
+
+        if ($this->request->is('post')) {
+            // prd($this->request->data);
+            $emailId = $this->request->data['User']['email'];
+
+            $result = $this->User->find('first', array(
+                'conditions' => array('User.email' => $emailId, 'User.status' => 1),
+                'fields' => array(
+                    'User.id', 'User.status', 'User.email', 'User.type',
+                    'UserProfile.fname', 'UserProfile.lname'
+                ),
+            ));
+            //prd($result);
+
+            if (isset($result) && !empty($result)) {
+
+                if ($result['User']['type'] != 4) {
+                    $this->flash_msg("You are not a authorized user of CupCherry Plus", 4);
+                    $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'account_recovery'));
+                } else {
+                    $data = array();
+                    $uniqueCode = uniqid();
+                    $data['User']['id'] = $result['User']['id'];
+                    $data['User']['password_reset_key'] = $uniqueCode;
+                    //Updating password_reset_key field with uniqueCode
+                    $this->User->save($data);
+
+                    $name = $result['UserProfile']['fname'] . " " . $result['UserProfile']['lname'];
+                    $email = $result['User']['email'];
+                    $key = $uniqueCode;
+
+
+                    // Initializing Email Object
+                    $emailObj = new EmailContent;
+                    $emailObj->forgetPassword($name, $email, $key);
+
+                    $this->flash_msg("An Email has been send to your email address. Please Check.", 1);
+                    $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'login'));
+                }
+            } else {
+                $this->flash_msg("This email address doesn't exist.", 2);
+            }
+        }
+    }
+
+    public function plus_recovery_token($token = null) {
+        $this->layout = 'plus_login';
+        $this->set('title_for_layout', 'Change Password');
+        $data = array();
+        $this->set('setKey', $token);
+        $data = $this->request->data;
+        if (!$token) {
+            $this->flash_msg('Invalid access', 2);
+            $this->redirect(array('controller' => 'users', 'action' => 'login'));
+        }
+        $result = $this->User->find('all', array(
+            'conditions' => array('User.password_reset_key' => $token, 'User.status' => 1),
+            'fields' => array('id', 'email', 'status')
+        ));
+        $data['User']['id'] = $result[0]['User']['id'];
+        $data['User']['password_reset_key'] = 0;
+
+        if (isset($result) && !empty($result)) {
+            if ($this->request->is('post')) {
+                $this->User->set($data);
+                if ($this->User->validates()) {
+                    if ($this->User->save($data)) {
+                        $this->flash_msg('Password Changed.', 1);
+                        $this->redirect(array('controller' => 'users', 'action' => 'login'));
+                    }
+                    $this->flash_msg('Password not chnaged', 2);
+                    $this->redirect(array('controller' => 'users', 'action' => 'login'));
+                } else {
+                    $errors = $this->User->validationErrors;
+                }
+            }
+        } else {
+            $this->flash_msg('Invalid result', 2);
+            $this->redirect(array('controller' => 'users', 'action' => 'login'));
         }
     }
 
@@ -510,7 +604,9 @@ class UsersController extends AppController {
     }
 
     public function dashboard() {
-        
+
+        $user = $this->__getUserInfo();
+        //prd($user);
     }
 
     public function admin_index() {
@@ -738,14 +834,11 @@ class UsersController extends AppController {
     }
 
     public function admin_list() {
-
-
         $this->set('title_for_layout', 'Admin - User List');
-
         $users = $this->User->find('all', array(
             'conditions' => array(
-                'User.type != 0',
-                'User.status != 2'
+                'User.type !=' => 0,
+                'User.status !=' => 2
             ),
             'fields' => array(
                 'User.id',
@@ -759,33 +852,73 @@ class UsersController extends AppController {
                 'UserProfile.dob',
                 'User.status',
                 'UserProfile.gender',
-                'User.created')
-                ,));
+                'User.created',)
+        ));
 
         $this->set('listUsers', $users);
-//        $totalUsers = count($users); 
-//        $this->set('totalUsers',$totalUsers);
     }
 
     public function admin_delete($id) {
-        $this->User->delete($id);
-        $this->Session->setFlash('User Deleted');
-        $this->redirect(array('controller' => 'Users', 'action' => 'admin_userlist'));
+        if (!$id) {
+            $this->flash_msg('Invaild access', 2);
+            $this->redirect(array('admin' => true, 'controller' => 'users', 'action' => 'edit', $id));
+        }
+        $data = $this->User->find('first', array(
+            'conditions' => array('User.status !=' => 2, 'User.id' => $id),
+            'fields' => array('id', 'email', 'status')
+        ));
+        // prd($data);
+        if (isset($data) && !empty($data)) {
+            $userData['User']['id'] = $id;
+            $userData['User']['status'] = 2;
+            $userData['User']['email'] = 'del_' . $data['User']['email'];
+
+            if ($this->User->save($userData)) {
+                $this->flash_msg('User Deleted');
+                $this->redirect(array('admin' => true, 'controller' => 'users', 'action' => 'list'));
+            } else {
+                $this->flash_msg('User not Deleted', 2);
+                $this->redirect(array('admin' => true, 'controller' => 'users', 'action' => 'list'));
+            }
+        }
     }
 
     public function admin_edit($id) {
+
         $this->set('title_for_layout', 'Admin - Edit User');
+        $this->loadModel('UserProfile');
+        $this->loadModel('OrgProfile');
+
         $data = $this->request->data;
-
+        unset($data['UserProfile']['email']);
+        //prd($data);
         if (isset($data) && !empty($data)) {
+            $userData['User']['id'] = $id;
+            $userData['User']['contact'] = $data['UserProfile']['contact'];
+            $userPro['UserProfile']['id'] = $data['UserProfile']['id'];
+            $userPro['UserProfile']['address'] = $data['UserProfile']['address'];
+            $userPro['UserProfile']['user_mobile'] = $data['UserProfile']['contact'];
+            $userPro['UserProfile']['fname'] = $data['UserProfile']['fname'];
+            $userPro['UserProfile']['lname'] = $data['UserProfile']['lname'];
+            $userPro['UserProfile']['gender'] = $data['UserProfile']['gender'];
+            $userPro['UserProfile']['dob'] = $data['UserProfile']['dob'];
 
-            if (empty($data['User']['password'])) {
-                unset($data['User']['password']);
-                unset($data['User']['confirm_password']);
-            }
 
-            if ($this->User->save($data)) {
-                $this->Session->setFlash("User  update successfully", 'default', 'success');
+//            if (empty($data['User']['password'])) {
+//                unset($data['User']['password']);
+//                unset($data['User']['confirm_password']);
+//            }
+
+            if ($this->User->save($userData)) {
+                $userPro['UserProfile']['user_id'] = $id;
+                if ($this->UserProfile->save($userPro)) {
+                    
+                } else {
+                    $this->flash_msg('User updation failed.', 2);
+                    $this->redirect(array('admin' => true, 'controller' => 'users', 'action' => 'edit', $id));
+                }
+
+                $this->flash_msg('User updation sucessfully.', 1);
             } else {
                 $this->Session->setFlash("User  cannot be update. Please try again", 'default', 'success');
             }
@@ -794,7 +927,11 @@ class UsersController extends AppController {
 
         $singleUser = $this->User->findById($id);
         unset($singleUser['User']['password']);
-        $this->request->data = $singleUser;
+        $this->set('singleUser', $singleUser);
+        //  prd($singleUser);
+        $this->request->data['User'] = $singleUser['User'];
+        $this->request->data['UserProfile'] = $singleUser['UserProfile'];
+        // prd($this->request->data);
     }
 
     public function admin_sendmail() {
@@ -823,7 +960,7 @@ class UsersController extends AppController {
         $this->set('title_for_layout', 'Plus Login');
 
         $user = Configure::read('currentUserInfo.Plus');
-        // echo $userId;
+        //pr($user);
 
         if (isset($user['id']) && !empty($user['id'])) {
             $this->redirect($this->Auth->loginRedirect);
@@ -832,12 +969,21 @@ class UsersController extends AppController {
 
 
         if ($this->request->is('post')) {
-
-            if ($this->Auth->login()) {
-
-                $this->redirect($this->Auth->loginRedirect);
+            $data = $this->request->data;
+            $userCheck = $this->User->find('first', array(
+                'conditions' => array('User.email' => $data['User']['email']),
+                'fields' => array('id', 'email', 'type', 'status')
+            ));
+            // prd($userCheck);
+            if ($userCheck['User']['status'] == 3) {
+                $this->flash_msg('Your account activation pending, please check your email.', 4);
             } else {
-                $this->flash_msg('Username & password incorrect.', 2);
+                if ($this->Auth->login()) {
+
+                    $this->redirect($this->Auth->loginRedirect);
+                } else {
+                    $this->flash_msg('Username & password incorrect.', 2);
+                }
             }
         }
     }
@@ -872,18 +1018,23 @@ class UsersController extends AppController {
                     'terms',
                 )
             ));
+            @$userEmail = $userCheck['User']['email'];
+            @$userType = $userCheck['User']['type'];
             //prd($userCheck);
-            if ($userCheck['User']['email'] == $data['User']['email'] && $userCheck['User']['type'] == 4) {
+            // 1. checks already a plus user by verify user email & type == 4
+            // 2. checks already a user by verify user email & type == 2,3,5
+            // 3. if user is not a plus user and a normal user , then we will create new user and send email for verificatio.
+            if ($userEmail == $data['User']['email'] && $userType == 4) {
                 $this->flash_msg('You are already a plus user, please try to login.', 4);
-            } elseif ($userCheck['User']['email'] == $data['User']['email'] && $userCheck['User']['type'] == 2) { // need to check 3 and 5 also
+            } elseif ($userEmail == $data['User']['email'] && $userType == 2) { // need to check 3 and 5 also
                 $this->flash_msg('You are already cupcherry user, please try with new email id for Plus Account.', 4);
             } else {
                 $userSave = array();
                 $userPro = array();
                 $OrgPro = array();
-
+                // User Data
                 $verify = uniqid();
-                $random = rand(5, 50);
+                $random = rand(5, 10000);
                 $passkey = 'cupcherry' . '#' . $random;
                 $userSave['User']['email'] = $data['User']['email'];
                 $userSave['User']['password'] = $passkey;
@@ -893,13 +1044,13 @@ class UsersController extends AppController {
                 $userSave['User']['status'] = 3;
                 $userSave['User']['terms'] = 0;
                 $userSave['User']['contact'] = $data['User']['contact'];
-
+// User Profile Data
                 $userPro['UserProfile']['fname'] = $data['User']['fname'];
                 $userPro['UserProfile']['lname'] = $data['User']['lname'];
                 $userPro['UserProfile']['user_mobile'] = $data['User']['contact'];
                 $userPro['UserProfile']['status'] = 1;
                 $userPro['UserProfile']['profile_status'] = 0;
-
+// Org Profile Data
                 $OrgPro['OrgProfile']['org_name'] = $data['User']['org_name'];
                 $OrgPro['OrgProfile']['verification'] = 0;
                 $OrgPro['OrgProfile']['status'] = 1;
@@ -910,7 +1061,6 @@ class UsersController extends AppController {
                             'conditions' => array('User.email' => $data['User']['email'], 'User.status !=' => 2),
                             'fields' => array('id', 'email', 'status')
                         ));
-                        //  prd($lastId);
                         //Saving User Profile
                         $userPro['UserProfile']['user_id'] = $lastUserId['User']['id'];
                         if ($this->UserProfile->save($userPro)) {
@@ -922,7 +1072,6 @@ class UsersController extends AppController {
                         $OrgPro['OrgProfile']['user_id'] = $lastUserId['User']['id'];
                         if ($this->OrgProfile->save($OrgPro)) {
                             $lastOrgId = $this->OrgProfile->getLastInsertId();
-                           // prd($lastOrgId);
                         } else {
                             $this->flash_msg('Some Error in saving OrgProfile', 2);
                         }
@@ -934,6 +1083,20 @@ class UsersController extends AppController {
                         } else {
                             $this->flash_msg('Some Error in Updating Use Profile_id', 2);
                         }
+
+
+                        // Initializing Email Model.
+                        $name = $data['User']['fname'];
+                        $orgname = $data['User']['org_name'];
+                        $key = $verify;
+                        $pass = $passkey;
+                        $email = $data['User']['email'];
+
+                        $emailObj = new EmailContent;
+                        $emailObj->plus_signup($orgname, $name, $email, $pass, $key);
+
+                        $this->flash_msg('Thanks for showing interest in CupCherry, Please check your email.', 1);
+                        $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'login'));
                     }
                 } else {
                     $errors = $this->User->validationErrors;
@@ -974,13 +1137,9 @@ class UsersController extends AppController {
         // prd($userData);
     }
 
-    public function plus_addmember() {
-        $this->set('title_for_layout', 'Add New Member');
-        $this->loadModel('User');
-        $this->loadModel('UserProfile');
+    public function plus_listmembers() {
+        $this->set('title_for_layout', 'List Members');
         $this->loadModel('OrgMember');
-        $this->loadModel('EmailContent');
-
         $user = Configure::read('currentUserInfo.Plus');
         //prd($user);
         $flag = 0;
@@ -992,31 +1151,42 @@ class UsersController extends AppController {
                             'conditions' => array(
                                 'OrgMember.user_id = User.id',
                             ),
+                            'fields' => array('id','profile_id','email','type','contact','status')
                         ),
                         'UserProfile' => array(
                             'foreignKey' => false,
                             'conditions' => array(
                                 'User.id = UserProfile.user_id',
                             ),
+                           'fields' => array('id','fname','lname','user_id','user_mobile','status')
                         ),
                     )
                 )
         );
 
-
-
-
         $membersList = $this->OrgMember->find('all', array(
-            'conditions' => array('OrgMember.org_id' => $user['id'])
+            'conditions' => array('OrgMember.org_id' => $user['id']),
+            
         ));
         //prd($membersList);
         $this->set('membersList', $membersList);
+    }
+
+    public function plus_addmember() {
+        $this->set('title_for_layout', 'Add New Member');
+        $this->loadModel('User');
+        $this->loadModel('UserProfile');
+        $this->loadModel('TeacherProfile');
+        $this->loadModel('OrgMember');
+        $this->loadModel('EmailContent');
+        $user = Configure::read('currentUserInfo.Plus');
+
 
         $data = $this->request->data;
         //  prd($data);
         @$emailId = $data['User']['email'];
         $userCheck = $this->User->find('first', array(
-            'conditions' => array('User.email' => $emailId, 'User.status' => 1),
+            'conditions' => array('User.email' => $emailId, 'User.status' => array(0, 1, 3)),
             'fields' => array(
                 'id',
                 'email',
@@ -1027,7 +1197,7 @@ class UsersController extends AppController {
                 'UserProfile.lname',
             )
         ));
-        //($userCheck);
+        // prd($userCheck);
 
         /* $flag
          *  0 = nothing;
@@ -1060,12 +1230,26 @@ class UsersController extends AppController {
             } else {
                 // user exist but  not a member 
                 if (isset($data) && !empty($data)) {
+                    echo 'Hii1';
                     $uniqueCode = uniqid();
                     $verifyCode = $uniqueCode . '.' . $user['id'];
                     $save['User']['id'] = $userCheck['User']['id'];
                     $save['User']['member_verify_key'] = $verifyCode;
 
                     if ($this->User->save($save)) {
+
+                        $orgMem = array();
+                        $orgMem['OrgMember']['org_id'] = $user['id'];
+                        $orgMem['OrgMember']['user_id'] = $userCheck['User']['id'];
+                        $orgMem['OrgMember']['status'] = 3;
+
+                        if ($this->OrgMember->save($orgMem)) {
+                            
+                        } else {
+                            $this->flash_msg('OrgMember not added, some error', 2);
+                            $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'addmember'));
+                        }
+
                         $organ_name = $user['OrgProfile']['org_name'];
                         $name = $userCheck['UserProfile']['fname'];
                         $email = $userCheck['User']['email'];
@@ -1084,11 +1268,10 @@ class UsersController extends AppController {
                 }
             }
         } elseif ($flag == 3) {
-
+            //echo 'Hii';
             if (isset($data) && !empty($data)) {
                 $uniqueCode = uniqid();
                 $verifyCode = $uniqueCode . '.' . $user['id'] . '.' . 'cup';
-
                 $passkey = $data['User']['fname'] . '' . '@123';
                 $data['User']['password'] = $passkey;
                 $data['User']['confirm_password'] = $passkey;
@@ -1104,20 +1287,39 @@ class UsersController extends AppController {
                     if ($this->User->save($data)) {
                         $lastInsertId = $this->User->getLastInsertID();
                         $userPro = array();
+                        $orgMem = array();
+                        $techProfile = array();
                         $userPro['UserProfile']['user_id'] = $lastInsertId;
                         $userPro['UserProfile']['fname'] = $data['User']['fname'];
                         $userPro['UserProfile']['lname'] = $data['User']['lname'];
                         $userPro['UserProfile']['profile_status'] = 0;
                         $userPro['UserProfile']['status'] = 1;
-                        $orgMem = array();
+
                         $orgMem['OrgMember']['org_id'] = $user['id'];
                         $orgMem['OrgMember']['user_id'] = $lastInsertId;
                         $orgMem['OrgMember']['status'] = 3;
+
+                        $techProfile['TeacherProfile']['status'] = 1;
+
                         if ($this->UserProfile->save($userPro)) {
                             
                         } else {
                             $this->flash_msg('UserProfile not saved, some error', 2);
-                            $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'addmember'));
+                            // $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'addmember'));
+                        }
+                        if ($this->TeacherProfile->save($techProfile)) {
+                            $laslTechProId = $this->TeacherProfile->getLastInsertId();
+                        } else {
+                            $this->flash_msg('TeacherProfile not saved, some error', 2);
+                            //$this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'addmember'));
+                        }
+                        $save1['User']['id'] = $lastInsertId;
+                        $save1['User']['profile_id'] = 'tec_' . $laslTechProId;
+                        if ($this->User->save($save1)) {
+                            
+                        } else {
+                            $this->flash_msg('User Profile_id  not updated, some error', 2);
+                            //$this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'addmember'));
                         }
                         if ($this->OrgMember->save($orgMem)) {
                             
@@ -1164,42 +1366,18 @@ class UsersController extends AppController {
         // prd($this->request);
         $this->set('title_for_layout', 'Profile');
         $this->loadModel('UserProfile');
-        $this->loadModel('Organization');
-        $this->loadModel('OrganizationProfile');
-        $user = Configure::read('currentUserInfo.Plus');
-
-        $organData = $this->Organization->find('first', array(
-            'conditions' => array('Organization.user_id' => $user['id'], 'Organization.status' => 1),
-            'fields' => array(
-                'id',
-                'organization_name',
-                'organization_address',
-                'user_id',
-                'valid_proof',
-                'type',
-                'status')
-        ));
-        // prd($organData);
-        $organProData = $this->OrganizationProfile->find('first', array(
-            'conditions' => array(
-                'OrganizationProfile.organization_id' => $organData['Organization']['id'],
-                'OrganizationProfile.status' => 1)
-        ));
-
-        $userProData = $this->UserProfile->find('first', array(
-            'conditions' => array('UserProfile.user_id' => $user['id'], 'UserProfile.status' => 1)
-        ));
-
-
+        $this->loadModel('OrgProfile');
+        $user = $this->__getPlusInfo();
+        // prd($user);
 
         if ($this->request->is = array('post', 'put')) {
-            //   prd($this->request);
+            // prd($this->request);
             @$userPro = $this->request->data['UserProfile'];
-            @$organPro = $this->request->data['OrganizationProfile'];
+            @$organPro = $this->request->data['OrgProfile'];
             // prd($organPro);
             // updates UserProfile 
             if (isset($userPro) && !empty($userPro)) {
-                $userPro['id'] = $userProData['UserProfile']['id'];
+                $userPro['id'] = $user['UserProfile']['id'];
                 if ($this->UserProfile->save($userPro)) {
                     $this->flash_msg('Personal profile updated.');
                     $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'profile'));
@@ -1210,9 +1388,9 @@ class UsersController extends AppController {
             }
             // updates OrganizationProfile
             if (isset($organPro) && !empty($organPro)) {
-                $organPro['id'] = $organProData['OrganizationProfile']['id'];
-                // prd($organPro);
-                if ($this->OrganizationProfile->save($organPro)) {
+                $organPro['id'] = $user['OrgProfile']['id'];
+                //  prd($organPro);
+                if ($this->OrgProfile->save($organPro)) {
                     $this->flash_msg('Organization profile updated.');
                     $this->redirect(array('plus' => true, 'controller' => 'users', 'action' => 'profile'));
                 } else {
@@ -1223,8 +1401,8 @@ class UsersController extends AppController {
         }
 
 
-        $this->request->data['UserProfile'] = $userProData['UserProfile'];
-        $this->request->data['OrganizationProfile'] = $organProData['OrganizationProfile'];
+        $this->request->data['UserProfile'] = $user['UserProfile'];
+        $this->request->data['OrgProfile'] = $user['OrgProfile'];
     }
 
     public function plus_changepassword() {

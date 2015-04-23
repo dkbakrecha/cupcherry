@@ -53,7 +53,7 @@
                 <hr>
                 <div id="organization_info">
                     <?php
-                    echo $this->Form->create('OrganizationProfile', array(
+                    echo $this->Form->create('OrgProfile', array(
                         'class' => 'form-horizontal', 'url' => array('plus'=>true,
                             'controller' => 'users', 'action' => 'profile'
                         )
@@ -65,7 +65,7 @@
                             <label class="control-label">Name</label>
                             <div class="controls">
                                 <?php
-                                echo $this->Form->input('organization_name', array(
+                                echo $this->Form->input('org_name', array(
                                     'class' => 'form-control',
                                     'div' => false,
                                     'label' => false,
@@ -84,7 +84,7 @@
                             <label class="control-label">Address</label>
                             <div class="controls">
                                 <?php
-                                echo $this->Form->input('organization_address', array(
+                                echo $this->Form->input('org_address', array(
                                     'class' => 'form-control',
                                     'div' => false, 'label' => false, 'required' => 'required'));
                                 ?>
@@ -145,7 +145,7 @@
                             <label class="control-label">Phone</label>
                             <div class="controls">
                                 <?php
-                                echo $this->Form->input('organization_phone', array(
+                                echo $this->Form->input('org_phone', array(
                                     'class' => 'form-control',
                                     'div' => false, 'label' => false,));
                                 ?>
@@ -160,7 +160,7 @@
                             <label class="control-label">Mobile</label>
                             <div class="controls">
                                 <?php
-                                echo $this->Form->input('organization_mobile', array(
+                                echo $this->Form->input('org_mobile', array(
                                     'class' => 'form-control',
                                     'div' => false, 'label' => false,));
                                 ?>
@@ -325,7 +325,7 @@
     $(document).ready(function() {
 
         // edit profile dob
-        $('#OrganizationProfilePlusProfileForm input').attr('readonly','readonly');
+        $('#OrgProfilePlusProfileForm input').attr('readonly','readonly');
         $('#UserProfileDobMonth').wrap("<div class='col-md-5'></div>");
         $('#UserProfileDobDay').wrap("<div class='col-md-3'></div>");
         $('#UserProfileDobYear').wrap("<div class='col-md-4'></div>");
@@ -334,16 +334,16 @@
 
         $('#edit1').click(function() {
             // alert('hello');
-            $('#OrganizationProfilePlusProfileForm input').attr('readonly', false);
-            $('#OrganizationProfilePlusProfileForm textarea').attr('readonly', false);
+            $('#OrgProfilePlusProfileForm input').attr('readonly', false);
+            $('#OrgProfilePlusProfileForm textarea').attr('readonly', false);
             $('#organ_btn').css('display', 'block');
             $('#edit1').css('display', 'none');
         })
 
         $('#organ_cancel').click(function() {
             // alert('hello');
-            $('#OrganizationProfilePlusProfileForm input').attr('readonly', 'readonly');
-            $('#OrganizationProfilePlusProfileForm textarea').attr('readonly', 'readonly');
+            $('#OrgProfilePlusProfileForm input').attr('readonly', 'readonly');
+            $('#OrgProfilePlusProfileForm textarea').attr('readonly', 'readonly');
             $('#organ_btn').css('display', 'none');
             $('#edit1').css('display', 'block');
         })

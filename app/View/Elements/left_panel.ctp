@@ -1,6 +1,13 @@
 
 <?php
-//prd($groupList);
+$user = array(); 
+
+$user['id'] = Configure::read('currentUserInfo.User.id');
+$user['profile_id'] = Configure::read('currentUserInfo.User.profile_id');
+$user['email'] = Configure::read('currentUserInfo.User.email');
+$user['type'] = Configure::read('currentUserInfo.User.type');
+$user['status'] = Configure::read('currentUserInfo.User.status');
+prd($user);
 ?>
 <div class="profile_pic_panel">
     <div class="thumbnail" id="image-thumb">
@@ -114,9 +121,7 @@
             <li class="list-group-item"><i class="fa fa-book" ></i><span>KeyNotes</span></li>
         </a>
         <?php
-        $userCreatedUnder = Configure::read('currentUserInfo.User.created_under');
-
-        if ($userCreatedUnder != 0 && 1) {
+        if ($userType == 5) {
             ?>
             <a id="orgToggle">
                 <li class="list-group-item"><i class="fa fa-hospital-o" ></i><span>Organizations</span>

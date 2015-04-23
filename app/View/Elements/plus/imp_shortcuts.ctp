@@ -8,7 +8,7 @@
             <!-- /widget-header -->
             <div class="widget-content">
                 <div class="shortcuts">
-                    <a href="<?php echo $this->Html->url(array('plus'=>true,'controller'=>'users','action'=>'addmember'));?>" class="shortcut">
+                    <a href="<?php echo $this->Html->url(array('plus'=>true,'controller'=>'users','action'=>'listmembers'));?>" class="shortcut">
                         <i class="shortcut-icon icon-list-alt"></i>
                         <span class="shortcut-label">Members</span>
                     </a>
@@ -26,21 +26,24 @@
                         <i class="shortcut-icon icon-signal"></i>
                         <span class="shortcut-label">Students</span> 
                     </a>
-                    <a href="javascript:;" class="shortcut">
+                    <a href="<?php
+                    echo $this->Html->url(array('plus'=>true,'controller'=>'parents','action'=>'index'));
+                    
+                    ?>" class="shortcut">
                         <i class="shortcut-icon icon-comment"></i>
-                        <span class="shortcut-label">Exams</span> 
+                        <span class="shortcut-label">Parents</span> 
                     </a>
                     <a href="javascript:;" class="shortcut">
                         <i class="shortcut-icon icon-user"></i>
-                        <span class="shortcut-label">Sms alert</span>
+                        <span class="shortcut-label">Exams</span>
                     </a>
                     <a href="javascript:;" class="shortcut">
                         <i class="shortcut-icon icon-file"></i>
-                        <span class="shortcut-label">Calender</span> 
+                        <span class="shortcut-label">Sms Alerts</span> 
                     </a>
                     <a href="javascript:;" class="shortcut">
                         <i class="shortcut-icon icon-picture"></i>
-                        <span class="shortcut-label">Settings</span> 
+                        <span class="shortcut-label">Calender</span> 
                     </a>
                     <a href="<?php echo $this->Html->url(array('plus'=>true,'controller'=>'studetns','action'=>'reports'));?>" class="shortcut"> 
                         <i class="shortcut-icon icon-tag"></i>

@@ -23,7 +23,7 @@ class AppController extends Controller {
         }
 
         parent::beforeFilter();
-        $this->Auth->allow('account_recovery', 'recovery_token', 'plus_login', 'plus_registration');
+        $this->Auth->allow('account_recovery', 'recovery_token', 'plus_login', 'plus_registration', 'plus_account_recovery', 'plus_recovery_token');
 
         if (isset($this->request->params['admin'])) {
             $this->layout = 'admin';
@@ -113,7 +113,7 @@ class AppController extends Controller {
         Configure::write('currentUserInfo', $currentUserInfo);
 
         $this->SiteSettings();
-      //  $this->commonDataFront();
+        //  $this->commonDataFront();
     }
 
     public function checkTerms($user) {
@@ -154,7 +154,30 @@ class AppController extends Controller {
 
         $userInfo = $this->User->find('first', array(
             'conditions' => array('User.id' => $user_id)
-            ));
+        ));
+        unset($userInfo['User']['password']);
+        unset($userInfo['User']['modified']);
+        unset($userInfo['UserProfile']['modified']);
+        unset($userInfo['OrgProfile']['modified']);
+
+        return $userInfo;
+    }
+
+    public function __getPlusInfo($id = null) {
+        $this->loadModel('User');
+        $user_id = $id;
+        if (empty($id)) {
+            $user_id = $this->Session->read('Auth.Plus.id');
+        }
+
+        $userInfo = $this->User->find('first', array(
+            'conditions' => array('User.id' => $user_id)
+        ));
+        unset($userInfo['User']['password']);
+        unset($userInfo['User']['modified']);
+        unset($userInfo['UserProfile']['modified']);
+        unset($userInfo['OrgProfile']['modified']);
+        // prd($userInfo);
 
         return $userInfo;
     }
@@ -200,7 +223,7 @@ class AppController extends Controller {
         // Query to fetch all joined groups by current User
         //$user = Configure::read('currentUserInfo.User');
         $user = $this->__getUserInfo();
-       // pr($user);
+        // pr($user);
         $groupList = $this->Group->find('all', array(
             'conditions' => array('Group.created_by' => $user['User']['id'], 'Group.status' => 1),
             'fields' => array('id', 'title', 'status'),

@@ -1,4 +1,7 @@
-<?php ?>
+<?php
+$user = Configure::read('currentUserInfo.Plus');
+//prd($user);
+?>
 
 
 <div class="navbar navbar-fixed-top">
@@ -8,7 +11,7 @@
                 <span class="icon-bar">
 
                 </span>
-                <a href="../../../../../../../../C:/Users/HP/AppData/Local/Temp/Settings.URL"></a> 
+                <a href="#"></a> 
                 <span class="icon-bar">
 
                 </span>
@@ -16,7 +19,9 @@
 
                 </span>
             </a>
-            <a class="brand" href="<?php echo $this->Html->url(array('plus' => true, 'controller' => 'users', 'action' => 'dashboard')); ?>">Cup Cherry </a>
+            <a class="brand" href="<?php echo $this->Html->url(array('plus' => true, 'controller' => 'users', 'action' => 'dashboard')); ?>">
+                Cup Cherry 
+            </a>  <p class="brand">- Welcome <?php echo $user['OrgProfile']['org_name'] . '/User ID-' .$user['id']?></p>
             <div class="nav-collapse">
                 <ul class="nav pull-right">
                     <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i

@@ -2,7 +2,7 @@
 
 App::uses('AppController', 'Controller');
 
-class StudentsController extends AppController {
+class ParentsController extends AppController {
 
     public $uses = array();
 
@@ -12,79 +12,71 @@ class StudentsController extends AppController {
     }
 
     public function plus_index() {
-        $this->set('title_for_layout', 'Students');
+        $this->set('title_for_layout', 'Parents');
         $this->loadModel('StudentProfile');
-        $this->loadModel('Standard');
+        $this->loadModel('SpoRelation');
         $user = Configure::read('currentUserInfo.Plus');
 
-        //Model Bind with Type 
-        $this->StudentProfile->bindModel(
+        //Model Bind with ParentProfile 
+        $this->SpoRelation->bindModel(
                 array('hasOne' => array(
-                        'Standard' => array(
+                        'ParentProfile' => array(
                             'foreignKey' => false,
                             'conditions' => array(
-                                'StudentProfile.standard_id = Standard.id',
-                            // 'GroupMessage.group_resource_id != 0'
+                                'SpoRelation.parent_id = ParentProfile.id',
                             ),
-                            'fields' => array('id', 'title', 'description', 'status')
+                        ),
+                        'User' => array(
+                            'foreignKey' => false,
+                            'conditions' => array(
+                                'ParentProfile.id = User.profile_id',
+                                'User.type' => 5
+                            )
+                        ),
+                        'UserProfile' => array(
+                            'foreignKey' => false,
+                            'conditions' => array(
+                                'User.id = UserProfile.user_id'
+                            )
                         )
                     )
                 )
         );
 
 
-        $standards = $this->Standard->find('all', array(
-            'conditions' => array('Standard.status' => 1),
-            'fields' => array('id', 'title', 'description', 'status')
+        $parData = $this->SpoRelation->find('all', array(
+            'conditions' => array('SpoRelation.org_id' => $user['id']),
+            'fields' => array(
+                'id',
+                'stu_id',
+                'org_id',
+                'parent_id',
+                'status',
+                'ParentProfile.id',
+                'ParentProfile.par_unique_id',
+                'ParentProfile.fname',
+                'ParentProfile.lname',
+                'ParentProfile.relation',
+                'ParentProfile.mobile',
+                'ParentProfile.phone',
+                'ParentProfile.email',
+                'ParentProfile.address',
+                'ParentProfile.created',
+                'ParentProfile.status',
+                'User.id',
+                'User.email',
+                'User.status',
+                'User.terms',
+                'User.type',
+                'UserProfile.id',
+                'UserProfile.fname',
+                'UserProfile.lname',
+                'UserProfile.user_mobile',
+                'UserProfile.address',
+                'UserProfile.status',)
         ));
-        $this->set('standards', $standards);
-
-        if ($this->request->is('post')) {
-            $StdId = $this->request->data['Student']['standard_id'];
-
-            if (isset($StdId) && !empty($StdId)) {
-                $stuList = $this->StudentProfile->find('all', array(
-                    'conditions' => array(
-                        'StudentProfile.status' => 1,
-                        'StudentProfile.standard_id' => $StdId,
-                        'StudentProfile.created_under' => $user['id'])
-                ));
-                //prd($stuList);
-            }
-        } else {
-            $stuList = $this->StudentProfile->find('all', array(
-                'conditions' => array(
-                    //  'StudentProfile.status' => 1,
-                    // 'StudentProfile.standard_id' => $StdId,
-                    'StudentProfile.created_under' => $user['id']),
-                'fields' => array(
-                    'id',
-                    'ParentProfile_id',
-                    'user_id',
-                    'created_under',
-                    'standard_id',
-                    'stu_unique_id',
-                    'fname',
-                    'lname',
-                    'contact_number',
-                    'dob',
-                    'gender',
-                    'address',
-                    'city',
-                    'pin',
-                    'status',
-                    'Standard.id',
-                    'Standard.title',
-                    'Standard.description',
-                    'Standard.status',
-                ),
-            ));
-        }
-
-
-        if (isset($stuList) && !empty($stuList)) {
-            $this->set('stuList', $stuList);
-        }
+        // prd($parData);
+        $this->set('parData', $parData);
     }
 
     public function plus_add() {
@@ -123,7 +115,7 @@ class StudentsController extends AppController {
         /* ------------------------------------------------------------- */
         if ($flag == 1) {
             // echo 'Parents email address is set';
-            //$case = 0;
+            $case = 0;
             $userCheck = $this->User->find('first', array(
                 'conditions' => array('User.email' => $parEmail, 'User.status !=' => 2),
                 'fields' => array('id', 'profile_id', 'username', 'email', 'status', 'type')
@@ -131,27 +123,8 @@ class StudentsController extends AppController {
             // prd($userCheck);
             if (isset($userCheck) && !empty($userCheck)) {
                 echo 'user found/ this email id found in database.';
-                // need to add concept here.
-                 prd($userCheck);
-                 
-                 
-                 
-                 
-                 
-                 
-                 
-              // need logic here.   
-                 
-                 
-                 
-                 
-                 
-                 
-                 
-                 
-                 
-                 
-                 
+
+                // prd($userCheck);
             } else {
                 $this->loadModel('EmailContent');
                 $saveUser = array();
@@ -191,7 +164,6 @@ class StudentsController extends AppController {
                 $parentPro['ParentProfile']['status'] = 1;
                 // prd($parentPro);
                 //Student profile
-                $studentPro['StudentProfile']['created_under'] = $user['id'];
                 $studentPro['StudentProfile']['standard_id'] = $data['StudentProfile']['standard_id'];
                 $studentPro['StudentProfile']['fname'] = $data['StudentProfile']['fname'];
                 $studentPro['StudentProfile']['lname'] = $data['StudentProfile']['lname'];

@@ -47,7 +47,19 @@
                                 Login..?
                             </a>
                             <?php
+                        }elseif ($cont == 'users' && $act == 'plus_account_recovery') {
+                            ?>
+                            <a href="<?php
+                            echo $this->Html->url(array('plus' => true,
+                                'controller' => 'users',
+                                'action' => 'login'
+                            ));
+                            ?>" class="">
+                                Login..?
+                            </a>
+                            <?php
                         }
+                        
                         ?>
 
 

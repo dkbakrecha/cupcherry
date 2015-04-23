@@ -26,7 +26,7 @@
 
 <div class="row">
     <?php
-    echo $this->Form->create('User', array('role' => 'form'));
+    echo $this->Form->create('UserProfile', array('role' => 'form'));
     echo $this->Form->hidden('id');
     ?>
     <div class="col-md-5 col-md-offset-1">
@@ -49,32 +49,10 @@
             <div class="row">
                 <dvi class='col-md-12'>
                     <label for="exampleInputEmail1">Email address</label>
-                    <?php echo $this->Form->input('email', array('div' => false, 'label' => false, 'class' => 'form-control ', 'placeholder' => 'Email Address')); ?>
+                    <?php echo $this->Form->input('email', array('div' => false, 'value' => $this->request->data['User']['email'], 'label' => false, 'class' => 'form-control ', 'placeholder' => 'Email Address')); ?>
             </div>
         </div>                
-        <div class="form-group">
-            <div class="row">
-                <dvi class='col-md-12'>
-                    <label for="exampleInputEmail1">Password</label>
-                    <?php echo $this->Form->input('password', array('div' => false, 'label' => false, 'class' => 'form-control ', 'placeholder' => 'Password', 'required' => false)); ?>
-            </div>
-        </div>                
-        <div class="form-group">
-            <div class="row">
-                <dvi class='col-md-12'>
-                    <label for="exampleInputEmail1">Confirm Password</label>
-                    <?php
-                    echo $this->Form->input('confirm_password', array(
-                        'div' => false,
-                        'label' => false,
-                        'type' => 'password',
-                        'class' => 'form-control ',
-                        'placeholder' => 'Password',
-                        'required' => false
-                    ));
-                    ?>
-            </div>
-        </div>
+
 
 
     </div>
@@ -87,6 +65,7 @@
                     $options = array('M' => 'Male', 'F' => 'Female');
                     $attributes = array('legend' => false, 'div' => false, 'label' => false);
                     echo $this->Form->radio('gender', $options, $attributes);
+                    
                     ?>
                 </dvi>
 
@@ -107,7 +86,12 @@
             <div class="row">
                 <dvi class='col-md-12'>
                     <label for="exampleInputEmail1">Contact Number</label>
-                    <?php echo $this->Form->input('contact', array('div' => false, 'label' => false, 'class' => 'form-control ', 'placeholder' => 'Contact')); ?>
+                    <?php echo $this->Form->input('contact', array(
+                        'div' => false,
+                        'label' => false, 
+                        'class' => 'form-control',
+                        'placeholder' => 'Contact',
+                        'value' => $singleUser['UserProfile']['user_mobile'])); ?>
             </div>
         </div>
         <div class="form-group">
@@ -115,7 +99,7 @@
                 <dvi class='col-md-12'>
                     <label for="exampleInputEmail1">Address</label>
                     <?php echo $this->Form->input('address', array('div' => false, 'label' => false, 'class' => 'form-control input', 'placeholder' => 'Address')); ?>
-                    <?php echo $this->Form->input('type', array('div' => false, 'label' => false, 'type' => 'hidden', 'value' => 1)); ?>
+                    
             </div>
         </div>
     </div>
@@ -124,8 +108,8 @@
 </div>
 <div class="row">
     <div class="col-lg-10 col-lg-offset-1">
-        <a href="<?php echo $this->Html->url(array('admin' => true, 'controller' => 'users', 'action' => 'index')) ?>" class="btn btn-primary pull-right">BACK</a>
-        
+        <a href="<?php echo $this->Html->url(array('admin' => true, 'controller' => 'users', 'action' => 'list')) ?>" class="btn btn-primary pull-right">BACK</a>
+
         <?php echo $this->Form->Submit('Save', array('class' => 'btn btn-success pull-right')); ?>
     </div>
     <?php
