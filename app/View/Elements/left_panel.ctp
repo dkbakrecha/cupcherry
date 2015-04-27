@@ -1,19 +1,10 @@
 
-<?php
-$user = array(); 
 
-$user['id'] = Configure::read('currentUserInfo.User.id');
-$user['profile_id'] = Configure::read('currentUserInfo.User.profile_id');
-$user['email'] = Configure::read('currentUserInfo.User.email');
-$user['type'] = Configure::read('currentUserInfo.User.type');
-$user['status'] = Configure::read('currentUserInfo.User.status');
-prd($user);
-?>
-<div class="profile_pic_panel">
+<!--<div class="profile_pic_panel">
     <div class="thumbnail" id="image-thumb">
-        <?php echo $this->Html->image('no_image.jpg'); ?>
+        <?php // echo $this->Html->image('no_image.jpg'); ?>
         <div class="change_image">
-            <a  href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'upload_image')); ?>">
+            <a  href="<?php // echo $this->Html->url(array('controller' => 'users', 'action' => 'upload_image')); ?>">
                 <div class="change_pic" id="show_pic_change">
                     Change    
                 </div>
@@ -21,7 +12,7 @@ prd($user);
             </a>
         </div>
     </div>
-</div>
+</div>-->
 
 <div class="panel panel-primary panel-custome ">
     <a class="dash_panel_heading" href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'dashboard')); ?>">
@@ -32,10 +23,10 @@ prd($user);
 
     <ul class="list-group">
 
-        <a id="groupListToggle">
+        <a href="<?php echo $this->Html->url(array('controller'=>'groups','action'=>'index'));?>">
             <li class="list-group-item"><i class="fa fa-group" ></i><span>Groups</span>
                 <div class="dashboard-plusIcon pull-right">
-                    <i class="fa fa-plus"></i>    
+                   
                 </div>
             </li>
         </a>
@@ -121,41 +112,41 @@ prd($user);
             <li class="list-group-item"><i class="fa fa-book" ></i><span>KeyNotes</span></li>
         </a>
         <?php
-        if ($userType == 5) {
+     //   if ($userType == 5) {
             ?>
-            <a id="orgToggle">
+<!--            <a id="orgToggle">
                 <li class="list-group-item"><i class="fa fa-hospital-o" ></i><span>Organizations</span>
                     <div class="dashboard-plusIcon pull-right">
                         <i class="fa fa-plus"></i>    
                     </div>
                 </li>
-            </a>
-
+            </a>-->
+<!--
             <ul id="org-drop-list" class="list-group">
                 <li id="OrgGrps" class="list-padding list-group-item">
                     <span>
                         <a>
-                            <?php echo $org['Organization']['organization_name'] ?>
+                            <?php //echo $org['Organization']['organization_name'] ?>
                         </a>
                         <i class="fa fa-plus pull-right"></i>
                     </span>
                     <ul id="org-grps-list" class="list-group">
                         <?php
-                        foreach ($orgGrps as $orgGroups) {
+                     //   foreach ($orgGrps as $orgGroups) {
                             ?>
                             <li class="list-padding list-group-item">
                                 <span>
                                     <?php
-                                    echo $this->Html->link($orgGroups['Group']['title'], array(
-                                        'controller' => 'groups',
-                                        'action' => 'view', $orgGroups['Group']['group_unique_name']
-                                    ));
+                                  //  echo $this->Html->link($orgGroups['Group']['title'], array(
+                                    //    'controller' => 'groups',
+                                      //  'action' => 'view', $orgGroups['Group']['group_unique_name']
+                                  //  ));
                                     ?>
 
                                 </span>
                             </li>
                             <?php
-                        }
+                      //  }
                         ?>
 
 
@@ -163,71 +154,15 @@ prd($user);
 
                 </li>
 
-            </ul>
+            </ul>-->
 
 
 
             <?php
-        }
+     //   }
         ?>
 
 
     </ul>
 </div>
 
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header for_heading">
-                <button type="button" class="close" 
-                        data-dismiss="modal" aria-hidden="true">
-                    &times;
-                </button>
-                <h4 class="modal-title" id="myModalLabel">
-                    Create Group
-                </h4>
-            </div>
-            <div class="modal-body">
-
-
-                <?php
-                echo $this->Form->create('Group', array(
-                    'type' => 'file',
-                    'url' => array('controller' => 'groups', 'action' => 'add')));
-                ?>
-
-
-
-                <div class="form-group">
-
-                    <?php echo $this->Form->input('title', array('class' => 'form-control', 'placeholder' => 'Group Title', 'required' => 'required', 'label' => false)); ?>
-                </div>
-
-                <div class="form-group">
-
-                    <?php echo $this->Form->input('description', array('class' => 'form-control', 'placeholder' => 'Group Description', 'type' => 'textarea', 'label' => false)); ?>
-                </div>
-                <div class="form-group">
-
-                    <?php echo $this->Form->input('image', array('class' => 'form-control', 'type' => 'file', 'label' => false, 'div' => false)); ?>
-                </div>
-
-
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" 
-                        data-dismiss="modal">Close
-                </button>
-
-
-                <?php echo $this->Form->submit('Create', array('div' => false, 'class' => 'btn btn-primary ')); ?>
-                <?php echo $this->Form->end(); ?>
-
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
-</div>

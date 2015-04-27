@@ -29,17 +29,19 @@ class GroupsController extends AppController {
             'conditions' => array('GroupMember.user_id' => $currentUserId, 'GroupMember.status' => 1)
         ));
         $this->set('joinedGropus', $joinedGropus);
-        //prd($joinedGropus);
+        // prd($joinedGropus);
         // prd($groupData);
     }
 
     public function add() {
         $this->set('title_for_layout', 'Group Add');
         $data = $this->request->data;
-        $currentUser = $this->Session->read("Auth.User");
+        $user = $this->__getUserInfo();
+        //prd($user);
+
         if (isset($data) && !empty($data)) {
-            $data['Group']['created_by'] = $currentUser['id'];
-            $data['Group']['managed_by'] = $currentUser['id'];
+            $data['Group']['created_by'] = $user['User']['id'];
+            $data['Group']['managed_by'] = $user['User']['id'];
             $data['Group']['modified'] = date("Y-m-d H:i:s");
             $data['Group']['status'] = 1;
             if (!empty($data['Group']['image']['name'])) {
@@ -64,8 +66,17 @@ class GroupsController extends AppController {
             }
         }
         if ($this->request->is('post')) {
+            ///prd($data);
             if ($this->Group->save($data)) {
-                $this->Session->setFlash(__('Group add successfully'));
+                $lastInsertGrpId = $this->Group->getLastInsertID();
+                $date1 = $dateFormated = date('Ym');
+                $grpUniqueName = $date1 . $user['User']['id'] . '.' . $lastInsertGrpId;
+                $save1['Group']['id'] = $lastInsertGrpId;
+                $save1['Group']['group_unique_name'] = $grpUniqueName;
+                $this->Group->save($save1);
+
+
+                $this->flash_msg('Group add successfully', 1);
                 $this->redirect(array('controller' => 'groups', 'action' => 'index'));
             }
         }
@@ -73,18 +84,20 @@ class GroupsController extends AppController {
         //prd($data);
     }
 
-    public function view($id = null) {
+    public function v($id = null) {
         $this->set('title_for_layout', 'Group View');
         $this->loadModel('GroupMessage');
         $this->loadModel('GroupMember');
         $this->loadModel('GroupResource');
         $this->loadModel('User');
         $data = array();
+        $grpId = explode('.', $id);
+        //pr($grpId);
         $groupData = $this->Group->find('all', array(
             'conditions' => array('Group.group_unique_name' => $id, 'Group.status' => 1),
         ));
         $this->set('groupData', $groupData);
-
+       // prd($groupData);
         //Model Bind with Group Resources
         $this->GroupMessage->bindModel(
                 array('hasOne' => array(
@@ -101,12 +114,12 @@ class GroupsController extends AppController {
 
         $messages = $this->GroupMessage->find('all', array(
             'conditions' => array(
-                'GroupMessage.group_id' => $id,
+                'GroupMessage.group_id' => $grpId[1],
                 'GroupMessage.status' => 1,
             ),
             'order' => array('GroupMessage.created DESC'),
         ));
-        // prd($messages);
+       // prd($messages);
         $this->set('messages', $messages);
 
         // Binding Group Member With User table
@@ -118,20 +131,27 @@ class GroupsController extends AppController {
                                 'GroupMember.user_id = User.id',
                                 'User.status = 1'
                             )
-                        )
+                        ),
+                        'UserProfile' => array(
+                            'foreignKey' => false,
+                            'conditions' => array(
+                                'UserProfile.user_id = User.id',
+                                'UserProfile.status = 1'
+                            )
+                        ),
                     )
                 )
         );
 
         $groupMemberData = $this->GroupMember->find('all', array(
             'conditions' => array(
-                'GroupMember.group_id' => $id,
+                'GroupMember.group_id' => $grpId[1],
                 'GroupMember.status' => 1),
             'recursive' => 0,
-            'fields' => array('GroupMember.id', 'User.id', 'User.fname', 'User.lname', 'User.status', 'User.username'),
+            'fields' => array('GroupMember.id', 'UserProfile.id', 'UserProfile.fname', 'UserProfile.lname', 'User.id', 'User.status', 'User.username'),
         ));
         $this->set('groupMemberData', $groupMemberData);
-        //  prd($groupMemberData);
+        // prd($groupMemberData);
     }
 
     public function save_message($id = null) {
@@ -171,13 +191,15 @@ class GroupsController extends AppController {
         $this->loadModel('GroupResource');
         $this->loadModel('GroupMessage');
         $data = $this->request->data;
-        //prd($this->request);
+       // prd($id);
+        $grpId = explode('.', $id);
+       // prd($grpId);
         if (isset($data) && !empty($data)) {
-            $userId = Configure::read('currentUserInfo.id');
+            $userId = Configure::read('currentUserInfo.User.id');
             // Saving data in resource table
             $saveData = array();
             $saveData['GroupResource']['user_id'] = $userId;
-            $saveData['GroupResource']['group_id'] = $id;
+            $saveData['GroupResource']['group_id'] = $grpId[1];
             $saveData['GroupResource']['resource_title'] = $data['GroupResource']['file']['name'];
             $saveData['GroupResource']['short_description'] = $data['GroupResource']['short_description'];
             $saveData['GroupResource']['status'] = 1;
@@ -206,7 +228,7 @@ class GroupsController extends AppController {
             // Get last insert id of reseource table and Saving data in message table
             $lastInsertResId = $this->GroupResource->getLastInsertID();
             $saveResId['GroupMessage']['user_id'] = $userId;
-            $saveResId['GroupMessage']['group_id'] = $id;
+            $saveResId['GroupMessage']['group_id'] = $grpId[1];
             $saveResId['GroupMessage']['status'] = 1;
             $saveResId['GroupMessage']['group_resource_id'] = $lastInsertResId;
             $this->GroupMessage->save($saveResId);
@@ -216,11 +238,11 @@ class GroupsController extends AppController {
 // $this->render('save_message', 'ajax');
             } else {
                 $this->flash_msg(1, 'File Uploaded');
-                $this->redirect(array('controller' => 'groups', 'action' => 'view', $id));
+                $this->redirect(array('controller' => 'groups', 'action' => 'v', $id));
             }
         } else {
             $this->flash_msg(2, 'Some error in file uploadation');
-            $this->redirect(array('controller' => 'groups', 'action' => 'view',
+            $this->redirect(array('controller' => 'groups', 'action' => 'v',
                 $id));
         }
     }
@@ -311,7 +333,7 @@ class GroupsController extends AppController {
                 'conditions' => array('User.email' => $result[0]['Invite']['send_to'], 'User.status' => 1),
                 'fields' => array('id', 'email', 'status')
             ));
-
+            //prd($userExist);
 
             if (isset($userExist) && !empty($userExist)) {
                 $flag = 1;
@@ -321,10 +343,7 @@ class GroupsController extends AppController {
 
 // If user is found then this condition will run.
             if ($flag == 1) {
-
-
                 $groupId = $result[0]['Invite']['group_id'];
-
                 $invitesEntry = array();
                 $groupEntry = array();
                 $groupMember = array();
@@ -352,14 +371,17 @@ class GroupsController extends AppController {
                 $this->Invite->save($invitesEntry);
                 $this->Group->save($groupEntry);
                 $this->GroupMember->save($grpMemEntry);
+
+                $this->flash_msg('Group Joined Sucessfully', 1);
+                $this->redirect(array('controller' => 'users', 'action' => 'login'));
             }
 // Else this condition will run. Means user not exist or user status is 0
             elseif ($flag == 2) {
-                $this->flash_msg(1, 'Registration required');
+                $this->flash_msg('Registration required', 2);
                 $this->redirect(array('controller' => 'users', 'action' => 'login'));
             }
         } else {
-            $this->flash_msg(1, 'Link Expired. Try resening a new link');
+            $this->flash_msg('Link Expired.', 2);
             $this->redirect(array('controller' => 'users', 'action' =>
                 'login'));
         }
@@ -517,7 +539,7 @@ class GroupsController extends AppController {
         ));
         $this->set(compact('types', 'memberList', 'grpList'));
 
-       // prd($grpList);
+        // prd($grpList);
         $data = array();
         $data = $this->request->data;
 

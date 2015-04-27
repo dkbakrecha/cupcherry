@@ -1,3 +1,7 @@
+<?php
+$user = Configure::read('currentUserInfo.User');
+//prd($user);
+?>
 <!-- Start Site Header -->
 <header>
     <div class="container">
@@ -12,7 +16,7 @@
             <div class="col-md-8 col-sm-6 col-xs-12">
 
                 <?php
-                if (!isset($currentUserInfo) && empty($currentUserInfo)) {
+                if (!isset($user) && empty($user)) {
                     ?>
                     <div class="top-links">
                         <ul>

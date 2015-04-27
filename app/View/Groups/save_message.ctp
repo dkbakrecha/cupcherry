@@ -8,7 +8,7 @@
     <div class="col-md-12  little_margin">
         <div class="col-md-6 LRpadding">
             <?php
-            echo $lastInsertMsgData['User']['fname'] . ' ' . $lastInsertMsgData['User']['lname'];
+            echo $lastInsertMsgData['UserProfile']['fname'] . ' ' . $lastInsertMsgData['UserProfile']['lname'];
             ;
             ?>
         </div>
@@ -22,6 +22,13 @@
             </span>
         </div>
 
+    </div>
+    <div class="col-md-12 msg LRpadding ">
+        <p>
+            <?php
+            echo $lastInsertMsgData['GroupMessage']['message'] . '<br>';
+            ?>   
+        </p>
     </div>
     <div class="col-md-12 msg LRpadding ">
         <p>

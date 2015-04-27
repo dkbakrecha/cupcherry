@@ -50,7 +50,7 @@
                                 <div class='col-md-6'>
                                     <?php
                                     echo $this->Form->input('standard_id', array(
-                                        'options' => $listData['types'],
+                                        'options' => $listData['Standard'],
                                         'empty' => '( choose class type )',
                                         'label' => false,
                                         'required' => true,

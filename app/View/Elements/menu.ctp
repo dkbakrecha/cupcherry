@@ -1,3 +1,6 @@
+<?php
+//prd($currentUserInfo);
+?>
 <div class="header-menu">
     <div class="container">
         <div class="row">
@@ -31,7 +34,7 @@
                             <li class="dropdown loginrighttopmenu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     <div class="loginpic">
-                                        <?php echo $this->Html->image('no_img.jpg',array('alt' => 'CC')); ?>
+                                        <?php echo $this->Html->image('../files/profile_image/'.$currentUserInfo['User']['UserProfile']['image_name'],array('alt' => 'CC')); ?>
                                     </div>
                                     <?php echo $currentUserInfo['User']['UserProfile']['fname'] . " " . $currentUserInfo['User']['UserProfile']['lname']; ?>  
                                     <span class="caret"></span>
@@ -63,12 +66,12 @@
                             <li><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'about')); ?>">About Us</a></li>
                             <li><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'howitworks')); ?>">How it Works</a></li>
                             <li><a href="<?php echo $this->Html->url(array('controller' => 'faqs', 'action' => 'index')); ?>">FAQ's</a></li>
-                            <li><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'contact_us')); ?>">Contact Us</a></li>
+                            <li><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'contact')); ?>">Contact Us</a></li>
                         </ul>
-                        <ul class="nav navbar-nav navbar-right">
-                            <li><a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'login')); ?>">Login</a></li>
-                            <li><a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'registration')); ?>">Register</a></li>
-                        </ul>
+<!--                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="<?php // echo $this->Html->url(array('controller' => 'users', 'action' => 'login')); ?>">Login</a></li>
+                            <li><a href="<?php //echo $this->Html->url(array('controller' => 'users', 'action' => 'registration')); ?>">Register</a></li>
+                        </ul>-->
 
                         <?php
                     }

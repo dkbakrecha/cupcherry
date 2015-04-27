@@ -60,9 +60,10 @@ class KeyNotesController extends AppController {
 
         $data = $this->request->data;
         if (isset($data) && !empty($data)) {
-            $user = $this->__getUser();
+            $user = $this->__getUserInfo();
+           // pr($user);
             $saveData = $data;
-            $saveData['KeyNote']['user_id'] = $user['id'];
+            $saveData['KeyNote']['user_id'] = $user['User']['id'];
             
             if ($this->KeyNote->save($saveData)) {
                 $this->Session->setFlash("Keynote add successfully", 'default', array('class' => 'alert alert-success'));
@@ -73,10 +74,10 @@ class KeyNotesController extends AppController {
         }
 
         $listData = array();
-        $this->loadModel('Type');
+        $this->loadModel('Standard');
         $this->loadModel('Category');
 
-        $listData['types'] = $this->Type->find('list');
+        $listData['Standard'] = $this->Standard->find('list');
         $listData['categories'] = $this->Category->find('list');
 
         $this->set('listData', $listData);

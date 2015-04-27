@@ -5,8 +5,10 @@
     </div>
     <div class="col-md-12">
         <?php
-        echo $this->Form->create('UserProfile', array('clasee' =>'form-horizontal','url' => array(
-                'controller' => 'users', 'action' => 'edit_profile'
+        echo $this->Form->create('UserProfile', array('clasee' =>'form-horizontal',
+            'type'=>'file',
+            'url' => array(
+                'controller' => 'users', 'action' => 'edit_profile',
         )));
         ?>
         <div class="form-group">
@@ -49,9 +51,9 @@
                         'label' => false,
                         'separator' => '',
                             // pending year picker
-//                       'dateFormat' => 'DMY',
-//                    'minYear' => date('Y') - 70,
-//                    'maxYear' => date('Y') - 18
+                       'dateFormat' => 'DMY',
+                    'minYear' => date('Y') - 70,
+                    'maxYear' => date('Y') - 20
                     ));
                     ?>
                 </div>
@@ -79,6 +81,19 @@
                 <div class="col-md-6">
                     <?php
                     echo $this->Form->input('about', array('class' => 'form-control', 'div' => false, 'label' => false,));
+                    ?>
+                </div>
+            </div>
+
+        </div>
+         <div class="form-group">
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Profile Image</label>
+                </div>
+                <div class="col-md-6">
+                    <?php
+                    echo $this->Form->input('image_name', array('class' => 'form-control','type'=>'file', 'div' => false, 'label' => false,));
                     ?>
                 </div>
             </div>

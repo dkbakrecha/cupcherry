@@ -27,7 +27,7 @@
                                     <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'howitworks')); ?>">How It Works</a></li>
                                     <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="<?php echo $this->Html->url(array('controller' => 'faqs', 'action' => 'index')); ?>">FAQ's</a></li>
                                     <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'terms')); ?>">Terms of Use</a></li>
-                                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'contact_us')); ?>">Contact Us</a></li>
+                                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'contact')); ?>">Contact Us</a></li>
                                 </ul> 
                             </nav>
                             

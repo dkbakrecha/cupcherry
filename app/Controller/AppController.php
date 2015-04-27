@@ -19,11 +19,12 @@ class AppController extends Controller {
         $currentUserInfo = $this->Session->read('Auth');
 
         if (!empty($currentUserInfo['User'])) {
-            $this->checkTerms($currentUserInfo['User']);
+			$this->checkTerms($currentUserInfo['User']);
         }
-
+		
         parent::beforeFilter();
-        $this->Auth->allow('account_recovery', 'recovery_token', 'plus_login', 'plus_registration', 'plus_account_recovery', 'plus_recovery_token');
+		
+        $this->Auth->allow('account_recovery', 'recovery_token', 'plus_login','invitation_token' ,'plus_registration', 'plus_account_recovery', 'plus_recovery_token');
 
         if (isset($this->request->params['admin'])) {
             $this->layout = 'admin';
@@ -101,7 +102,7 @@ class AppController extends Controller {
             $this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'dashboard');
             $this->Auth->logoutRedirect = array('controller' => 'users', 'action' => 'login');
         }
-
+	
         $currentUserInfo = $this->Session->read('Auth');
         //prd($currentUserInfo);
 
@@ -111,7 +112,7 @@ class AppController extends Controller {
         }
 
         Configure::write('currentUserInfo', $currentUserInfo);
-
+		
         $this->SiteSettings();
         //  $this->commonDataFront();
     }
@@ -122,12 +123,12 @@ class AppController extends Controller {
         $cont = strtolower($req->params['controller']);
         $act = strtolower($req->params['action']);
         $currentAct = $cont . "_" . $act;
-
+		//prd($currentAct);
         $allowArray = array();
         $allowArray[] = "pages_terms";
         $allowArray[] = "pages_doandnot";
         $allowArray[] = "users_logout";
-
+		
         if ($user['terms'] == '0' && in_array($currentAct, $allowArray)) {
             return true;
         } elseif ($user['terms'] == '0') {

@@ -11,57 +11,14 @@ echo $this->Html->script('validation');
     <div class="col-md-12 for_heading">
         <span><h3>Group View</h3></span>
     </div>
-
-    <div  class="group-detail-div col-md-12">
-
-        <div class="col-md-7 LRpadding middle-left">
-            <div class="col-md-6 LRpadding">
-                <div class="thumbnail">
-                    <?php
-                    if (isset($groupData[0]['Group']['logo']) && !empty($groupData[0]['Group']['logo'])) {
-                        $filePath = WWW_ROOT . "img/group/" . $groupData[0]['Group']['logo'];
-                        if (file_exists($filePath)) {
-                            ?>
-
-                            <img src="<?php echo $this->webroot . "img/group/" . $groupData[0]['Group']['logo'] ?>" />
-                            <?php
-                        } else {
-
-                            echo $this->Html->image('no_image.jpg');
-                        }
-                    } else {
-
-                        echo $this->Html->image('no_image.jpg');
-                    }
-                    ?>
-
-
-                </div> 
-            </div>
-            <div class="col-md-6">
-                <div class="group_info">
-                    <span><?php echo $groupData[0]['Group']['title']; ?></span>
-                    <p><?php echo $groupData[0]['Group']['description']; ?></p>
-                </div>   
-            </div>
-
-        </div>
-
-
-
-
-
-
-    </div>
-
-
 </div>
+
 <!--<hr class="hr-marginTop">
 <div class="col-md-6">
     <div id="fileuploader">Upload</div>
 </div>-->
 
-<hr class="hr-marginTop">
+
 <div class="row">
     <?php
     if (isset($groupData) && !empty($groupData)) {
@@ -125,7 +82,7 @@ echo $this->Html->script('validation');
                                 echo $this->Form->create('GroupResource', array(
                                     'type' => 'file',
                                     'enctype' => 'multipart/form-data',
-                                    'url' => array('controller' => 'groups', 'action' => 'save_resource', $groupData[0]['Group']['id'])
+                                    'url' => array('controller' => 'groups', 'action' => 'save_resource', $groupData[0]['Group']['group_unique_name'])
                                 ));
                                 ?>
                                 <div class="form-group">
@@ -181,7 +138,7 @@ echo $this->Html->script('validation');
                                 <div class="col-md-12  little_margin">
                                     <div class="col-md-6 LRpadding">
                                         <?php
-                                        echo $msg['User']['fname'] . ' ' . $msg['User']['lname'];
+                                        echo $msg['UserProfile']['fname'] . ' ' . $msg['UserProfile']['lname'];
                                         ;
                                         ?>
                                     </div>
@@ -271,6 +228,38 @@ echo $this->Html->script('validation');
     }
     ?>
     <div class="col-md-4 LRpadding">
+	<div  class="group-detail-div col-md-12">
+		<div class="col-md-7 LRpadding middle-left">
+            <div class="col-md-6 LRpadding">
+                <div class="thumbnail">
+                    <?php
+                    if (isset($groupData[0]['Group']['logo']) && !empty($groupData[0]['Group']['logo'])) {
+                        $filePath = WWW_ROOT . "img/group/" . $groupData[0]['Group']['logo'];
+                        if (file_exists($filePath)) {
+                            ?>
+
+                            <img src="<?php echo $this->webroot . "img/group/" . $groupData[0]['Group']['logo'] ?>" />
+                            <?php
+                        } else {
+
+                            echo $this->Html->image('no_image.jpg');
+                        }
+                    } else {
+
+                        echo $this->Html->image('no_image.jpg');
+                    }
+                    ?>
+                </div> 
+            </div>
+            <div class="col-md-6">
+                <div class="group_info">
+                    <span><?php echo $groupData[0]['Group']['title']; ?></span>
+                    <p><?php echo $groupData[0]['Group']['description']; ?></p>
+                </div>   
+            </div>
+        </div>
+    </div>
+	<hr class="hr-marginTop">
         <div class="col-md-12 LRpadding">
 
             <div class="invite-group-div col-md-12">
@@ -337,7 +326,7 @@ echo $this->Html->script('validation');
 
                             <td>
                                 <?php
-                                echo $this->Html->link($gMember['User']['fname'] . ' ' . $gMember['User']['lname'], array(
+                                echo $this->Html->link($gMember['UserProfile']['fname'] . ' ' . $gMember['UserProfile']['lname'], array(
                                     'controller' => 'users', 'action' => 'profile', $gMember['User']['username']
                                         ), array('target' => '_blank'));
                                 ?>

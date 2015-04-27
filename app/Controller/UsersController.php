@@ -9,7 +9,6 @@ class UsersController extends AppController {
         // Allow users to register and logout.
         $this->Auth->allow(
                 'admin_login', 'register',
-                //'add',
                 'signup', 'registration', 'verification', 'mem_verify'
         );
     }
@@ -34,11 +33,10 @@ class UsersController extends AppController {
     public function profile($username = null) {
         $this->set('title_for_layout', 'Public Profile');
 
-
         $userData = $this->User->find('first', array('conditions' => array(
                 'username' => $username
         )));
-
+		prd($userData);
         $this->set('userData', $userData);
     }
 
@@ -77,25 +75,41 @@ class UsersController extends AppController {
     }
 
     public function edit_profile() {
-        $this->loadModel('UserProfile');
-        $this->set('title_for_layout', 'Edit Profile');
-        $userId = Configure::read('currentUserInfo.id');
-
-        $data = array();
-        $data = $this->UserProfile->find('first', array(
-            'conditions' => array('UserProfile.user_id' => $userId),
-        ));
-        if (!isset($userId) && empty($userId)) {
-            $this->flash_msg('Unauthorized access.', 2);
-            $this->redirect(array('controller' => 'pages', 'action' => 'index'));
-        }
-
-
-
+		$this->set('title_for_layout', 'Edit Profile');
+                $this->loadModel('UserProfile');
+		
+		$userData = $this->__getUserInfo();
+		
         if ($this->request->is('post')) {
             $saveData = $this->request->data;
-            $saveData['UserProfile']['id'] = $data['UserProfile']['id'];
-            $saveData['UserProfile']['user_id'] = $userId;
+            //prd($saveData);
+             if (!empty($saveData['UserProfile']['image_name']['name'])) {
+                /**
+                 * Profile Image upload
+                 */
+                $file = $saveData['UserProfile']['image_name'];
+                $filename = basename($file['name']);
+                if (!empty($file['name'])) {
+                    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+                    $file_extension = array('png', 'jpeg', 'jpg');
+                    if (in_array($ext, $file_extension)) {
+                        $newFileName = "profile" . "_" . uniqid() . '.' . $ext;
+                        $destination = PROFILE_IMG . $newFileName;
+                        $moved = move_uploaded_file($file['tmp_name'], $destination);
+
+                        if ($moved) {
+                            $saveData['UserProfile']['image_name'] = $newFileName;
+                        }
+                    }
+                }
+            }
+            
+            
+            
+            
+           // prd($saveData);
+            $saveData['UserProfile']['id'] = $userData['UserProfile']['id'];
+           // $saveData['UserProfile']['user_id'] = $userId;
             if ($this->UserProfile->save($saveData)) {
                 $this->flash_msg('Profile Updated.', 1);
                 $this->redirect(array('controller' => 'users', 'action' => 'edit_profile'));
@@ -105,7 +119,7 @@ class UsersController extends AppController {
             }
         }
         if (!$this->request->data) {
-            $this->request->data = $data;
+            $this->request->data = $userData;
         }
     }
 
@@ -970,7 +984,7 @@ class UsersController extends AppController {
 
         if ($this->request->is('post')) {
             $data = $this->request->data;
-            $userCheck = $this->User->find('first', array(
+            @$userCheck = $this->User->find('first', array(
                 'conditions' => array('User.email' => $data['User']['email']),
                 'fields' => array('id', 'email', 'type', 'status')
             ));

@@ -9,7 +9,7 @@ class PagesController extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
         // Allow users to register and logout.
-        $this->Auth->allow('index', 'about', 'contact_us', 'faq', 'howitworks', 'terms');
+        $this->Auth->allow('index', 'about', 'contact', 'faq', 'howitworks', 'terms');
     }
 
     public function index() {
@@ -53,10 +53,13 @@ class PagesController extends AppController {
         $this->set('cmsData', $cmsData[0]);
     }
 
-    public function contact_us() {
+    public function contact() {
+        $this->set('title_for_layout','Contact Us');
         $this->layout = "cmsContent";
         if ($this->request->is('post') || !empty($this->request->data)) {
             $this->loadModel('ContactUs');
+            $data = $this->request->data;
+            prd($data);
             $this->ContactUs->set($this->request->data);
 
             if ($this->ContactUs->validates()) {

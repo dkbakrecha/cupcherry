@@ -14,7 +14,7 @@
             </div> <!-- /error-details -->
 
             <div class="error-actions">
-                <a href="index.html" class="btn btn-large btn-primary">
+                <a href="<?php echo $this->Html->url(array('controller'=>'pages','action'=>'index'));?>" class="btn btn-large btn-primary">
                     <i class="icon-chevron-left"></i>
                     &nbsp;
                     Back to Dashboard						
