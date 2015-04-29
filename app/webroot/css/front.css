@@ -200,20 +200,20 @@ header{
 .dash_panel_heading:hover {
     text-decoration: none;
 }
-.panel-heading {
+.cus-panel-heading {
     background-color: #428bca;
     color: white;
     outline: none;
 }
 
-.panel{
+.cus-panel{
     background-color: #fff;
     border: 0px;
     border-radius: 0px;
     box-shadow: 0 0px 0px rgba(0, 0, 0, 0.0);
     margin-bottom: 0px
 }
-.panel-heading {
+.cus-panel-heading {
     border-bottom: 0px solid transparent;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
@@ -222,7 +222,7 @@ header{
     padding: 15px 20px;
 }
 .list-group-item > span {
-    bottom: 5px;
+   // bottom: 5px;
     font-size: 16px;
     padding-left: 10px;
     position: relative;
@@ -333,6 +333,45 @@ header{
     display: none;
 }
 #org-grps-list{
-    display: none;s
+    display: none;
 
+}
+.color {
+    background-color: #1d3f6b;
+   // opacity: 0.78;
+}
+.dashboard_box {
+    color: white;
+    height: 110px;
+    padding: 15px;
+}
+.box-top {
+    background-color: #1d3f6b;
+    color: white;
+    height: 35px;
+    opacity: 0.8;
+    padding: 6px 6px 6px 10px;
+}
+.box-bottom {
+    background-color: #1d3f6b;
+    height: 35px;
+    color: white;
+     opacity: 0.8;
+    padding: 6px 6px 6px 10px;
+}
+.box-bottom > a {
+    color: white;
+    
+}
+.resize-none{
+    resize: none;
+}
+#grp-srch-box{
+ display: none;   
+}
+#grp-data-box{
+ display: block;   
+}
+#g-data-btn{
+    display: none;
 }

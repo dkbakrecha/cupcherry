@@ -14,6 +14,16 @@
                             <?php echo $cmsData['CmsPage']['description'] ?>
                         </p>
                     </div>
+                    <div>
+                        <button class="btn btn-primary" onclick="location.href = '<?php echo $this->Html->url(array('controller' => 'pages', 'action' => 'terms_accept')); ?>'" >
+                            Agree
+                        </button>
+
+                        <button class="btn btn-primary" onclick="location.href = '<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'logout')); ?>'" >
+                            Not Agree
+                        </button>
+
+                    </div>
                 </div>
 
                 <div class="col-md-3">

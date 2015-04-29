@@ -13,12 +13,6 @@ echo $this->Html->script('validation');
     </div>
 </div>
 
-<!--<hr class="hr-marginTop">
-<div class="col-md-6">
-    <div id="fileuploader">Upload</div>
-</div>-->
-
-
 <div class="row">
     <?php
     if (isset($groupData) && !empty($groupData)) {
@@ -228,38 +222,38 @@ echo $this->Html->script('validation');
     }
     ?>
     <div class="col-md-4 LRpadding">
-	<div  class="group-detail-div col-md-12">
-		<div class="col-md-7 LRpadding middle-left">
-            <div class="col-md-6 LRpadding">
-                <div class="thumbnail">
-                    <?php
-                    if (isset($groupData[0]['Group']['logo']) && !empty($groupData[0]['Group']['logo'])) {
-                        $filePath = WWW_ROOT . "img/group/" . $groupData[0]['Group']['logo'];
-                        if (file_exists($filePath)) {
-                            ?>
+        <div  class="group-detail-div col-md-12">
+            <div class="col-md-7 LRpadding middle-left">
+                <div class="col-md-6 LRpadding">
+                    <div class="thumbnail">
+                        <?php
+                        if (isset($groupData[0]['Group']['logo']) && !empty($groupData[0]['Group']['logo'])) {
+                            $filePath = WWW_ROOT . "img/group/" . $groupData[0]['Group']['logo'];
+                            if (file_exists($filePath)) {
+                                ?>
 
-                            <img src="<?php echo $this->webroot . "img/group/" . $groupData[0]['Group']['logo'] ?>" />
-                            <?php
+                                <img src="<?php echo $this->webroot . "img/group/" . $groupData[0]['Group']['logo'] ?>" />
+                                <?php
+                            } else {
+
+                                echo $this->Html->image('no_image.jpg');
+                            }
                         } else {
 
                             echo $this->Html->image('no_image.jpg');
                         }
-                    } else {
-
-                        echo $this->Html->image('no_image.jpg');
-                    }
-                    ?>
-                </div> 
-            </div>
-            <div class="col-md-6">
-                <div class="group_info">
-                    <span><?php echo $groupData[0]['Group']['title']; ?></span>
-                    <p><?php echo $groupData[0]['Group']['description']; ?></p>
-                </div>   
+                        ?>
+                    </div> 
+                </div>
+                <div class="col-md-6">
+                    <div class="group_info">
+                        <span><?php echo $groupData[0]['Group']['title']; ?></span>
+                        <p><?php echo $groupData[0]['Group']['description']; ?></p>
+                    </div>   
+                </div>
             </div>
         </div>
-    </div>
-	<hr class="hr-marginTop">
+        <hr class="hr-marginTop">
         <div class="col-md-12 LRpadding">
 
             <div class="invite-group-div col-md-12">
@@ -272,20 +266,18 @@ echo $this->Html->script('validation');
                 <div class="form-group form-bottom-margin">
                     <?php
                     echo $this->Form->input('send_to', array(
-                    'id' => 'send_to',
-                    'class' => 'form-control ',
-                    'label' => false,
-                    'div' => false,
-                    'placeholder' => 'Email address',
-                    'required' => 'required'
+                        'id' => 'send_to',
+                        'class' => 'form-control ',
+                        'label' => false,
+                        'div' => false,
+                        'placeholder' => 'Email address',
+                        'required' => 'required'
                     ));
-                  //  echo $this->Form->submit('Invite',array('class'=>'btn btn-primary pull-right btn-invite'));
+                    //  echo $this->Form->submit('Invite',array('class'=>'btn btn-primary pull-right btn-invite'));
                     echo $this->Js->submit('Invite', array(
                         'class' => array('btn btn-primary pull-right btn-invite'),
                         'url' => array('controller' => 'groups', 'action' => 'send_invitation', $groupData[0]['Group']['id']),
-                       
-                        'before' =>$this->Js->get('#sending')->effect('fadeIn'),
-                       
+                        'before' => $this->Js->get('#sending')->effect('fadeIn'),
                         'success' => $this->Js->get('#sending')->effect('fadeOut'),
                         'complete' => 'javascript:resetThisForm();',
                         'update' => '#success'
@@ -359,8 +351,8 @@ echo $this->Html->script('validation');
 //            alert('scrolling');
 //        });
     });
-      
-    
+
+
 
     function msgprepend() {
         $(response).hide().prependTo("#save_message");

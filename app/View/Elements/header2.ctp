@@ -20,8 +20,8 @@ $user = Configure::read('currentUserInfo.User');
                     ?>
                     <div class="top-links">
                         <ul>
-                            <li><a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'login')); ?>">Login</a></li>
-                            <li><a href="<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'registration')); ?>">Register</a></li>
+                            <li><a href="<?php echo $this->Html->url(array('plus'=>true,'controller' => 'users', 'action' => 'login')); ?>">Plus Login</a></li>
+<!--                            <li><a href="<?php //echo $this->Html->url(array('controller' => 'users', 'action' => 'registration')); ?>">Signup</a></li>-->
                         </ul>
                     </div>
                     <?php

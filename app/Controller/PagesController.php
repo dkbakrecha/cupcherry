@@ -15,7 +15,7 @@ class PagesController extends AppController {
     public function index() {
         $this->layout = 'homenew';
         $this->set('title_for_layout', 'Eduction');
-        
+
         $user = $this->Session->read('Auth.User.id');
         $userddd = $this->Session->read('Auth');
         //prd($userddd);
@@ -54,7 +54,7 @@ class PagesController extends AppController {
     }
 
     public function contact() {
-        $this->set('title_for_layout','Contact Us');
+        $this->set('title_for_layout', 'Contact Us');
         $this->layout = "cmsContent";
         if ($this->request->is('post') || !empty($this->request->data)) {
             $this->loadModel('ContactUs');
@@ -103,7 +103,7 @@ class PagesController extends AppController {
         $this->set('categories', $categories);
     }
 
-    public function terms(){
+    public function terms() {
         $this->layout = "cmsContent";
         $this->set('title_for_layout', 'Terms of Use | CupCherry');
         $this->loadModel('CmsPage');
@@ -112,6 +112,27 @@ class PagesController extends AppController {
         ));
 
         $this->set('cmsData', $cmsData[0]);
+    }
+
+    public function terms_accept() {
+        $this->loadModel('User');
+        $user['id'] = Configure::read('currentUserInfo.User.id');
+        $user['terms'] = Configure::read('currentUserInfo.User.terms');
+        $user['status'] = Configure::read('currentUserInfo.User.status');
+        //prd($user);
+        if ($user['terms'] == 1) {
+            $this->redirect(array('controller' => 'users', 'action' => 'dashboard'));
+        }
+        $save['User']['id'] = $user['id'];
+        $save['User']['terms'] = 1;
+        if ($this->User->save($save)) {
+            $this->Session->write('Auth.User.terms', $save['User']['terms']);
+            $this->flash_msg('Welcome to Cupcherry', 1);
+            $this->redirect(array('controller' => 'users', 'action' => 'dashboard'));
+        } else {
+            $this->flash_msg('Some error updating terms, please try again', 1);
+            $this->redirect(array('controller' => 'users', 'action' => 'logout'));
+        }
     }
 
     public function plus_types() {
